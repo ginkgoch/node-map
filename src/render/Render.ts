@@ -2,7 +2,7 @@ import _ from 'lodash';
 import assert from 'assert';
 import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
 import { Canvas, CanvasRenderingContext2D } from 'canvas';
-import { Image, AntialiasOption, Size, RenderUtils } from ".";
+import { Image, Size, RenderUtils } from ".";
 
 export class Render {
     image: Image;
@@ -12,7 +12,7 @@ export class Render {
     resolutionX = 0;
     resolutionY = 0;
     envelope: IEnvelope;
-    antialias: AntialiasOption = 'default';
+    antialias: "default" | "none" | "gray" | "subpixel" = 'default';
     context: CanvasRenderingContext2D;
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
@@ -30,6 +30,13 @@ export class Render {
         this.canvas = new Canvas(this.width, this.height);
         this.context = this.canvas.getContext('2d');
         this.context.antialias = this.antialias;
+    }
+
+    static create(width: number = 256, height: number = 256, 
+        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }): Render {
+        const image = new Image(width, height);
+        const render = new Render(image, envelope);
+        return render;
     }
 
     flush() {
@@ -72,6 +79,8 @@ export class Render {
             this._drawPolygon(geom, style);
         } else if (geom instanceof MultiPoint) {
             this._drawMultiPoint(geom, style);
+        } else if (geom instanceof MultiLineString) {
+            this._drawMultiLine(geom, style);
         } else if (geom instanceof MultiPolygon) {
             this._drawMultiPolygon(geom, style);
         } else if (geom instanceof GeometryCollection) {
