@@ -2,7 +2,7 @@ import _ from 'lodash';
 import assert from 'assert';
 import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
 import { Canvas, CanvasRenderingContext2D } from 'canvas';
-import { Image, AntialiasOption, Size, RenderUtils } from ".";
+import { Image, Size, RenderUtils } from ".";
 
 export class Render {
     image: Image;
@@ -12,7 +12,7 @@ export class Render {
     resolutionX = 0;
     resolutionY = 0;
     envelope: IEnvelope;
-    antialias: AntialiasOption = 'default';
+    antialias: "default" | "none" | "gray" | "subpixel" = 'default';
     context: CanvasRenderingContext2D;
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
