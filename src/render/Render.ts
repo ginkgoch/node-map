@@ -32,6 +32,13 @@ export class Render {
         this.context.antialias = this.antialias;
     }
 
+    static create(width: number = 256, height: number = 256, 
+        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }): Render {
+        const image = new Image(width, height);
+        const render = new Render(image, envelope);
+        return render;
+    }
+
     flush() {
         this.image.buffer = this.canvas.toBuffer();
     }
@@ -72,6 +79,8 @@ export class Render {
             this._drawPolygon(geom, style);
         } else if (geom instanceof MultiPoint) {
             this._drawMultiPoint(geom, style);
+        } else if (geom instanceof MultiLineString) {
+            this._drawMultiLine(geom, style);
         } else if (geom instanceof MultiPolygon) {
             this._drawMultiPolygon(geom, style);
         } else if (geom instanceof GeometryCollection) {
