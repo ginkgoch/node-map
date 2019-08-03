@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "Ginkgoch",
   "license": "MIT",
+  "scripts": {
+    "test": "./node_modules/.bin/jest",
+    "build": "./node_modules/.bin/tsc"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
@@ -13,8 +17,10 @@
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
-  "scripts": {
-    "test": "./node_modules/.bin/jest",
-    "build": "./node_modules/.bin/tsc"
+  "dependencies": {
+    "@types/lodash": "^4.14.136",
+    "canvas": "^2.5.0",
+    "ginkgoch-geom": "^1.0.14",
+    "lodash": "^4.17.15"
   }
 }

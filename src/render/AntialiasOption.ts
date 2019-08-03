@@ -1,0 +1,1 @@
+export type AntialiasOption = "default" | "none" | "gray" | "subpixel";
