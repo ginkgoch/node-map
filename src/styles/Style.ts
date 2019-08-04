@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
 
+//TODO: test whether the context will be recovered.
 export abstract class Style {
     name: string
     constructor(name?: string) {
@@ -31,7 +32,6 @@ export abstract class Style {
 
     json(): any {
         let json = this._json();
-        json = _.pickBy(json, v => v !== undefined);
         return json;
     }
 
@@ -39,6 +39,13 @@ export abstract class Style {
      * @virtual
      */
     protected _json(): any {
-        return {};
+        const raw: any = {};
+        _.forIn(this, (v, k) => {
+            if (typeof v !== 'function' && k !== 'name' && v !== undefined) {
+                raw[k] = v;
+            }
+        });
+
+        return raw;
     }
 }

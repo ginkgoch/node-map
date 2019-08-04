@@ -92,8 +92,8 @@ export class Render {
 
     //#region draw concrete geometries
     _drawPoint(geom: Point, style: any) {
-        const screen = RenderUtils.toViewportCoordinate(geom, this.envelope, this.resolutionX, this.resolutionY);
-        if (style.symbolType === 'rect' || style.symbolType === 'square') {
+        const screen = this._toViewport(geom);
+        if (style.symbol === 'rect' || style.symbol === 'square') {
             const offset = style.radius * .5;
             const left = screen.x - offset;
             const top = screen.y - offset;
@@ -112,9 +112,7 @@ export class Render {
     }
 
     _drawLineString(geom: LineString, style: any) {
-        let coordinates = geom.coordinatesFlat().map(c => {
-            return RenderUtils.toViewportCoordinate(c, this.envelope, this.resolutionX, this.resolutionY);
-        });
+        let coordinates = geom.coordinatesFlat().map(c => this._toViewport(c));
 
         coordinates = RenderUtils.compressViewportCoordinates(coordinates);
         if (coordinates.length <= 1) return;
@@ -145,12 +143,10 @@ export class Render {
 
     _drawRing(geom: LinearRing) {
         let coordinates = geom.coordinatesFlat();
-        coordinates = coordinates.map(c => {
-            return RenderUtils.toViewportCoordinate(c, this.envelope, this.resolutionX, this.resolutionY);
-        });
+        coordinates = coordinates.map(c => this._toViewport(c));
         coordinates = RenderUtils.compressViewportCoordinates(coordinates);
 
-        if (coordinates.length <= 4) return;
+        if (coordinates.length < 4) return;
 
         const first = coordinates.shift() as ICoordinate;
         this.context.moveTo(first.x, first.y);
@@ -179,7 +175,7 @@ export class Render {
 
     //#region draw normal text
     drawText(text: string, coordinate: ICoordinate, style: any) {
-        coordinate = RenderUtils.toViewportCoordinate(coordinate, this.envelope, this.resolutionX, this.resolutionY);
+        coordinate = this._toViewport(coordinate);
         
         this._drawText(text, coordinate, style);
     }
@@ -199,16 +195,16 @@ export class Render {
         this._rotate(coordinate.x, coordinate.y, rotation, (x, y) => {
             const offset = Math.abs(textBound.maxy - textBound.miny) * .5;
             if (style.strokeStyle && style.lineWidth > 0) {
-                this.context.strokeText(text, coordinate.x, coordinate.y + offset);
+                this.context.strokeText(text, x, y + offset);
             }
             
-            this.context.fillText(text, coordinate.x, coordinate.y + offset);
+            this.context.fillText(text, x, y + offset);
         });
     }
     
     _rotate(x: number, y: number, rotation: number, action: (x: number, y: number) => void) {
         if (rotation && rotation !== 0) {
-            if (rotation < 0) rotation += Math.PI;
+            rotation = this._headsUp(rotation);
             
             this.context.save();
             this.context.translate(x, y);
@@ -243,9 +239,7 @@ export class Render {
 
         _.extend(this.context, style);
         const textWidth = this.measureText(text, style).width;
-        coordinates = coordinates.map(c => {
-            return RenderUtils.toViewportCoordinate(c, this.envelope, this.resolutionX, this.resolutionY);
-        });
+        coordinates = coordinates.map(c => this._toViewport(c));
 
         let previous = coordinates.shift() as ICoordinate;
         while (coordinates.length > 0) {
@@ -255,7 +249,7 @@ export class Render {
                 const x = (previous.x + current.x) * .5;
                 const y = (previous.y + current.y) * .5;
                 const position = { x, y };
-                const rotation = RenderUtils.angle(current, previous);
+                const rotation = RenderUtils.angle(previous, current);
                 this._drawText(text, position, style, rotation);
 
                 return;
@@ -263,5 +257,31 @@ export class Render {
 
             previous = current;
         }
+    }
+
+    drawIcon(icon: Image, coordinate: ICoordinate, style: any) {
+        coordinate = this._toViewport(coordinate);
+        let left = coordinate.x - icon.width * .5;
+        let top = coordinate.y - icon.height * .5;
+        left += _.get(style, 'offsetX', 0);
+        top += _.get(style, 'offsetY', 0);
+
+        this.context.drawImage(icon.source, left, top);
+    }
+
+    private _toViewport(coordinate: ICoordinate) {
+        return RenderUtils.toViewportCoordinate(coordinate, this.envelope, this.resolutionX, this.resolutionY);
+    }
+
+    private _headsUp(rotation: number) {
+        if (rotation < 0) {
+            rotation += Math.PI;
+        }
+
+        if (rotation > Math.PI / 2) {
+            rotation += Math.PI;
+        }
+
+        return rotation;
     }
 }
