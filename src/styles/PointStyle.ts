@@ -1,8 +1,6 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import _ from "lodash";
-import { IFeature } from "ginkgoch-geom";
-import { Render } from "../render";
 
 export class PointStyle extends Style {
     fillStyle: string;

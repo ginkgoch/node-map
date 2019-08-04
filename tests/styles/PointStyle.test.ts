@@ -1,4 +1,4 @@
-import { PointStyle } from "../../src/styles/Index";
+import { PointStyle } from "../../src/styles";
 import { Point, Feature } from "ginkgoch-geom";
 import { Render } from "../../src/render";
 import TestUtils from "../shared/TestUtils";
