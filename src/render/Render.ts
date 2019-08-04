@@ -93,7 +93,7 @@ export class Render {
     //#region draw concrete geometries
     _drawPoint(geom: Point, style: any) {
         const screen = this._toViewport(geom);
-        if (style.symbolType === 'rect' || style.symbolType === 'square') {
+        if (style.symbol === 'rect' || style.symbol === 'square') {
             const offset = style.radius * .5;
             const left = screen.x - offset;
             const top = screen.y - offset;
