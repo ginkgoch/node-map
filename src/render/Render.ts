@@ -146,7 +146,7 @@ export class Render {
         coordinates = coordinates.map(c => this._toViewport(c));
         coordinates = RenderUtils.compressViewportCoordinates(coordinates);
 
-        if (coordinates.length <= 4) return;
+        if (coordinates.length < 4) return;
 
         const first = coordinates.shift() as ICoordinate;
         this.context.moveTo(first.x, first.y);
@@ -266,7 +266,7 @@ export class Render {
         left += _.get(style, 'offsetX', 0);
         top += _.get(style, 'offsetY', 0);
 
-        this.context.drawImage(icon, left, top);
+        this.context.drawImage(icon.source, left, top);
     }
 
     private _toViewport(coordinate: ICoordinate) {

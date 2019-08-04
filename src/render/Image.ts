@@ -9,6 +9,7 @@ export class Image {
     buffer: Buffer|null;
     width: number;
     height: number;
+    source: ImageRaw;
 
     /**
      * Constructs an instance of Image.
@@ -28,15 +29,19 @@ export class Image {
         if (typeof param === 'number') {
             this.width = param;
             this.height = height || 256;
+            this.source = new ImageRaw();
+            this.source.src = this.buffer = new Canvas(this.width, this.height).toBuffer();
         }
         else if(typeof param === 'string') {
-            const source = new ImageRaw();
-            source.src = this.buffer = fs.readFileSync(param);
-            this.width = source.width;
-            this.height = source.height;
+            this.source = new ImageRaw();
+            this.source.src = this.buffer = fs.readFileSync(param);
+            this.width = this.source.width;
+            this.height = this.source.height;
         }
         else {
             this.width = this.height = 256;
+            this.source = new ImageRaw();
+            this.source.src = this.buffer = new Canvas(this.width, this.height).toBuffer();
         }
     }
 
