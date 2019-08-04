@@ -13,6 +13,6 @@ describe('IconStyle', () => {
         style.draw(feature, canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'icon-default.png', true);
+        compareImage(canvas.image, 'icon-default.png');
     });
 });

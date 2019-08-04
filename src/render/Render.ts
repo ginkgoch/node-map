@@ -195,10 +195,10 @@ export class Render {
         this._rotate(coordinate.x, coordinate.y, rotation, (x, y) => {
             const offset = Math.abs(textBound.maxy - textBound.miny) * .5;
             if (style.strokeStyle && style.lineWidth > 0) {
-                this.context.strokeText(text, coordinate.x, coordinate.y + offset);
+                this.context.strokeText(text, x, y + offset);
             }
             
-            this.context.fillText(text, coordinate.x, coordinate.y + offset);
+            this.context.fillText(text, x, y + offset);
         });
     }
     

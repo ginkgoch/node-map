@@ -11,15 +11,15 @@ export class TextStyle extends Style {
     strokeStyle: string | undefined;
     lineWidth: number;
 
-    constructor(content: string | undefined) {
+    constructor(content: string | undefined, fillStyle?: string, font?: string) {
         super();
 
         this.name = 'Text Style';
         this.content = content;
         this.textAlign = 'center';
-        this.font = '12px ARIAL';
+        this.font = font || '12px ARIAL';
         this.lineWidth = 0;
-        this.fillStyle = StyleUtils.colorOrRandomDark();
+        this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
     }
 
     /**
