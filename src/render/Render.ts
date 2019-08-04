@@ -204,7 +204,7 @@ export class Render {
     
     _rotate(x: number, y: number, rotation: number, action: (x: number, y: number) => void) {
         if (rotation && rotation !== 0) {
-            if (rotation < 0) rotation += Math.PI;
+            rotation = this._headsUp(rotation);
             
             this.context.save();
             this.context.translate(x, y);
@@ -249,7 +249,7 @@ export class Render {
                 const x = (previous.x + current.x) * .5;
                 const y = (previous.y + current.y) * .5;
                 const position = { x, y };
-                const rotation = RenderUtils.angle(current, previous);
+                const rotation = RenderUtils.angle(previous, current);
                 this._drawText(text, position, style, rotation);
 
                 return;
@@ -271,5 +271,17 @@ export class Render {
 
     private _toViewport(coordinate: ICoordinate) {
         return RenderUtils.toViewportCoordinate(coordinate, this.envelope, this.resolutionX, this.resolutionY);
+    }
+
+    private _headsUp(rotation: number) {
+        if (rotation < 0) {
+            rotation += Math.PI;
+        }
+
+        if (rotation > Math.PI / 2) {
+            rotation += Math.PI;
+        }
+
+        return rotation;
     }
 }

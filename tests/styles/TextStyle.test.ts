@@ -74,6 +74,6 @@ describe('TextStyle', () => {
         textStyle.draw(feature, canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'text-4.png');
+        compareImage(canvas.image, 'text-4.png', true);
     });
 });
