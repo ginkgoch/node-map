@@ -1,24 +1,27 @@
+import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { FieldFilterOptions } from "./FieldFilterOptions";
-import { Opener } from "./Opener";
 import { Field } from "./Field";
+import { Opener } from "./Opener";
+import { Projection } from "../projection/Projection";
+import { FieldFilterOptions } from "./FieldFilterOptions";
 
 export abstract class FeatureSource extends Opener {
-    srs?: string;
     name: string;
+    projection: Projection
 
-    constructor() { 
+    constructor() {
         super();
-        
+
         this.name = 'Unknown';
+        this.projection = new Projection();
     }
 
-    async features(envelope?: IEnvelope, envelopeSrs?: string): Promise<Feature[]> {
+    async features(envelope?: IEnvelope): Promise<Feature[]> {
         this._checkOpened();
 
         let envelopeIn = envelope;
         if (envelopeIn !== undefined) {
-            envelopeIn = this._inverseProjection(envelopeIn, envelopeSrs);
+            envelopeIn = this._inverseProjection(envelopeIn);
         }
         const featuresIn = await this._features(envelopeIn);
         const featuresOut = this._forwardProjection(featuresIn);
@@ -41,26 +44,54 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _fields(): Promise<Field[]>;
 
-    async envelope(srs?: string) {
+    async envelope() {
         this._checkOpened();
-        return await this._envelope(srs);
+
+        let envelope = await this._envelope();
+        return this.projection.forward(envelope);
     }
 
-    protected abstract async _envelope(srs?: string): Promise<Envelope>;
+    protected abstract async _envelope(): Promise<Envelope>;
 
-    protected _inverseProjection(envelope: IEnvelope, envelopeSrs?: string): IEnvelope;
-    protected _inverseProjection(feature: IFeature, featureSrs?: string): Feature;
-    protected _inverseProjection(param: IEnvelope | IFeature, paramSrs?: string): IEnvelope | Feature {
-        throw new Error();
+    get srs(): string | undefined {
+        return this.projection.from;
+    }
+
+    set srs(srs: string|undefined) {
+        this.projection.from = srs;
+    }
+
+    protected _inverseProjection(envelope: IEnvelope): IEnvelope;
+    protected _inverseProjection(feature: IFeature): Feature;
+    protected _inverseProjection(param: IEnvelope | IFeature): IEnvelope | Feature {
+        if (this.isEnvelope(param)) {
+            let envelope = param as IEnvelope;
+            envelope = this.projection.inverse(envelope);
+            return envelope;
+        } else {
+            let f = param as IFeature;
+            let geometry = f.geometry.clone(c => this.projection.inverse(c));
+            return new Feature(geometry, f.properties, f.id);
+        }
     }
 
     protected _forwardProjection(feature: IFeature): Feature
     protected _forwardProjection(features: IFeature[]): Feature[]
     protected _forwardProjection(param: IFeature | IFeature[]): Feature | Feature[] {
-        throw new Error();
+        if (Array.isArray(param)) {
+            let features = param as IFeature[];
+            return features.map(f => {
+                let geom = f.geometry.clone(c => this.projection.forward(c));
+                return new Feature(geom, f.properties, f.id);
+            });
+        } else {
+            let f = param as IFeature;
+            let geom = f.geometry.clone(c => this.projection.inverse(c));
+            return new Feature(geom, f.properties, f.id);
+        }
     }
 
-    async feature(id: string, fields?: FieldFilterOptions, geomSrc?: string): Promise<Feature> {
+    async feature(id: string, fields?: FieldFilterOptions): Promise<Feature> {
         let feature = await this._feature(id, fields);
         feature = this._forwardProjection(feature);
         return feature;
@@ -73,25 +104,25 @@ export abstract class FeatureSource extends Opener {
         return false;
     }
 
-    async push(feature: IFeature, featureSrs?: string) {
+    async push(feature: IFeature) {
         this._checkEditable();
 
-        const featureIn = this._inverseProjection(feature, featureSrs);
+        const featureIn = this._inverseProjection(feature);
         this._push(featureIn);
     }
 
-    protected async _push(feature: IFeature) { 
+    protected async _push(feature: IFeature) {
         this._notImplemented();
     }
 
-    async update(feature: IFeature, featureSrs?: string) {
+    async update(feature: IFeature) {
         this._checkEditable();
 
-        const featureIn = this._inverseProjection(feature, featureSrs);
+        const featureIn = this._inverseProjection(feature);
         await this._update(featureIn);
     }
 
-    protected async _update(feature: IFeature) { 
+    protected async _update(feature: IFeature) {
         this._notImplemented();
     }
 
@@ -113,4 +144,8 @@ export abstract class FeatureSource extends Opener {
         throw new Error('Not implemented');
     }
     //#endregion
+
+    private isEnvelope(obj: any) {
+        return ['minx', 'miny', 'maxx', 'maxy'].every(v => v in obj)
+    }
 }
