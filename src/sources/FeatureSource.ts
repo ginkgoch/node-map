@@ -16,19 +16,47 @@ export abstract class FeatureSource extends Opener {
         this.projection = new Projection();
     }
 
-    async features(envelope?: IEnvelope): Promise<Feature[]> {
+    async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
         this._checkOpened();
 
         let envelopeIn = envelope;
         if (envelopeIn !== undefined) {
             envelopeIn = this._inverseProjection(envelopeIn);
+        } else {
+            envelopeIn = { minx: Number.NEGATIVE_INFINITY, miny: Number.NEGATIVE_INFINITY, maxx: Number.POSITIVE_INFINITY, maxy: Number.POSITIVE_INFINITY };
         }
-        const featuresIn = await this._features(envelopeIn);
+
+        const fieldsNorm = await this._normalizeFields(fields);
+        const featuresIn = await this._features(envelopeIn, fieldsNorm);
         const featuresOut = this._forwardProjection(featuresIn);
         return featuresOut;
     }
 
-    protected abstract async _features(envelope?: IEnvelope): Promise<Feature[]>;
+    protected abstract async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]>;
+
+    async feature(id: number, fields?: FieldFilterOptions): Promise<Feature | undefined> {
+        let fieldsNorm = await this._normalizeFields(fields);
+        let feature = await this._feature(id, fieldsNorm);
+        if (feature === undefined) {
+            return undefined;
+        }
+
+        feature = this._forwardProjection(feature);
+        return feature;
+    }
+
+    protected abstract async _feature(id: number, fields: string[]): Promise<Feature | undefined>;
+
+    protected async _normalizeFields(fields?: FieldFilterOptions): Promise<string[]> {
+        if (fields === 'none') return [];
+
+        const allFields = (await this.fields()).map(f => f.name);
+        if (fields === 'all' || fields === undefined) {
+            return allFields;
+        } else {
+            return _.intersection(allFields, fields);
+        }
+    }
 
     async count() {
         this._checkOpened();
@@ -90,14 +118,6 @@ export abstract class FeatureSource extends Opener {
             return new Feature(geom, f.properties, f.id);
         }
     }
-
-    async feature(id: string, fields?: FieldFilterOptions): Promise<Feature> {
-        let feature = await this._feature(id, fields);
-        feature = this._forwardProjection(feature);
-        return feature;
-    }
-
-    protected abstract async _feature(id: string, fields?: FieldFilterOptions): Promise<Feature>;
 
     //#region edit
     editable() {
