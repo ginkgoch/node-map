@@ -1,4 +1,4 @@
-import { LineStyle } from "../../src/styles/Index";
+import { LineStyle } from "../../src/styles";
 import { Feature, LineString } from "ginkgoch-geom";
 import { Render } from "../../src/render";
 import TestUtils from "../shared/TestUtils";

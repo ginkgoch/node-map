@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
-import { Render, Image } from "../render/Index";
+import { Render, Image } from "../render";
 import { Opener, Validator } from "../shared";
 
 export class FeatureLayer extends Opener {

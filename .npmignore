@@ -1,0 +1,7 @@
+/src/
+/tests/
+/built/tests/
+/tsconfig.json
+/jest.config.js
+/docs
+/webpack.config.js
