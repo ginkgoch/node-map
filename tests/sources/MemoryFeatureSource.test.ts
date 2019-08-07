@@ -1,6 +1,6 @@
 import { Feature, Point } from "ginkgoch-geom";
-import { MemoryFeatureSource } from "../../src/sources/MemoryFeatureSource";
-import { Field } from "../../src/sources/Field";
+import { MemoryFeatureSource } from "../../src/layers/MemoryFeatureSource";
+import { Field } from "../../src/layers/Field";
 
 describe('MemoryFeatureSource', () => {
     it('push feature', async () => {

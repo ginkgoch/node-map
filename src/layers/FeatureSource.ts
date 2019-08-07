@@ -1,9 +1,8 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Field } from "./Field";
-import { Opener } from "../shared/Opener";
-import Validator from "../shared/Validator";
-import { Projection } from "../projection/Projection";
+import { Opener, Validator } from "../shared";
+import { Projection } from "./Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
 
 export abstract class FeatureSource extends Opener {

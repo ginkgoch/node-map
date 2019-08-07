@@ -1,7 +1,7 @@
 import { Opener } from "./Opener";
-import { FeatureSource } from "../sources/FeatureSource";
+import { FeatureSource } from "../layers/FeatureSource";
 
-export default class Validator {
+export class Validator {
     static checkOpenAndEditable(source: FeatureSource, ignoreOpen = false) {
         Validator.checkEditable(source);
         Validator.checkOpened(source, ignoreOpen);        

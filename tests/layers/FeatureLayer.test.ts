@@ -1,6 +1,5 @@
 import { LineString, Feature } from "ginkgoch-geom";
-import { MemoryFeatureSource } from "../../src/sources/MemoryFeatureSource";
-import { FeatureLayer } from "../../src/layers/FeatureLayer";
+import { MemoryFeatureSource, FeatureLayer } from "../../src/layers";
 import { Render } from "../../src/render/Index";
 import { LineStyle } from "../../src/styles/Index";
 import TestUtils from "../shared/TestUtils";
