@@ -10,7 +10,7 @@ describe('Style', () => {
     it('json', () => {
         const pointStyle = new PointStyle();
         const raw = pointStyle.json();
-        expect(Object.keys(raw).length).toBe(5);
+        expect(Object.keys(raw).length).toBe(7);
     });
 
     it('PointStyle', () => {

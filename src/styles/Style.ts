@@ -4,19 +4,31 @@ import { IFeature } from "ginkgoch-geom";
 
 //TODO: test whether the context will be recovered.
 export abstract class Style {
-    name: string
+    name: string;
+    maximumScale: number;
+    minimumScale: number;
+
     constructor(name?: string) {
         this.name = name || 'unknown';
+        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.minimumScale = 0;
     }
 
     draw(feature: IFeature, render: Render) {
-        const styleJson = this.json();
-        this._draw(feature, styleJson, render);
+        this.drawAll([feature], render);
     }
 
     drawAll(features: IFeature[], render: Render) {
+        if (render.scale < this.minimumScale || render.scale > this.maximumScale) {
+            return;
+        }
+
         const styleJson = this.json();
         features.forEach(f => this._draw(f, styleJson, render));
+    }
+
+    fields(): string[] {
+        return [];
     }
 
     /**
