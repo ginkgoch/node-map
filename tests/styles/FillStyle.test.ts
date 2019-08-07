@@ -1,4 +1,4 @@
-import { FillStyle } from "../../src/styles/Index";
+import { FillStyle } from "../../src/styles";
 import { Feature, Polygon, LinearRing } from "ginkgoch-geom";
 import { Render } from "../../src/render";
 import TestUtils from "../shared/TestUtils";
