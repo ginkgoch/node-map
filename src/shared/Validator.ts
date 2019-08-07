@@ -1,4 +1,4 @@
-import { Opener } from "../sources/Opener";
+import { Opener } from "./Opener";
 import { FeatureSource } from "../sources/FeatureSource";
 
 export default class Validator {
@@ -8,7 +8,7 @@ export default class Validator {
     }
 
     static checkEditable(source: FeatureSource) {
-        if (!source.editable()) throw new Error('Source is not editable.');
+        if (!source.editable) throw new Error('Source is not editable.');
     }
 
     static checkOpened(opener: Opener, ignore: boolean = false) {

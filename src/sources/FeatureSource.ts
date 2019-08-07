@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Field } from "./Field";
-import { Opener } from "./Opener";
+import { Opener } from "../shared/Opener";
 import Validator from "../shared/Validator";
 import { Projection } from "../projection/Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
@@ -15,6 +15,14 @@ export abstract class FeatureSource extends Opener {
 
         this.name = 'Unknown';
         this.projection = new Projection();
+    }
+
+    protected _open(): Promise<void> { 
+        return Promise.resolve();
+    }
+
+    protected _close(): Promise<void> {
+        return Promise.resolve();
     }
 
     async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
@@ -121,7 +129,7 @@ export abstract class FeatureSource extends Opener {
     }
 
     //#region edit
-    editable() {
+    get editable() {
         return false;
     }
 

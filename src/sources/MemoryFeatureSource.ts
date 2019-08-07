@@ -13,6 +13,12 @@ export class MemoryFeatureSource extends FeatureSource {
         this._memoryFields = new Array<Field>();
     }
 
+    /**
+     * 
+     * @param envelope 
+     * @param fields 
+     * @override
+     */
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
         const features = this._memoryFeatures.features.filter(f => {
             return !Envelope.disjoined(envelope, f.geometry.envelope());
@@ -29,14 +35,26 @@ export class MemoryFeatureSource extends FeatureSource {
         return Promise.resolve(features);
     }
 
+    /**
+     * @override
+     */
     protected _fields(): Promise<Field[]> {
         return Promise.resolve(this._memoryFields);
     }
 
+    /**
+     * @override
+     */
     protected async _envelope(): Promise<Envelope> {
         return await this._memoryFeatures.envelope();
     }
 
+    /**
+     * 
+     * @param id 
+     * @param fields 
+     * @override
+     */
     protected _feature(id: number, fields: string[]): Promise<Feature | undefined> {
         let feature = this._memoryFeatures.features.find(f => f.id === id);
         if (feature === undefined) {
@@ -46,15 +64,10 @@ export class MemoryFeatureSource extends FeatureSource {
         return Promise.resolve(feature.clone(fields));
     }
 
-    protected _open(): Promise<void> { 
-        return Promise.resolve();
-    }
-
-    protected _close(): Promise<void> {
-        return Promise.resolve();
-    }
-
-    editable() {
+    /**
+     * @override
+     */
+    get editable() {
         return true;
     }
 
