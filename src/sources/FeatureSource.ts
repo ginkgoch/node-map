@@ -2,6 +2,7 @@ import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Field } from "./Field";
 import { Opener } from "./Opener";
+import Validator from "../shared/Validator";
 import { Projection } from "../projection/Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
 
@@ -17,7 +18,7 @@ export abstract class FeatureSource extends Opener {
     }
 
     async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         let envelopeIn = envelope;
         if (envelopeIn !== undefined) {
@@ -59,13 +60,13 @@ export abstract class FeatureSource extends Opener {
     }
 
     async count() {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         return (await this.features()).length;
     }
 
     async fields() {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         return await this._fields();
     }
@@ -73,7 +74,7 @@ export abstract class FeatureSource extends Opener {
     protected abstract async _fields(): Promise<Field[]>;
 
     async envelope() {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         let envelope = await this._envelope();
         return this.projection.forward(envelope);
@@ -125,7 +126,7 @@ export abstract class FeatureSource extends Opener {
     }
 
     async push(feature: IFeature) {
-        this._checkEditable();
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
         const featureIn = this._inverseProjection(feature);
         this._push(featureIn);
@@ -136,7 +137,7 @@ export abstract class FeatureSource extends Opener {
     }
 
     async update(feature: IFeature) {
-        this._checkEditable();
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
         const featureIn = this._inverseProjection(feature);
         await this._update(featureIn);
@@ -147,7 +148,7 @@ export abstract class FeatureSource extends Opener {
     }
 
     async delete(id: number) {
-        this._checkEditable();
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
         await this._delete(id);
     }
@@ -156,8 +157,34 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
-    private _checkEditable() {
-        if (!this.editable()) throw new Error('Source is not editable.');
+    async pushField(field: Field) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._pushField(field);
+    }
+
+    protected async _pushField(field: Field): Promise<void> {
+        this._notImplemented();
+    }
+
+    async updateField(sourceFieldName: string, newField: Field) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._updateField(sourceFieldName, newField);
+    }
+
+    protected async _updateField(sourceFieldName: string, newField: Field): Promise<void> {
+        this._notImplemented();
+    }
+
+    async deleteField(fieldName: string) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._deleteField(fieldName);
+    }
+
+    protected async _deleteField(fieldName: string): Promise<void> {
+        this._notImplemented();
     }
 
     private _notImplemented() {

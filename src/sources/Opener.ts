@@ -19,9 +19,7 @@ export abstract class Opener {
 
     protected abstract async _close(): Promise<void>;
 
-    protected _checkOpened() {
-        if (!this.opened) {
-            throw new Error('Not opened. Call open() method and try again.');
-        }
+    protected get _openRequired() {
+        return true;
     }
 }
