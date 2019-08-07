@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Opener } from "../shared/Opener";
 import { FeatureSource } from "../sources/FeatureSource";
 import { Style } from "../styles/Style";
-import { Render } from "../render/Index";
+import { Render, Image } from "../render/Index";
 import Validator from "../shared/Validator";
 
 export class FeatureLayer extends Opener {
@@ -25,8 +25,8 @@ export class FeatureLayer extends Opener {
      */
     protected async _open(): Promise<void> {
         await this.source.open();
-    }    
-    
+    }
+
     /**
      * @override
      */
@@ -34,9 +34,16 @@ export class FeatureLayer extends Opener {
         await this.source.close();
     }
 
+    async envelope() {
+        Validator.checkOpened(this);
+
+        return await this.source.envelope();
+    }
+
     async draw(render: Render) {
         Validator.checkOpened(this);
-        if(!this._isVisible(render.scale, this.maximumScale, this.minimumScale)) {
+
+        if (!this._isVisible(render.scale, this.maximumScale, this.minimumScale)) {
             return;
         }
 
@@ -47,6 +54,15 @@ export class FeatureLayer extends Opener {
         styles.forEach(style => {
             style.drawAll(features, render);
         });
+    }
+
+    async sample(width = 256, height = 256): Promise<Image> {
+        const envelope = await this.envelope();
+        const render = Render.create(width, height, envelope, this.source.projection.fromUnit);
+        await this.draw(render);
+        render.flush();
+
+        return render.image;
     }
 
     private _isVisible(scale: number, maxScale: number, minScale: number) {

@@ -37,9 +37,9 @@ export class Render {
     }
 
     static create(width: number = 256, height: number = 256, 
-        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }): Render {
+        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }, envelopeUnit = Unit.degrees): Render {
         const image = new Image(width, height);
-        const render = new Render(image, envelope);
+        const render = new Render(image, envelope, envelopeUnit);
         return render;
     }
 

@@ -16,7 +16,9 @@ export class GeoUtils {
         return Math.max(scaleX, scaleY);
     }
 
-    static unit(srs: string): Unit {
+    static unit(srs: string | undefined): Unit {
+        if (srs === undefined) return Unit.unknown;
+
         try {
             const proj = proj4(srs) as any;
             const unit = proj.oProj.units;
