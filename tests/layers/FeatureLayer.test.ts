@@ -23,7 +23,7 @@ describe('FeatureLayer', () => {
     it('sample', async () => {
         const layer = lineLayer();
         await layer.open();
-        const image = await layer.sample();
+        const image = await layer.thumbnail();
         layer.close();
 
         compareImage(image, 'layer-sample.png');
