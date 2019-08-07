@@ -155,13 +155,13 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
-    async delete(id: number) {
+    async remove(id: number) {
         Validator.checkOpenAndEditable(this, !this._openRequired);
 
-        await this._delete(id);
+        await this._remove(id);
     }
 
-    async _delete(id: number) {
+    protected async _remove(id: number) {
         this._notImplemented();
     }
 
@@ -185,13 +185,13 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
-    async deleteField(fieldName: string) {
+    async removeField(fieldName: string) {
         Validator.checkOpenAndEditable(this, !this._openRequired);
 
-        await this._deleteField(fieldName);
+        await this._removeField(fieldName);
     }
 
-    protected async _deleteField(fieldName: string): Promise<void> {
+    protected async _removeField(fieldName: string): Promise<void> {
         this._notImplemented();
     }
 
