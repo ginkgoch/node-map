@@ -1,10 +1,14 @@
 import { ICoordinate, IEnvelope, Geometry, LinearRing, Polygon } from "ginkgoch-geom";
 import proj4 from 'proj4';
 import _ from "lodash";
+import { Unit } from "../shared/Unit";
+import { GeoUtils } from "../shared/GeoUtils";
 
 export class Projection {
     _from?: string;
+    _fromUnit: Unit = Unit.unknown;
     _to?: string;
+    _toUnit: Unit = Unit.unknown;
     _invalid = false;
     _converter?: proj4.Converter;
 
@@ -21,8 +25,13 @@ export class Projection {
     set from(fromProjection: string | undefined) {
         if (this._from !== fromProjection) {
             this._from = fromProjection
+            this._fromUnit = GeoUtils.unit(this._from);
             this._invalid = true;
         }
+    }
+
+    get fromUnit() {
+        return this._fromUnit;
     }
 
     get to(): string | undefined {
@@ -31,9 +40,14 @@ export class Projection {
     
     set to(toProjection: string | undefined) {
         if (this._to !== toProjection) {
-            this._to = toProjection
+            this._to = toProjection;
+            this._toUnit = GeoUtils.unit(this._to);
             this._invalid = true;
         }
+    }
+
+    get toUnit() {
+        return this._toUnit;
     }
     //#endregion
 

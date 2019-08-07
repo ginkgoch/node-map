@@ -3,12 +3,15 @@ import assert from 'assert';
 import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
 import { Canvas, CanvasRenderingContext2D } from 'canvas';
 import { Image, Size, RenderUtils } from ".";
+import { Unit } from '../shared/Unit';
+import { GeoUtils } from '../shared/GeoUtils';
 
 export class Render {
     image: Image;
     width: number;
     height: number;
     canvas: Canvas;
+    scale: number;
     resolutionX = 0;
     resolutionY = 0;
     envelope: IEnvelope;
@@ -16,7 +19,7 @@ export class Render {
     context: CanvasRenderingContext2D;
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
-    constructor(image: Image, envelope: IEnvelope) {
+    constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meter) {
         assert(image.width > 0, 'Image width must greater than 0.')
         assert(image.height > 0, 'Image height must greater than 0.')
 
@@ -24,6 +27,7 @@ export class Render {
         this.envelope = envelope;
         this.width = image.width;
         this.height = image.height;
+        this.scale = GeoUtils.scale(envelope, envelopeUnit, { width: this.width, height: this.height });
         this.resolutionX = Math.abs(envelope.maxx - envelope.minx) / this.width;
         this.resolutionY = Math.abs(envelope.maxy - envelope.miny) / this.height;
 
@@ -33,9 +37,9 @@ export class Render {
     }
 
     static create(width: number = 256, height: number = 256, 
-        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }): Render {
+        envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }, envelopeUnit = Unit.degrees): Render {
         const image = new Image(width, height);
-        const render = new Render(image, envelope);
+        const render = new Render(image, envelope, envelopeUnit);
         return render;
     }
 

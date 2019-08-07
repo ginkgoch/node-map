@@ -1,3 +1,4 @@
+import proj4 from 'proj4';
 import { Projection } from "../../src/projection/Projection";
 import { Polygon } from "ginkgoch-geom";
 
@@ -58,6 +59,17 @@ describe('Projection', () => {
             [ -25, 5 ],
             [ -25, 15 ],
             [ -25, 25 ] ]);
+    });
+
+    it('proj4 - unit', () => {
+        let proj1 = proj4('EPSG:4326') as any;
+        expect(proj1.oProj.units).toEqual('degrees');
+
+        let proj2 = proj4('GOOGLE') as any;
+        expect(proj2.oProj.units).toEqual('m');
+
+        let proj3 = proj4('+proj=lcc +lat_1=40.03333333333333 +lat_2=38.73333333333333 +lat_0=38 +lon_0=-82.5 +x_0=600000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs') as any;
+        expect(proj3.oProj.units).toEqual('us-ft');    
     });
 });
 

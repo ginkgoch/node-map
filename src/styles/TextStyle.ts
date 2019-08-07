@@ -54,6 +54,14 @@ export class TextStyle extends Style {
         }
     }
 
+    /**
+     * @override
+     */
+    fields(): string[] {
+        const fields = this._extractFields();
+        return fields;
+    }
+
     private _formatContent(props: Map<string, any>) {
         let content = this.content as string;
         props.forEach((v, k) => {
