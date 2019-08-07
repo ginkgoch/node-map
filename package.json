@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "build": "./node_modules/.bin/tsc"
+    "build": "./node_modules/.bin/tsc",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
@@ -22,7 +23,7 @@
     "@types/proj4": "^2.5.0",
     "@types/randomcolor": "^0.5.2",
     "canvas": "^2.5.0",
-    "ginkgoch-geom": "^1.2.0",
+    "ginkgoch-geom": "^1.4.0",
     "lodash": "^4.17.15",
     "proj4": "^2.5.0",
     "randomcolor": "^0.5.4"

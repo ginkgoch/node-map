@@ -1,116 +1,206 @@
+import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { FieldFilterOptions } from "./FieldFilterOptions";
-import { Opener } from "./Opener";
 import { Field } from "./Field";
+import { Opener } from "../shared/Opener";
+import Validator from "../shared/Validator";
+import { Projection } from "../projection/Projection";
+import { FieldFilterOptions } from "./FieldFilterOptions";
 
 export abstract class FeatureSource extends Opener {
-    srs?: string;
     name: string;
+    projection: Projection
 
-    constructor() { 
+    constructor() {
         super();
-        
+
         this.name = 'Unknown';
+        this.projection = new Projection();
     }
 
-    async features(envelope?: IEnvelope, envelopeSrs?: string): Promise<Feature[]> {
-        this._checkOpened();
+    protected _open(): Promise<void> { 
+        return Promise.resolve();
+    }
+
+    protected _close(): Promise<void> {
+        return Promise.resolve();
+    }
+
+    async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
+        Validator.checkOpened(this, !this._openRequired);
 
         let envelopeIn = envelope;
         if (envelopeIn !== undefined) {
-            envelopeIn = this._inverseProjection(envelopeIn, envelopeSrs);
+            envelopeIn = this._inverseProjection(envelopeIn);
+        } else {
+            envelopeIn = { minx: Number.NEGATIVE_INFINITY, miny: Number.NEGATIVE_INFINITY, maxx: Number.POSITIVE_INFINITY, maxy: Number.POSITIVE_INFINITY };
         }
-        const featuresIn = await this._features(envelopeIn);
+
+        const fieldsNorm = await this._normalizeFields(fields);
+        const featuresIn = await this._features(envelopeIn, fieldsNorm);
         const featuresOut = this._forwardProjection(featuresIn);
         return featuresOut;
     }
 
-    protected abstract async _features(envelope?: IEnvelope): Promise<Feature[]>;
+    protected abstract async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]>;
+
+    async feature(id: number, fields?: FieldFilterOptions): Promise<Feature | undefined> {
+        let fieldsNorm = await this._normalizeFields(fields);
+        let feature = await this._feature(id, fieldsNorm);
+        if (feature === undefined) {
+            return undefined;
+        }
+
+        feature = this._forwardProjection(feature);
+        return feature;
+    }
+
+    protected abstract async _feature(id: number, fields: string[]): Promise<Feature | undefined>;
+
+    protected async _normalizeFields(fields?: FieldFilterOptions): Promise<string[]> {
+        if (fields === 'none') return [];
+
+        const allFields = (await this.fields()).map(f => f.name);
+        if (fields === 'all' || fields === undefined) {
+            return allFields;
+        } else {
+            return _.intersection(allFields, fields);
+        }
+    }
 
     async count() {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         return (await this.features()).length;
     }
 
     async fields() {
-        this._checkOpened();
+        Validator.checkOpened(this, !this._openRequired);
 
         return await this._fields();
     }
 
     protected abstract async _fields(): Promise<Field[]>;
 
-    async envelope(srs?: string) {
-        this._checkOpened();
-        return await this._envelope(srs);
+    async envelope() {
+        Validator.checkOpened(this, !this._openRequired);
+
+        let envelope = await this._envelope();
+        return this.projection.forward(envelope);
     }
 
-    protected abstract async _envelope(srs?: string): Promise<Envelope>;
+    protected abstract async _envelope(): Promise<Envelope>;
 
-    protected _inverseProjection(envelope: IEnvelope, envelopeSrs?: string): IEnvelope;
-    protected _inverseProjection(feature: IFeature, featureSrs?: string): Feature;
-    protected _inverseProjection(param: IEnvelope | IFeature, paramSrs?: string): IEnvelope | Feature {
-        throw new Error();
+    get srs(): string | undefined {
+        return this.projection.from;
+    }
+
+    set srs(srs: string|undefined) {
+        this.projection.from = srs;
+    }
+
+    protected _inverseProjection(envelope: IEnvelope): IEnvelope;
+    protected _inverseProjection(feature: IFeature): Feature;
+    protected _inverseProjection(param: IEnvelope | IFeature): IEnvelope | Feature {
+        if (this.isEnvelope(param)) {
+            let envelope = param as IEnvelope;
+            envelope = this.projection.inverse(envelope);
+            return envelope;
+        } else {
+            let f = param as IFeature;
+            let geometry = f.geometry.clone(c => this.projection.inverse(c));
+            return new Feature(geometry, f.properties, f.id);
+        }
     }
 
     protected _forwardProjection(feature: IFeature): Feature
     protected _forwardProjection(features: IFeature[]): Feature[]
     protected _forwardProjection(param: IFeature | IFeature[]): Feature | Feature[] {
-        throw new Error();
+        if (Array.isArray(param)) {
+            let features = param as IFeature[];
+            return features.map(f => {
+                let geom = f.geometry.clone(c => this.projection.forward(c));
+                return new Feature(geom, f.properties, f.id);
+            });
+        } else {
+            let f = param as IFeature;
+            let geom = f.geometry.clone(c => this.projection.inverse(c));
+            return new Feature(geom, f.properties, f.id);
+        }
     }
-
-    async feature(id: string, fields?: FieldFilterOptions, geomSrc?: string): Promise<Feature> {
-        let feature = await this._feature(id, fields);
-        feature = this._forwardProjection(feature);
-        return feature;
-    }
-
-    protected abstract async _feature(id: string, fields?: FieldFilterOptions): Promise<Feature>;
 
     //#region edit
-    editable() {
+    get editable() {
         return false;
     }
 
-    async push(feature: IFeature, featureSrs?: string) {
-        this._checkEditable();
+    async push(feature: IFeature) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
-        const featureIn = this._inverseProjection(feature, featureSrs);
+        const featureIn = this._inverseProjection(feature);
         this._push(featureIn);
     }
 
-    protected async _push(feature: IFeature) { 
+    protected async _push(feature: IFeature) {
         this._notImplemented();
     }
 
-    async update(feature: IFeature, featureSrs?: string) {
-        this._checkEditable();
+    async update(feature: IFeature) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
-        const featureIn = this._inverseProjection(feature, featureSrs);
+        const featureIn = this._inverseProjection(feature);
         await this._update(featureIn);
     }
 
-    protected async _update(feature: IFeature) { 
+    protected async _update(feature: IFeature) {
         this._notImplemented();
     }
 
-    async delete(id: number) {
-        this._checkEditable();
+    async remove(id: number) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
 
-        await this._delete(id);
+        await this._remove(id);
     }
 
-    async _delete(id: number) {
+    protected async _remove(id: number) {
         this._notImplemented();
     }
 
-    private _checkEditable() {
-        if (!this.editable()) throw new Error('Source is not editable.');
+    async pushField(field: Field) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._pushField(field);
+    }
+
+    protected async _pushField(field: Field): Promise<void> {
+        this._notImplemented();
+    }
+
+    async updateField(sourceFieldName: string, newField: Field) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._updateField(sourceFieldName, newField);
+    }
+
+    protected async _updateField(sourceFieldName: string, newField: Field): Promise<void> {
+        this._notImplemented();
+    }
+
+    async removeField(fieldName: string) {
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._removeField(fieldName);
+    }
+
+    protected async _removeField(fieldName: string): Promise<void> {
+        this._notImplemented();
     }
 
     private _notImplemented() {
         throw new Error('Not implemented');
     }
     //#endregion
+
+    private isEnvelope(obj: any) {
+        return ['minx', 'miny', 'maxx', 'maxy'].every(v => v in obj)
+    }
 }
