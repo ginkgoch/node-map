@@ -1,6 +1,6 @@
-import { PointStyle } from "../../src/styles";
+import { PointStyle } from "..";
 import { Point, Feature } from "ginkgoch-geom";
-import { Render } from "../../src/render";
+import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);

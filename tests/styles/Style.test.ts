@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { PointStyle } from "../../src/styles";
-import { Render } from '../../src/render';
+import { PointStyle } from "..";
+import { Render } from '..';
 import { Feature, Point } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
 

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { Point, LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon } from 'ginkgoch-geom';
-import { Image, Render } from '../../src/render';
+import { Image, Render } from '..';
 
 const defaultEnvelope = { minx: -180, maxx: 180, miny: -90, maxy: 90 };
 

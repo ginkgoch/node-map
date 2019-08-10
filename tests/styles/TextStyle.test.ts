@@ -1,8 +1,6 @@
-import { TextStyle } from "../../src/styles/TextStyle";
+import { TextStyle, LineStyle, Render } from "..";
 import { Feature, Point, LineString } from "ginkgoch-geom";
-import { Render } from "../../src/render";
 import TestUtils from "../shared/TestUtils";
-import { LineStyle } from "../../src/styles";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 

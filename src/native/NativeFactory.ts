@@ -19,7 +19,7 @@ export class NativeFactory {
     static nativeCanvas(width: number, height: number) {
         NativeFactory._checkHasRegistered();
 
-        return NativeFactory.__middleware.createCanvasBySize(width, height);
+        return NativeFactory.__middleware.createCanvas(width, height);
     }
 
     private static _checkHasRegistered() {
