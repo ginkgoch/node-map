@@ -1,15 +1,15 @@
 import fs from 'fs';
-import { Canvas, Image as ImageRaw } from 'canvas';
+import { NativeFactory, NativeImage } from '../native';
 
 /**
  * An image wrapper class.
  * @class
  */
 export class Image {
-    buffer: Buffer|null;
+    buffer: Buffer | null;
     width: number;
     height: number;
-    source: ImageRaw;
+    source: NativeImage;
 
     /**
      * Constructs an instance of Image.
@@ -24,24 +24,24 @@ export class Image {
      */
     constructor(imageFilePath?: string)
     constructor(width?: number, height?: number)
-    constructor(param?: string|number, height?: number) {
+    constructor(param?: string | number, height?: number) {
         this.buffer = null;
         if (typeof param === 'number') {
             this.width = param;
             this.height = height || 256;
-            this.source = new ImageRaw();
-            this.source.src = this.buffer = new Canvas(this.width, this.height).toBuffer();
+            this.source = NativeFactory.nativeImage();
+            this.source.src = this.buffer = this._nativeCanvas(this.width, this.height).toBuffer();
         }
-        else if(typeof param === 'string') {
-            this.source = new ImageRaw();
+        else if (typeof param === 'string') {
+            this.source = NativeFactory.nativeImage();
             this.source.src = this.buffer = fs.readFileSync(param);
             this.width = this.source.width;
             this.height = this.source.height;
         }
         else {
             this.width = this.height = 256;
-            this.source = new ImageRaw();
-            this.source.src = this.buffer = new Canvas(this.width, this.height).toBuffer();
+            this.source = NativeFactory.nativeImage();
+            this.source.src = this.buffer = this._nativeCanvas(this.width, this.height).toBuffer();
         }
     }
 
@@ -50,6 +50,10 @@ export class Image {
      * @returns {Buffer} Buffer from this image.
      */
     toBuffer(): Buffer {
-        return this.buffer || new Canvas(this.width, this.height).toBuffer();
+        return this.buffer || this._nativeCanvas(this.width, this.height).toBuffer();
+    }
+
+    private _nativeCanvas(width: number, height: number) {
+        return NativeFactory.nativeCanvas(width, height);
     }
 }

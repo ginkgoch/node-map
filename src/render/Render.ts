@@ -1,22 +1,24 @@
 import _ from 'lodash';
 import assert from 'assert';
-import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
-import { Canvas, CanvasRenderingContext2D } from 'canvas';
 import { Image, Size, RenderUtils } from ".";
 import { Unit } from '../shared/Unit';
 import { GeoUtils } from '../shared/GeoUtils';
+import { NativeCanvas, NativeFactory } from '../native';
+import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, 
+    MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, 
+    LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
 
 export class Render {
     image: Image;
     width: number;
     height: number;
-    canvas: Canvas;
+    canvas: NativeCanvas;
     scale: number;
     resolutionX = 0;
     resolutionY = 0;
     envelope: IEnvelope;
     antialias: "default" | "none" | "gray" | "subpixel" = 'default';
-    context: CanvasRenderingContext2D;
+    context: any;
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
     constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meter) {
@@ -31,7 +33,7 @@ export class Render {
         this.resolutionX = Math.abs(envelope.maxx - envelope.minx) / this.width;
         this.resolutionY = Math.abs(envelope.maxy - envelope.miny) / this.height;
 
-        this.canvas = new Canvas(this.width, this.height);
+        this.canvas = NativeFactory.nativeCanvas(this.width, this.height);
         this.context = this.canvas.getContext('2d');
         this.context.antialias = this.antialias;
     }
