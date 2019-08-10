@@ -194,6 +194,14 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
+    async flushFields() { 
+        Validator.checkOpenAndEditable(this, !this._openRequired);
+
+        await this._flushFields();
+    }
+
+    protected async _flushFields() { }
+
     private _notImplemented() {
         throw new Error('Not implemented');
     }

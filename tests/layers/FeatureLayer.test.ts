@@ -1,6 +1,7 @@
 import { LineString, Feature } from "ginkgoch-geom";
-import { MemoryFeatureSource, FeatureLayer, Render, LineStyle } from "..";
+import { MemoryFeatureSource, FeatureLayer, Render, LineStyle, ShapefileFeatureSource } from "..";
 import TestUtils from "../shared/TestUtils";
+import { FillStyle } from "../../src/styles";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/layers/' + name);
 
@@ -24,6 +25,20 @@ describe('FeatureLayer', () => {
         layer.close();
 
         compareImage(image, 'layer-sample.png');
+    });
+
+    it('draw - shapefile', async () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        const layer = new FeatureLayer(source);
+        layer.styles.push(new FillStyle('#886600', 'red', 2));
+
+        await layer.open();
+        const envelope = await layer.envelope();
+        const render = Render.create(256, 256, envelope);
+        await layer.draw(render);
+        render.flush();
+
+        compareImage(render.image, 'layer-area.png');
     });
 });
 
