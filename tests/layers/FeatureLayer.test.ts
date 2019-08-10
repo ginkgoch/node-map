@@ -1,7 +1,5 @@
 import { LineString, Feature } from "ginkgoch-geom";
-import { MemoryFeatureSource, FeatureLayer } from "../../src/layers";
-import { Render } from "../../src/render";
-import { LineStyle } from "../../src/styles";
+import { MemoryFeatureSource, FeatureLayer, Render, LineStyle } from "..";
 import TestUtils from "../shared/TestUtils";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/layers/' + name);

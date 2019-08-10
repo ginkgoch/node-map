@@ -23,4 +23,4 @@ export class StyleUtils {
     }
 }
 
-export interface ColorOptions extends RandomColorOptions { }
+export interface ColorOptions extends RandomColorOptionsSingle { }

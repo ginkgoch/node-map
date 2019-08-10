@@ -1,4 +1,4 @@
-import { RenderUtils } from "../../src/render";
+import { RenderUtils } from "..";
 
 describe('RenderUtils', () => {
     it('compressViewportCoordinates', () => {
