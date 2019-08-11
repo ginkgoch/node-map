@@ -38,6 +38,12 @@ module.exports = {
       amd: "ginkgoch-geom",
       root: "ginkgoch-geom"
     },
+    "ginkgoch-shapefile": {
+      commonjs: "ginkgoch-shapefile",
+      commonjs2: "ginkgoch-shapefile",
+      amd: "ginkgoch-shapefile",
+      root: "ginkgoch-shapefile"
+    },
     "proj4": {
       commonjs: "proj4",
       commonjs2: "proj4",
