@@ -92,7 +92,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-3-b.png', true);
+        compareImage(image, 'colors-3-b.png');
     });
 
     it('between - backward - 2', () => {
@@ -100,7 +100,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-4-b.png', true);
+        compareImage(image, 'colors-4-b.png');
     });
 
     it('between - backward - 3', () => {
@@ -108,7 +108,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-5-b.png', true);
+        compareImage(image, 'colors-5-b.png');
     });
 
     it('between - backward - 4', () => {
@@ -116,7 +116,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-6-b.png', true);
+        compareImage(image, 'colors-6-b.png');
     });
 });
 
