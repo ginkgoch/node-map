@@ -4,6 +4,7 @@ import { Field } from "./Field";
 import { Opener, Validator } from "../shared";
 import { Projection } from "./Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
+import { PropertyAggregator } from "./PropertyAggregator";
 
 export abstract class FeatureSource extends Opener {
     name: string;
@@ -79,6 +80,28 @@ export abstract class FeatureSource extends Opener {
     }
 
     protected abstract async _fields(): Promise<Field[]>;
+
+    async propertyAggregator(fields?: FieldFilterOptions) {
+        const properties = await this.properties(fields);
+        return new PropertyAggregator(properties);
+    }
+
+    async properties(fields?: FieldFilterOptions): Promise<Array<Map<string, any>>> {
+        Validator.checkOpened(this, !this._openRequired);
+
+        const f = await this._normalizeFields(fields);
+        return await this._properties(f);
+    }
+
+    protected async _properties(fields: string[]): Promise<Array<Map<string, any>>> {
+        const features = await this.features(undefined, fields);
+        const properties = new Array<Map<string, any>>();
+        features.forEach(f => {
+            properties.push(_.clone(f.properties));
+        })
+
+        return properties;
+    }
 
     async envelope() {
         Validator.checkOpened(this, !this._openRequired);
