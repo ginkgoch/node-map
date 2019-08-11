@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 const colorDictionary = new Map<string, ColorInfo>();
 
 interface ColorInfo {
@@ -131,6 +133,70 @@ function HexToHSB(hex: string): number[] {
         case blue: return [60 * (((red - green) / delta) + 4) || 0, saturation, cMax];
         default: throw new Error(`Cannot convert hex color ${hex} to HSB color.`);
     }
+}
+
+function HueToRgb(p: number, q: number, t: number) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
+    if (t < 1.0 / 2.0) return q;
+    if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6;
+    return p;
+}
+
+function HexToHSL(hex: string) {
+    hex = hex.replace(/^#/, '');
+    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
+
+    var red = parseInt(hex.substr(0, 2), 16) / 255,
+        green = parseInt(hex.substr(2, 2), 16) / 255,
+        blue = parseInt(hex.substr(4, 2), 16) / 255;
+
+    let max = Math.max(red, green, blue);
+    let min = Math.min(red, green, blue);
+    let h, s, l = (max + min) / 2;
+    if (max === min) {
+        h = s = 0;
+    } else {
+        let d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max == red) {
+            h = (green - blue) / d + (green < blue ? 6 : 0);
+        }
+        else if (max == green) {
+            h = (blue - red) / d + 2;
+        }
+        else if (max == blue) {
+            h = (red - green) / d + 4;
+        }
+        else {
+            throw new Error(`${hex} is not in range.`);
+        }
+
+        h /= 6;
+    }
+
+    return [h, s, l];
+}
+
+function HSLToHex(hsl: number[]) {
+    let [hue, saturation, luminosity] = hsl;
+    let r, g, b;
+
+    if (saturation == 0) {
+        r = g = b = luminosity; // achromatic
+    }
+    else {
+        var q = luminosity < 0.5 ? luminosity * (1 + saturation) : luminosity + saturation - luminosity * saturation;
+        var p = 2 * luminosity - q;
+        r = HueToRgb(p, q, hue + 1.0 / 3.0);
+        g = HueToRgb(p, q, hue);
+        b = HueToRgb(p, q, hue - 1.0 / 3.0);
+    }
+
+    [r, g, b] = [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    const hex = '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+    return hex;
 }
 
 function pickSaturation(hue: number, options: any): number {
@@ -395,5 +461,42 @@ export class Colors {
         return <string>this.random({
             luminosity: RandomLuminosity.bright
         });
+    }
+
+    static between(fromHex: string, toHex: string, count: number): string[] {
+        assert(count > 1, 'Count must be greater than 1 colors.');
+
+        const fromHSL = HexToHSL(fromHex);
+        const toHSL = HexToHSL(toHex);
+        const segCount = count - 1;
+
+        const incrementH = (toHSL[0] - fromHSL[0]) / segCount;
+        const incrementS = (toHSL[1] - fromHSL[1]) / segCount;
+        const incrementL = (toHSL[2] - fromHSL[2]) / segCount;
+
+        const hslColors = new Array<number[]>();
+        hslColors.push(fromHSL);
+        for (let i = 0; i < segCount - 1; i++) {
+            hslColors.push([
+                this._round(fromHSL[0] + incrementH * i),
+                this._round(fromHSL[1] + incrementS * i),
+                this._round(fromHSL[2] + incrementL * i)]);
+        }
+        hslColors.push(toHSL);
+
+        const hexColors = hslColors.map(hsl => HSLToHex(hsl));
+        return hexColors;
+    }
+
+    private static _round(v: number, min: number = 0, max: number = 1) {
+        while (v > max) {
+            v -= max;
+        }
+
+        while (v < min) {
+            v += max;
+        }
+
+        return v;
     }
 }
