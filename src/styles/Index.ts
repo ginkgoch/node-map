@@ -4,4 +4,5 @@ export * from './LineStyle';
 export * from './PointStyle'; 
 export * from './Style';
 export * from './StyleUtils'; 
-export * from './TextStyle'; 
+export * from './TextStyle';
+export * from './Colors';

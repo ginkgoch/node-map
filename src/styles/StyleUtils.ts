@@ -1,26 +1,24 @@
-import randomColor from 'randomcolor';
+import { Colors, RandomColorOption, RandomLuminosity } from './Colors';
 
 export class StyleUtils {
-    static colorOrRandom(color?: string, option?: ColorOptions): string {
+    static colorOrRandom(color?: string, option?: RandomColorOption): string {
         if (color !== undefined) return color;
 
-        return <string>randomColor(option || {
-            luminosity: 'light',
-            hue: 'random'
+        return <string>Colors.random(option || {
+            luminosity: RandomLuminosity.light,
+            hue: RandomLuminosity.dark
         });
     }
 
     static colorOrRandomDark(color?: string) {
         return StyleUtils.colorOrRandom(color, {
-            luminosity: 'dark'
+            luminosity: RandomLuminosity.dark
         });
     }
 
     static colorOrRandomLight(color?: string) {
         return StyleUtils.colorOrRandom(color, {
-            luminosity: 'light'
+            luminosity: RandomLuminosity.light
         });
     }
 }
-
-export interface ColorOptions extends RandomColorOptionsSingle { }
