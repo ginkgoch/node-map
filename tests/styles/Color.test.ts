@@ -44,7 +44,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(3);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-1.png', true);
+        compareImage(image, 'colors-1.png');
     });
 
     it('between - normal - 2', () => {
@@ -52,7 +52,71 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-2.png', true);
+        compareImage(image, 'colors-2.png');
+    });
+
+    it('between - forward - 1', () => {
+        const colors = Colors.forward('#ff0000', 20, 100, 'all');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-3.png');
+    });
+
+    it('between - forward - 2', () => {
+        const colors = Colors.forward('#ff0000', 20, 100);
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-4.png');
+    });
+
+    it('between - forward - 3', () => {
+        const colors = Colors.forward('#ff0000', 20, 100, 'saturation');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-5.png');
+    });
+
+    it('between - forward - 4', () => {
+        const colors = Colors.forward('#ff0000', 20, 100, 'luminosity');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-6.png');
+    });
+
+    it('between - backward - 1', () => {
+        const colors = Colors.backward('#ff0000', 20, 100, 'all');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-3-b.png', true);
+    });
+
+    it('between - backward - 2', () => {
+        const colors = Colors.backward('#ff0000', 20, 100);
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-4-b.png', true);
+    });
+
+    it('between - backward - 3', () => {
+        const colors = Colors.backward('#ff0000', 20, 100, 'saturation');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-5-b.png', true);
+    });
+
+    it('between - backward - 4', () => {
+        const colors = Colors.backward('#ff0000', 20, 100, 'luminosity');
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-6-b.png', true);
     });
 });
 

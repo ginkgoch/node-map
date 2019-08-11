@@ -488,6 +488,48 @@ export class Colors {
         return hexColors;
     }
 
+    static forward(hex: string, count: number,
+        forwardPercentage: number = 100,
+        colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue') {
+
+        return this._forwardOrBackward(hex, count, forwardPercentage, colorFamily, true);
+    }
+
+    static backward(hex: string, count: number,
+        forwardPercentage: number = 100,
+        colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue') {
+
+        return this._forwardOrBackward(hex, count, forwardPercentage, colorFamily, false);
+    }
+
+    private static _forwardOrBackward(hex: string, count: number,
+        forwardPercentage: number = 100,
+        colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue', forward = true) {
+        let result = new Array<string>();
+        if (count <= 0) return result;
+
+        result.push(hex);
+        if (count === 1) {
+            return result;
+        }
+
+        const increment = forwardPercentage * .01 / (count - 1);
+        const fromHSL = HexToHSL(hex);
+        const segCount = count - 1;
+
+        const hslColors = new Array<number[]>();
+        hslColors.push(fromHSL);
+        for (let i = 0; i < segCount; i++) {
+            hslColors.push([
+                this._round(fromHSL[0] + i * this._increment(increment, colorFamily, 'hue', forward)),
+                this._round(fromHSL[1] + i * this._increment(increment, colorFamily, 'saturation', forward)),
+                this._round(fromHSL[2] + i * this._increment(increment, colorFamily, 'luminosity', forward))]);
+        }
+
+        const hexColors = hslColors.map(hsl => HSLToHex(hsl));
+        return hexColors;
+    }
+
     private static _round(v: number, min: number = 0, max: number = 1) {
         while (v > max) {
             v -= max;
@@ -498,5 +540,13 @@ export class Colors {
         }
 
         return v;
+    }
+
+    private static _increment(increment: number, colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all', expect: string, forward = true) {
+        if (expect === colorFamily || colorFamily === 'all') {
+            return increment * (forward ? 1 : -1);
+        } else {
+            return 0;
+        }
     }
 }
