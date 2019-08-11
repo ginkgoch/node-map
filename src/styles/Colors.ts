@@ -371,7 +371,7 @@ export interface RandomColorOption {
 }
 
 export class Colors {
-    static random(options: RandomColorOption): string | number[] {
+    static random(options?: RandomColorOption): string | number[] {
         return randomColor(options);
     }
 }
