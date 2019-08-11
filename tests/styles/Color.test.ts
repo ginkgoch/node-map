@@ -18,4 +18,12 @@ describe('Colors', () => {
             expect(color).toMatch(/^rgba\(/);
         }
     });
+
+    it('randomColor - 3', () => {
+        for (let i = 0; i < 10; i++) {
+            let color = Colors.randomHex();
+            expect(color).toMatch(/^#\w{6}$/);
+            expect(color.length).toBe(7);
+        }
+    });
 });

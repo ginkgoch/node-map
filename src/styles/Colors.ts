@@ -374,4 +374,26 @@ export class Colors {
     static random(options?: RandomColorOption): string | number[] {
         return randomColor(options);
     }
+
+    static randomHex() {
+        return <string>this.random();
+    }
+
+    static randomHexLight() {
+        return <string>this.random({
+            luminosity: RandomLuminosity.light
+        });
+    }
+
+    static randomHexDark() {
+        return <string>this.random({
+            luminosity: RandomLuminosity.dark
+        });
+    }
+
+    static randomHexBright() {
+        return <string>this.random({
+            luminosity: RandomLuminosity.bright
+        });
+    }
 }
