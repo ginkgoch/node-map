@@ -89,7 +89,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     }
 
     protected async _flushFields() { 
-        this.__shapefile.flushField();
+        this.__shapefile.flushFields();
     }
 
     private get __shapefile() {
