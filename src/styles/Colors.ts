@@ -261,14 +261,10 @@ function HSVtoHSL(hsv: number[]) {
 }
 
 function HSVtoRGB(hsv: number[]) {
-
-    // this doesn't work for the values of 0 and 360
-    // here's the hacky fix
     var h = hsv[0];
     if (h === 0) { h = 1; }
     if (h === 360) { h = 359; }
 
-    // Rebase the h,s,v values
     h = h / 360;
     var s = hsv[1] / 100,
         v = hsv[2] / 100;
@@ -311,7 +307,8 @@ function getColorInfo(hue: number): ColorInfo {
         hue -= 360;
     }
 
-    for (var colorName in colorDictionary.keys()) {
+    const keys = Array.from(colorDictionary.keys());
+    for (var colorName of keys) {
         var color = colorDictionary.get(colorName) as ColorInfo;
         if (color.hueRange &&
             hue >= color.hueRange[0] &&
@@ -344,9 +341,28 @@ export enum ColorFormat {
     hex = 'hex'
 }
 
+export enum RandomHue {
+    random = 'random',
+    red = 'red',
+    orange = 'orange',
+    yellow = 'yellow',
+    green = 'green',
+    blue = 'blue',
+    purple = 'purple',
+    pink = 'pink',
+    monochrome = 'monochrome'
+}
+
+export enum RandomLuminosity {
+    random = 'random',
+    bright = 'bright',
+    light = 'light',
+    dark = 'dark'
+}
+
 export interface RandomColorOption {
-    hue?: number | string | 'monochrome',
-    luminosity?: 'random' | 'bright' | 'light' | 'dark',
+    hue?: number | string | RandomHue,
+    luminosity?: RandomLuminosity,
     /**
      * 0 - 1
      */

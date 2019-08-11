@@ -1,6 +1,5 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import _ from "lodash";
 
 export class PointStyle extends Style {
     fillStyle: string;
@@ -18,8 +17,8 @@ export class PointStyle extends Style {
         super();
 
         this.name = 'Point Style';
-        this.fillStyle = _.defaultTo(fillStyle, StyleUtils.colorOrRandomLight());
-        this.strokeStyle = _.defaultTo(strokeStyle, StyleUtils.colorOrRandomDark());
+        this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
+        this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
         this.lineWidth = lineWidth;
         this.radius = radius;
         this.symbol = symbol;
