@@ -4,9 +4,11 @@ import { Image, Size, RenderUtils } from ".";
 import { Unit } from '../shared/Unit';
 import { GeoUtils } from '../shared/GeoUtils';
 import { NativeCanvas, NativeFactory } from '../native';
-import { IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection, 
-    MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon, 
-    LinearRing, Envelope, IEnvelope } from "ginkgoch-geom";
+import {
+    IFeature, Geometry, Point, LineString, ICoordinate, GeometryCollection,
+    MultiPoint, GeometryCollectionBase, MultiLineString, MultiPolygon, Polygon,
+    LinearRing, Envelope, IEnvelope
+} from "ginkgoch-geom";
 
 export class Render {
     image: Image;
@@ -38,7 +40,7 @@ export class Render {
         this.context.antialias = this.antialias;
     }
 
-    static create(width: number = 256, height: number = 256, 
+    static create(width: number = 256, height: number = 256,
         envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }, envelopeUnit = Unit.degrees): Render {
         const image = new Image(width, height);
         const render = new Render(image, envelope, envelopeUnit);
@@ -114,7 +116,11 @@ export class Render {
 
         _.extend(this.context, style);
         this.context.fill();
-        this.context.stroke();
+
+        if (style && style.lineWidth !== 0) {
+            _.extend(this.context, style);
+            this.context.stroke();
+        }
     }
 
     _drawLineString(geom: LineString, style: any) {
@@ -130,8 +136,10 @@ export class Render {
             this.context.lineTo(c.x, c.y);
         });
 
-        _.extend(this.context, style);
-        this.context.stroke();
+        if (style && style.lineWidth !== 0) {
+            _.extend(this.context, style);
+            this.context.stroke();
+        }
     }
 
     _drawPolygon(geom: Polygon, style: any) {
@@ -142,9 +150,12 @@ export class Render {
         });
 
         _.extend(this.context, style);
-
         this.context.fill();
-        this.context.stroke();
+
+        if (style && style.lineWidth !== 0) {
+            _.extend(this.context, style);
+            this.context.stroke();
+        }
     }
 
     _drawRing(geom: LinearRing) {
@@ -182,49 +193,49 @@ export class Render {
     //#region draw normal text
     drawText(text: string, coordinate: ICoordinate, style: any) {
         coordinate = this._toViewport(coordinate);
-        
+
         this._drawText(text, coordinate, style);
     }
-    
+
     _drawText(text: string, coordinate: ICoordinate, style: any, rotation: number = 0) {
         if (text.length === 0) {
             return;
         }
-        
+
         _.extend(this.context, style);
         const textBound = this._textBound(text, coordinate);
         if (_.some(this.textBounds, b => !Envelope.disjoined(b, textBound))) {
             return;
         }
-        
+
         this.textBounds.push(textBound);
         this._rotate(coordinate.x, coordinate.y, rotation, (x, y) => {
             const offset = Math.abs(textBound.maxy - textBound.miny) * .5;
             if (style.strokeStyle && style.lineWidth > 0) {
                 this.context.strokeText(text, x, y + offset);
             }
-            
+
             this.context.fillText(text, x, y + offset);
         });
     }
-    
+
     _rotate(x: number, y: number, rotation: number, action: (x: number, y: number) => void) {
         if (rotation && rotation !== 0) {
             rotation = this._headsUp(rotation);
-            
+
             this.context.save();
             this.context.translate(x, y);
             this.context.rotate(rotation);
-            
+
             action && action(0, 0);
-            
+
             this.context.restore();
-            
+
         } else {
             action && action(x, y);
         }
     }
-    
+
     _textBound(text: string, coordinate: ICoordinate) {
         const size = this.measureText(text);
         const minx = coordinate.x;
