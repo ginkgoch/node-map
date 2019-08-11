@@ -14,7 +14,7 @@ export class PropertyAggregator {
     distinct(field: string, sort = false) {
         let query = _.chain(this.properties).filter(p => p.has(field)).map(p => p.get(field));
         if (sort) {
-            query = query.sortedUniq();
+            query = query.sortedUniq().orderBy(v => v, 'asc');
         } else {
             query = query.uniq();
         }
