@@ -6,3 +6,4 @@ export * from './Style';
 export * from './StyleUtils'; 
 export * from './TextStyle';
 export * from './Colors';
+export * from './ValueStyle';
