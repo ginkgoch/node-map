@@ -29,9 +29,13 @@ export class TextStyle extends Style {
      * @param render 
      * @override
      */
-    protected _draw(feature: IFeature, styleJson: any, render: Render) {
+    protected _draw(features: IFeature[], styleJson: any, render: Render) {
         if(this.content === undefined) return;
 
+        features.forEach(f => this._drawFeature(f, styleJson, render));
+    }
+
+    private _drawFeature(feature: IFeature, styleJson: any, render: Render) {
         const props = this._filterProperties(feature);
         const text = this._formatContent(props);
 

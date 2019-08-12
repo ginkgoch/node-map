@@ -27,7 +27,7 @@ export abstract class Style {
         }
 
         const styleJson = this.json();
-        features.forEach(f => this._draw(f, styleJson, render));
+        this._draw(features, styleJson, render);
     }
 
     /**
@@ -37,8 +37,8 @@ export abstract class Style {
      * @param render 
      * @virtual
      */
-    protected _draw(feature: IFeature, styleJson: any, render: Render) {
-        render.drawFeature(feature, styleJson);
+    protected _draw(features: IFeature[], styleJson: any, render: Render) {
+        features.forEach(f => render.drawFeature(f, styleJson));
     }
 
     json(): any {
