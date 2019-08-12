@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { Field } from "./Field";
@@ -56,6 +57,12 @@ export class ShapefileFeatureSource extends FeatureSource {
     protected async _feature(id: number, fields: string[]): Promise<Feature | undefined> {
         const feature = this.__shapefile.get(id, fields);
         return feature === null ? undefined : feature;
+    }
+
+    protected async _properties(fields: string[]): Promise<Array<Map<string, any>>> {
+        return this.__shapefile._dbf.value.records({ fields })
+            .filter(r => !r.deleted)
+            .map(r => _.clone(r.values));
     }
 
     protected async _push(feature: IFeature) {
