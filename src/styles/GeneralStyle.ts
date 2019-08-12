@@ -7,14 +7,16 @@ export class GeneralStyle extends Style {
     lineWidth: number;
     strokeStyle: string;
     symbol: PointSymbolType;
+    radius: number;
 
-    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 1) {
+    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
         super();
 
         this.name = 'General Style';
         this.lineWidth = lineWidth;
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
         this.strokeStyle = strokeStyle || this.fillStyle;
-        this.symbol = 'circle';
+        this.symbol = symbol;
+        this.radius = radius;
     }
 }

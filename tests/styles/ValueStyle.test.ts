@@ -59,8 +59,7 @@ describe('ValueStyle', () => {
         });
 
         source.pushField(new Field('type', 'char', 40));
-        const style = ValueStyle.autoPointStyle('type', 
-            features.map(f => f.properties.get('type')), 
+        const style = ValueStyle.auto('point', 'type', features.map(f => f.properties.get('type')), 
             '#ff0000', '#0000ff', '#000000');
 
         const layer = new FeatureLayer(source);
