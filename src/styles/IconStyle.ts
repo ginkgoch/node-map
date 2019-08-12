@@ -17,9 +17,11 @@ export class IconStyle extends Style {
         this.offsetY = offsetY;
     }
 
-    protected _draw(feature: IFeature, styleJson: any, render: Render) {
-        const geom = feature.geometry;
-        this._drawIconForGeom(geom, styleJson, render);
+    protected _draw(features: IFeature[], styleJson: any, render: Render) {
+        features.forEach(f => {
+            const geom = f.geometry;
+            this._drawIconForGeom(geom, styleJson, render);
+        });
     }
 
     private _drawIconForGeom(geom: Geometry, styleJson: any, render: Render) {

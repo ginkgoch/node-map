@@ -86,13 +86,20 @@ export class ValueStyle extends Style {
         return style;
     }
 
-    protected _draw(feature: IFeature, styleJson: any, render: Render) {
-        const v = feature.properties.get(this.field);
-        if (v === undefined) return;
+    protected _draw(features: IFeature[], styleJson: any, render: Render) {
+        _.groupBy(this.items, i => i.value)
 
-        const items = this.items.filter(i => i.value === v);
-        items.forEach(i => {
-            i.style.draw(feature, render);
+
+        const itemMap = _.groupBy(this.items, i => i.value);
+
+        features.forEach(f => {
+            const v = f.properties.get(this.field);
+            if (v === undefined) return;
+    
+            const items = itemMap[v];
+            items.forEach(i => {
+                i.style.draw(f, render);
+            });
         });
     }
 }
