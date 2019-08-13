@@ -21,4 +21,21 @@ export class StyleUtils {
             luminosity: RandomLuminosity.light
         });
     }
+
+    static colorsBetween(count: number, fromColor?: string, toColor?: string) {
+        let colors = new Array<string>();
+        if (fromColor === undefined && toColor === undefined) {
+            for (let i = 0; i < count; i++) {
+                colors.push(Colors.random() as string);
+            }
+        } else if (toColor === undefined) {
+            Colors.forward(<string>fromColor, count, 100).forEach(c => colors.push(c));
+        } else if (fromColor === undefined) {
+            Colors.backward(<string>toColor, count, 100).forEach(c => colors.push(c));
+        } else {
+            Colors.between(fromColor, toColor, count).forEach(c => colors.push(c));
+        }
+
+        return colors;
+    }
 }
