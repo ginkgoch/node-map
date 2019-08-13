@@ -7,11 +7,11 @@ export class MemoryFeatureSource extends FeatureSource {
     _interFields: Array<Field>;
     _maxFeatureId: number;
 
-    constructor() {
+    constructor(features?: IFeature[]) {
         super();
 
         this._maxFeatureId = 0;
-        this._interFeatures = new FeatureCollection();
+        this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
     }
 

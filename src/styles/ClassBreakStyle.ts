@@ -80,7 +80,7 @@ export class ClassBreakStyle extends Style {
 
     private static _auto(field: string, maximum: number, minimum: number, count: number,
         fromColor?: string, toColor?: string, func?: (color: string, min: number, max: number) => Style) {
-        const breakIncrement = Math.abs(maximum - minimum);
+        const breakIncrement = Math.abs(maximum - minimum) / count;
 
         const colors = StyleUtils.colorsBetween(count, fromColor, toColor);
         const style = new ClassBreakStyle(field);
