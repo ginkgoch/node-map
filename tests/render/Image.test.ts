@@ -1,4 +1,4 @@
-import * as render from '../../src/render';
+import * as render from '..';
 
 describe('image tests', () => {
     test('toBuffer test 1', () => {

@@ -2,7 +2,6 @@ import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
 
-//TODO: test whether the context will be recovered.
 export abstract class Style {
     name: string;
     maximumScale: number;
@@ -12,6 +11,10 @@ export abstract class Style {
         this.name = name || 'unknown';
         this.maximumScale = Number.POSITIVE_INFINITY;
         this.minimumScale = 0;
+    }
+
+    fields(): string[] {
+        return [];
     }
 
     draw(feature: IFeature, render: Render) {
@@ -24,11 +27,7 @@ export abstract class Style {
         }
 
         const styleJson = this.json();
-        features.forEach(f => this._draw(f, styleJson, render));
-    }
-
-    fields(): string[] {
-        return [];
+        this._draw(features, styleJson, render);
     }
 
     /**
@@ -38,8 +37,8 @@ export abstract class Style {
      * @param render 
      * @virtual
      */
-    protected _draw(feature: IFeature, styleJson: any, render: Render) {
-        render.drawFeature(feature, styleJson);
+    protected _draw(features: IFeature[], styleJson: any, render: Render) {
+        features.forEach(f => render.drawFeature(f, styleJson));
     }
 
     json(): any {

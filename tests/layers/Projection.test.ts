@@ -1,5 +1,5 @@
 import proj4 from 'proj4';
-import { Projection } from "../../src/layers/Projection";
+import { Projection } from "..";
 import { Polygon } from "ginkgoch-geom";
 
 describe('Projection', () => {

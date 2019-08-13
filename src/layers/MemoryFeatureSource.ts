@@ -7,11 +7,11 @@ export class MemoryFeatureSource extends FeatureSource {
     _interFields: Array<Field>;
     _maxFeatureId: number;
 
-    constructor() {
+    constructor(features?: IFeature[]) {
         super();
 
         this._maxFeatureId = 0;
-        this._interFeatures = new FeatureCollection();
+        this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
     }
 
@@ -40,15 +40,15 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * @override
      */
-    protected _fields(): Promise<Field[]> {
-        return Promise.resolve(this._interFields);
+    protected async _fields(): Promise<Field[]> {
+        return this._interFields;
     }
 
     /**
      * @override
      */
     protected async _envelope(): Promise<Envelope> {
-        return await this._interFeatures.envelope();
+        return this._interFeatures.envelope();
     }
 
     /**
@@ -57,13 +57,13 @@ export class MemoryFeatureSource extends FeatureSource {
      * @param fields 
      * @override
      */
-    protected _feature(id: number, fields: string[]): Promise<Feature | undefined> {
+    protected async _feature(id: number, fields: string[]): Promise<Feature | undefined> {
         let feature = this._interFeatures.features.find(f => f.id === id);
         if (feature === undefined) {
             return Promise.resolve(undefined);
         }
 
-        return Promise.resolve(feature.clone(fields));
+        return feature.clone(fields);
     }
 
     /**

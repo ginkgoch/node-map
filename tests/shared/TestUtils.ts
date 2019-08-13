@@ -1,5 +1,5 @@
 import fs from "fs";
-import { Image } from '../../src/render';
+import { Image } from '..';
 
 export default class TestUtils {
     static resolveDataPath(root: string, path: string) {

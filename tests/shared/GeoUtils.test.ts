@@ -1,5 +1,4 @@
-import { GeoUtils } from "../../src/shared/GeoUtils";
-import { Unit } from "../../src/shared/Unit";
+import { GeoUtils, Unit } from "..";
 
 describe('GeoUtils', () => {
     it('unit', () => {

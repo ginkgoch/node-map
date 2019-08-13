@@ -1,6 +1,6 @@
-import { IconStyle } from "../../src/styles";
+import { IconStyle } from "..";
 import { Feature, Point } from "ginkgoch-geom";
-import { Render, Image } from "../../src/render";
+import { Render, Image } from "..";
 import TestUtils from "../shared/TestUtils";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
