@@ -1,6 +1,6 @@
 import { Colors, ColorFormat } from "../../src/styles";
 import { Render } from "..";
-import { Envelope, Point, Polygon, LinearRing } from "ginkgoch-geom";
+import { Envelope, Polygon, LinearRing } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
 
 describe('Colors', () => {
