@@ -4,50 +4,62 @@ import _ from "lodash";
 import { Unit } from "../shared/Unit";
 import { GeoUtils } from "../shared/GeoUtils";
 
+export class Srs {
+    private _projection?: string;
+    private _unit: Unit = Unit.unknown;
+    
+    constructor(projection?: string) {
+        this.projection = projection;
+    }
+
+    get unit() {
+        return this._unit;
+    }
+
+    get projection() {
+        return this._projection;
+    }
+
+    set projection(projection: string | undefined) {
+        this._projection = projection;
+        if (this._projection) {
+            this._unit = GeoUtils.unit(this._projection);
+        }
+    }
+}
+
 export class Projection {
-    _from?: string;
-    _fromUnit: Unit = Unit.unknown;
-    _to?: string;
-    _toUnit: Unit = Unit.unknown;
+    _from: Srs;
+    _to: Srs;
     _invalid = false;
     _converter?: proj4.Converter;
 
     constructor(from?: string, to?: string) {
-        this._from = from;
-        this._to = to;
+        this._from = new Srs(from);
+        this._to = new Srs(to);
     }
 
     //#region properties
-    get from(): string | undefined {
+    get from(): Srs {
         return this._from
     } 
     
-    set from(fromProjection: string | undefined) {
+    set from(fromProjection: Srs) {
         if (this._from !== fromProjection) {
-            this._from = fromProjection
-            this._fromUnit = GeoUtils.unit(this._from);
+            this._from = fromProjection;
             this._invalid = true;
         }
     }
 
-    get fromUnit() {
-        return this._fromUnit;
-    }
-
-    get to(): string | undefined {
+    get to(): Srs {
         return this._to
     } 
     
-    set to(toProjection: string | undefined) {
+    set to(toProjection: Srs) {
         if (this._to !== toProjection) {
             this._to = toProjection;
-            this._toUnit = GeoUtils.unit(this._to);
             this._invalid = true;
         }
-    }
-
-    get toUnit() {
-        return this._toUnit;
     }
     //#endregion
 
@@ -121,12 +133,12 @@ export class Projection {
 
     //#region private
     private _transform(coordinate: ICoordinate, project: () => ICoordinate): ICoordinate {
-        if (this._from === undefined || this._to === undefined) {
+        if (this._from.projection === undefined || this._to.projection === undefined) {
             return coordinate;
         }
 
         if (this._converter === undefined || this._invalid) {
-            this._converter = proj4(this._from, this._to);
+            this._converter = proj4(this._from.projection, this._to.projection);
         }
 
         return project();

@@ -113,11 +113,11 @@ export abstract class FeatureSource extends Opener {
     protected abstract async _envelope(): Promise<Envelope>;
 
     get srs(): string | undefined {
-        return this.projection.from;
+        return this.projection.from.projection;
     }
 
     set srs(srs: string|undefined) {
-        this.projection.from = srs;
+        this.projection.from.projection = srs;
     }
 
     protected _inverseProjection(envelope: IEnvelope): IEnvelope;
