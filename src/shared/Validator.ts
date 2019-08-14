@@ -17,6 +17,10 @@ export class Validator {
         if (!ignore && !opener.opened) throw new Error('Resource is not opened. Call open() method.')
     }
 
+    static checkAllOpened(openers: Array<Opener>, ignore: boolean = false) {
+        openers.forEach(o => this.checkOpened(o, ignore));
+    }
+
     static checkFilePathNotEmptyAndExist(filePath: string) {
         assert(filePath !== '', 'File path cannot be empty.');
         assert(fs.existsSync(filePath), `File ${ filePath } doesn't exist.`);
