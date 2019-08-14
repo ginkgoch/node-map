@@ -445,7 +445,6 @@ export class Colors {
         let colorResource: ColorResource = (<any>global)[colorResourceKey];
         if (colorResource === undefined) {
             (<any>global)[colorResourceKey] = colorResource = new ColorResource();
-            console.log('init color resources.')
         }
 
         return colorResource;
