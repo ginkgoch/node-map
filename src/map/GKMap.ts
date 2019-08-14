@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { LayerGroup, FeatureLayer } from "../layers";
-import { IEnvelope } from "ginkgoch-geom";
+import { IEnvelope, Envelope } from "ginkgoch-geom";
 import { Render } from "../render";
 import { Unit, GeoUtils } from "../shared";
 
-export class Map {
+export class GKMap {
     name = 'GKMap';
     srs?: string;
     srsUnit?: Unit;
@@ -20,6 +20,15 @@ export class Map {
         this.height = height || 256;
         this.srs = srs || 'EPSG:3857';
         this.groups = new Array<LayerGroup>();
+    }
+
+    async envelope() {
+        const envelopes = new Array<IEnvelope>();
+        for (let group of this.groups) {
+            envelopes.push(await group.envelope());
+        }
+        let envelope = Envelope.unionAll(envelopes);
+        return envelope;
     }
 
     pushLayers(layers: Array<FeatureLayer>, groupName: string = 'Default') {
@@ -46,7 +55,11 @@ export class Map {
         return _.flatMap(this.groups, g => g.layers).find(l => l.name === name);
     }
 
-    async draw(envelope: IEnvelope) {
+    async draw(envelope?: IEnvelope) {
+        if (!envelope) {
+            envelope = await this.envelope();
+        }
+
         this.srsUnit = GeoUtils.unit(this.srs);
         const render = Render.create(this.width, this.height, envelope, this.srsUnit);
         for (let group of this.groups) {

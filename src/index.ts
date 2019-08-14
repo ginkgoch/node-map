@@ -3,13 +3,15 @@ import * as render from './render';
 import * as shared from './shared';
 import * as styles from './styles';
 import * as native from './native';
+import * as map from './map';
 
 const mapkit = {
     layers,
     render,
     shared,
     styles,
-    native
+    native,
+    map
 };
 
 export default mapkit;
