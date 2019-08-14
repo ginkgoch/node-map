@@ -5,6 +5,7 @@ import { Render, Image } from "../render";
 import { Opener, Validator } from "../shared";
 
 export class FeatureLayer extends Opener {
+    name: string;
     source: FeatureSource;
     styles: Array<Style>;
     minimumScale: number;
@@ -13,6 +14,7 @@ export class FeatureLayer extends Opener {
     constructor(source: FeatureSource) {
         super();
 
+        this.name = 'Unknown';
         this.source = source;
         this.styles = new Array<Style>();
         this.minimumScale = 0;
