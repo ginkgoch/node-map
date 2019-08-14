@@ -32,6 +32,12 @@ export class Map {
         group.pushAll(layers);
     }
 
+    pushGroups(groups: Array<LayerGroup>) {
+        for (let group of groups) {
+            this.groups.push(group);
+        }
+    }
+
     group(name: string): LayerGroup | undefined {
         return this.groups.find(g => g.name === name);
     }
@@ -43,7 +49,7 @@ export class Map {
     async draw(envelope: IEnvelope) {
         this.srsUnit = GeoUtils.unit(this.srs);
         const render = Render.create(this.width, this.height, envelope, this.srsUnit);
-        for(let group of this.groups) {
+        for (let group of this.groups) {
             await group.draw(render);
         }
 

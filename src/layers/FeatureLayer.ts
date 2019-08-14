@@ -21,6 +21,12 @@ export class FeatureLayer extends Opener {
         this.maximumScale = Number.POSITIVE_INFINITY;
     }
 
+    pushStyles(styles: Array<Style>) {
+        for (let style of styles) {
+            this.styles.push(style);
+        }
+    }
+
     /**
      * @override
      */
