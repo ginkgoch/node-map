@@ -65,7 +65,7 @@ export class FeatureLayer extends Opener {
 
     async thumbnail(width = 256, height = 256): Promise<Image> {
         const envelope = await this.envelope();
-        const render = Render.create(width, height, envelope, this.source.projection.fromUnit);
+        const render = Render.create(width, height, envelope, this.source.projection.from.unit);
         await this.draw(render);
         render.flush();
 
