@@ -65,7 +65,7 @@ export class Image {
             type: 'image',
             width: this.width,
             height: this.height,
-            buffer: this.buffer
+            buffer: (<Buffer>this.buffer).toJSON()
         }
     }
 
