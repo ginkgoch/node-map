@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle } from ".";
+import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleTypes } from ".";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
 import { StyleUtils } from ".";
@@ -11,6 +11,8 @@ export class ClassBreakStyle extends Style {
     constructor(field?: string, classBreaks?: Array<ClassBreakItem>) {
         super();
 
+        this.name = 'ClassBreak Style';
+        this.type = StyleTypes.classBreaks;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
 

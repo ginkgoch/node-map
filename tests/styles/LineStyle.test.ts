@@ -31,7 +31,7 @@ describe('LineStyle', () => {
     it('json', () => {
         const style1 = new LineStyle('#00ff00', 6);
         expect(style1.json()).toEqual({
-            type: 'unknown',
+            type: 'line-style',
             name: 'Line Style',
             maximumScale: Infinity,
             minimumScale: 0,

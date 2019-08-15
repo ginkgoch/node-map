@@ -45,7 +45,7 @@ describe('PointStyle', () => {
     it('json', () => {
         const style = new PointStyle('green', 'yellow', 6, 20, "rect");
         expect(style.json()).toEqual({
-            type: 'unknown',
+            type: 'point-style',
             name: 'Point Style',
             maximumScale: Infinity,
             minimumScale: 0,

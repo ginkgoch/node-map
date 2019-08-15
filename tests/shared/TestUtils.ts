@@ -24,4 +24,15 @@ export default class TestUtils {
             }
         }
     }
+
+    static compareOrLog(actual: any, expected: any, stringlify = false, log = false) {
+        if (stringlify) {
+            actual = JSON.stringify(actual);
+        }
+        if (log) {
+            console.log(actual);
+        } else {
+            expect(actual).toEqual(expected);
+        }
+    } 
 }

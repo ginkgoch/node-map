@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
+import { StyleTypes } from "./StyleTypes";
 
 export abstract class Style {
     type: string;
@@ -9,7 +10,7 @@ export abstract class Style {
     minimumScale: number;
 
     constructor(name?: string) {
-        this.type = 'unknown';
+        this.type = StyleTypes.unknown;
         this.name = name || 'unknown';
         this.maximumScale = Number.POSITIVE_INFINITY;
         this.minimumScale = 0;
