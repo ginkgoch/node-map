@@ -12,7 +12,7 @@ export abstract class Style {
     constructor(name?: string) {
         this.type = StyleTypes.unknown;
         this.name = name || 'unknown';
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = 1e10;
         this.minimumScale = 0;
     }
 
@@ -53,6 +53,17 @@ export abstract class Style {
         return Style._serialize(this);
     }
 
+    private static _serialize(obj: any) {
+        const json: any = {};
+        _.forIn(obj, (v, k) => {
+            if (typeof v !== 'function' && v !== undefined) {
+                json[k] = this._serializeValue(v);
+            }
+        });
+
+        return json;
+    }
+
     private static _serializeValue(obj: any): any {
         if (obj.json !== undefined || typeof obj.json === 'function') {
             return obj.json();
@@ -65,17 +76,6 @@ export abstract class Style {
         }
     }
 
-    private static _serialize(obj: any) {
-        const json: any = {};
-        _.forIn(obj, (v, k) => {
-            if (typeof v !== 'function' && v !== undefined) {
-                json[k] = this._serializeValue(v);
-            }
-        });
-
-        return json;
-    }
-
     props(): any {
         let props = this._props();
         return props;
@@ -86,7 +86,6 @@ export abstract class Style {
      */
     protected _props(): any {
         const raw: any = {};
-        const keys = this._propKeys();
         _.forIn(this, (v, k) => {
             if (this._propKeys().some(key => key === k)) {
                 raw[k] = v;

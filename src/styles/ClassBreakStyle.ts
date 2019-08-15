@@ -92,11 +92,11 @@ export class ClassBreakStyle extends Style {
             let breakMin = minimum + i * breakIncrement;
             let breakMax = breakMin + breakIncrement;
             if (i === 0) {
-                breakMin = Number.NEGATIVE_INFINITY;
+                breakMin = 0;
             }
 
             if (i === count - 1) {
-                breakMax = Number.POSITIVE_INFINITY;
+                breakMax = 1e10;
             }
 
             const subStyle = func(colors[i], breakMin, breakMax);

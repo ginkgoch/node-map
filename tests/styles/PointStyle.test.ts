@@ -47,7 +47,7 @@ describe('PointStyle', () => {
         expect(style.json()).toEqual({
             type: 'point-style',
             name: 'Point Style',
-            maximumScale: Infinity,
+            maximumScale: 1e10,
             minimumScale: 0,
             symbol: 'rect',
             fillStyle: 'green',
