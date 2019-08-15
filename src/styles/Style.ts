@@ -3,11 +3,13 @@ import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
 
 export abstract class Style {
+    type: string;
     name: string;
     maximumScale: number;
     minimumScale: number;
 
     constructor(name?: string) {
+        this.type = 'unknown';
         this.name = name || 'unknown';
         this.maximumScale = Number.POSITIVE_INFINITY;
         this.minimumScale = 0;
@@ -26,7 +28,7 @@ export abstract class Style {
             return;
         }
 
-        const styleJson = this.json();
+        const styleJson = this.props();
         this._draw(features, styleJson, render);
     }
 
@@ -46,17 +48,54 @@ export abstract class Style {
         return json;
     }
 
+    protected _json() {
+        return Style._serialize(this);
+    }
+
+    private static _serializeValue(obj: any): any {
+        if (obj.json !== undefined || typeof obj.json === 'function') {
+            return obj.json();
+        } else if (Array.isArray(obj)) {
+            return obj.map(o => this._serializeValue(o));
+        } else if (typeof obj === 'object') {
+            return this._serialize(obj);
+        } else {
+            return obj;
+        }
+    }
+
+    private static _serialize(obj: any) {
+        const json: any = {};
+        _.forIn(obj, (v, k) => {
+            if (typeof v !== 'function' && v !== undefined) {
+                json[k] = this._serializeValue(v);
+            }
+        });
+
+        return json;
+    }
+
+    props(): any {
+        let props = this._props();
+        return props;
+    }
+
     /**
      * @virtual
      */
-    protected _json(): any {
+    protected _props(): any {
         const raw: any = {};
+        const keys = this._propKeys();
         _.forIn(this, (v, k) => {
-            if (typeof v !== 'function' && k !== 'name' && v !== undefined) {
+            if (this._propKeys().some(key => key === k)) {
                 raw[k] = v;
             }
         });
 
         return raw;
+    }
+
+    protected _propKeys(): string[] {
+        return [];
     }
 }

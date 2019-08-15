@@ -23,6 +23,16 @@ export class PointStyle extends Style {
         this.radius = radius;
         this.symbol = symbol;
     }
+
+    protected _propKeys(): string[] {
+        return [
+            'fillStyle',
+            'strokeStyle',
+            'lineWidth',
+            'radius',
+            'symbol'
+        ];
+    }
 }
 
 export type PointSymbolType = 'default' | 'rect' | 'square' | 'circle';

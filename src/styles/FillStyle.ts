@@ -15,4 +15,8 @@ export class FillStyle extends Style {
         this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
     }
+
+    protected _propKeys(): string[] {
+        return ['fillStyle', 'lineWidth', 'strokeStyle'];
+    }
 }
