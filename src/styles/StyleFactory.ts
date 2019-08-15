@@ -6,19 +6,24 @@ import { TextStyle } from "./TextStyle";
 import { GeneralStyle } from "./GeneralStyle";
 import { ValueStyle } from "./ValueStyle";
 import { ClassBreakStyle } from "./ClassBreakStyle";
+import { Image } from '../render';
 import _ from "lodash";
 
 export class StyleFactory {
     private static _deserialize(json: any) {
         const type = this._extractStyleType(json);
-        if (type !== undefined) {
+        if (typeof type === 'function') {
             const style = new type();
             _.forIn(json, (v, k) => {
                 style[k] = this._deserializeValue(v);
             });
 
             return style;
-        } else {
+        } 
+        else if (typeof type === 'string' || type === 'image') {
+            return new Image(Buffer.from(json.buffer.data));
+        }
+        else {
             return undefined;
         }
     }
@@ -46,6 +51,7 @@ export class StyleFactory {
                 case StyleTypes.general: return GeneralStyle;
                 case StyleTypes.values: return ValueStyle;
                 case StyleTypes.classBreaks: return ClassBreakStyle;
+                case 'image': return 'image';
                 default: 
                     return undefined;
             }
