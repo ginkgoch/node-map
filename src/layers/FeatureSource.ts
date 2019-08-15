@@ -5,6 +5,7 @@ import { Opener, Validator } from "../shared";
 import { Projection } from "./Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
 import { PropertyAggregator } from "./PropertyAggregator";
+import { JsonUtils } from "../shared/JsonUtils";
 
 export abstract class FeatureSource extends Opener {
     name: string;
@@ -17,7 +18,7 @@ export abstract class FeatureSource extends Opener {
         this.projection = new Projection();
     }
 
-    protected _open(): Promise<void> { 
+    protected _open(): Promise<void> {
         return Promise.resolve();
     }
 
@@ -116,7 +117,7 @@ export abstract class FeatureSource extends Opener {
         return this.projection.from.projection;
     }
 
-    set srs(srs: string|undefined) {
+    set srs(srs: string | undefined) {
         this.projection.from.projection = srs;
     }
 
@@ -217,7 +218,7 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
-    async flushFields() { 
+    async flushFields() {
         Validator.checkOpenAndEditable(this, !this._openRequired);
 
         await this._flushFields();
@@ -228,6 +229,17 @@ export abstract class FeatureSource extends Opener {
     private _notImplemented() {
         throw new Error('Not implemented');
     }
+    //#endregion
+
+    //#region toJson
+    json(): any {
+        return this._json();
+    }
+
+    protected _json(): any {
+        return JsonUtils.objectToJson(this)
+    }
+
     //#endregion
 
     private isEnvelope(obj: any) {

@@ -2,7 +2,7 @@ import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
 import { Render } from "../render";
-import { StyleTypes } from ".";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class TextStyle extends Style {
     content: string | undefined;
@@ -16,7 +16,7 @@ export class TextStyle extends Style {
         super();
 
         this.name = 'Text Style';
-        this.type = StyleTypes.text;
+        this.type = JsonKnownTypes.textStyle;
         this.content = content;
         this.textAlign = 'center';
         this.font = font || '12px ARIAL';

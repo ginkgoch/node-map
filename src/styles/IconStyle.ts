@@ -2,7 +2,7 @@ import { Style } from "./Style";
 import { Image, Render } from "../render";
 import _ from "lodash";
 import { IFeature, Point, MultiPoint, GeometryCollection, Geometry } from "ginkgoch-geom";
-import { StyleTypes } from ".";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class IconStyle extends Style {
     icon: Image;
@@ -13,7 +13,7 @@ export class IconStyle extends Style {
         super();
 
         this.name = 'Icon Style';
-        this.type = StyleTypes.icon;
+        this.type = JsonKnownTypes.iconStyle;
         this.icon = icon;
         this.offsetX = offsetX;
         this.offsetY = offsetY;

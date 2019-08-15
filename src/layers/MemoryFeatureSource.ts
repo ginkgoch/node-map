@@ -1,6 +1,7 @@
 import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature } from "ginkgoch-geom";
 import { Field } from "./Field";
 import { FeatureSource } from "./FeatureSource";
+import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
 
 export class MemoryFeatureSource extends FeatureSource {
     _interFeatures: FeatureCollection;
@@ -13,6 +14,16 @@ export class MemoryFeatureSource extends FeatureSource {
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
+
+        this._maxFeatureId = this._interFeatures.features.length;
+    }
+
+    json() {
+        return {
+            type: JsonKnownTypes.memoryFeatureSource,
+            features: this._interFeatures.json(),
+            fields: JsonUtils.valueToJson(this._interFields)
+        };
     }
 
     /**

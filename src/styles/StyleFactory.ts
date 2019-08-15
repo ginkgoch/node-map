@@ -1,15 +1,20 @@
-import { StyleTypes, PointStyle } from ".";
+import { PointStyle } from ".";
 import { LineStyle } from "./LineStyle";
+import _ from "lodash";
+import { Image } from '../render';
 import { FillStyle } from "./FillStyle";
 import { IconStyle } from "./IconStyle";
 import { TextStyle } from "./TextStyle";
 import { GeneralStyle } from "./GeneralStyle";
 import { ValueStyle } from "./ValueStyle";
 import { ClassBreakStyle } from "./ClassBreakStyle";
-import { Image } from '../render';
-import _ from "lodash";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class StyleFactory {
+    static create(styleJson: any) {
+        return this._deserialize(styleJson);
+    }
+
     private static _deserialize(json: any) {
         const type = this._extractStyleType(json);
         if (typeof type === 'function') {
@@ -43,14 +48,14 @@ export class StyleFactory {
     private static _extractStyleType(json: any): any {
         if (json.type !== undefined) {
             switch (json.type) {
-                case StyleTypes.point: return PointStyle;
-                case StyleTypes.line: return LineStyle;
-                case StyleTypes.fill: return FillStyle;
-                case StyleTypes.icon: return IconStyle;
-                case StyleTypes.text: return TextStyle;
-                case StyleTypes.general: return GeneralStyle;
-                case StyleTypes.values: return ValueStyle;
-                case StyleTypes.classBreaks: return ClassBreakStyle;
+                case JsonKnownTypes.pointStyle: return PointStyle;
+                case JsonKnownTypes.lineStyle: return LineStyle;
+                case JsonKnownTypes.fillStyle: return FillStyle;
+                case JsonKnownTypes.iconStyle: return IconStyle;
+                case JsonKnownTypes.textStyle: return TextStyle;
+                case JsonKnownTypes.generalStyle: return GeneralStyle;
+                case JsonKnownTypes.valueStyle: return ValueStyle;
+                case JsonKnownTypes.classBreakStyle: return ClassBreakStyle;
                 case 'image': return 'image';
                 default: 
                     return undefined;

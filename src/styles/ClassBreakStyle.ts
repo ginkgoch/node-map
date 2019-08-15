@@ -1,9 +1,10 @@
 import _ from "lodash";
-import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleTypes } from ".";
+import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle } from ".";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
 import { StyleUtils } from ".";
 import { Constants } from "../shared";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class ClassBreakStyle extends Style {
     field: string;
@@ -13,7 +14,7 @@ export class ClassBreakStyle extends Style {
         super();
 
         this.name = 'ClassBreak Style';
-        this.type = StyleTypes.classBreaks;
+        this.type = JsonKnownTypes.classBreakStyle;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
 

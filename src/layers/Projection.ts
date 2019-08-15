@@ -26,6 +26,13 @@ export class Srs {
             this._unit = GeoUtils.unit(this._projection);
         }
     }
+
+    json() {
+        return { 
+            projection: this._projection,
+            unit: this._unit
+        };
+    }
 }
 
 export class Projection {
@@ -37,6 +44,13 @@ export class Projection {
     constructor(from?: string, to?: string) {
         this._from = new Srs(from);
         this._to = new Srs(to);
+    }
+
+    json() {
+        return {
+            from: this._from.json(),
+            to: this._to.json()
+        };
     }
 
     //#region properties

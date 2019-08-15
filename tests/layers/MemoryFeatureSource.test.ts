@@ -139,4 +139,18 @@ describe('MemoryFeatureSource', () => {
         fields = await source.fields();
         expect(fields.length).toBe(1);
     });
+
+    it('json', async () => {
+        const source = new MemoryFeatureSource();
+        const field1 = new Field('name', 'char', 10);
+        const field2 = new Field('age', 'number', 4); 
+        await source.pushField(field1);
+        await source.pushField(field2);
+        await source.push(new Feature(new Point(0, 1)));
+        await source.push(new Feature(new Point(1, 1)));
+        await source.push(new Feature(new Point(91, 19)));
+
+        const json = source.json();
+        console.log(JSON.stringify(json));
+    });
 });
