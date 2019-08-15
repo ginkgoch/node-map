@@ -1,8 +1,9 @@
 import _ from "lodash";
-import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle } from ".";
+import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleTypes } from ".";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
 import { StyleUtils } from ".";
+import { Constants } from "../shared";
 
 export class ClassBreakStyle extends Style {
     field: string;
@@ -11,6 +12,8 @@ export class ClassBreakStyle extends Style {
     constructor(field?: string, classBreaks?: Array<ClassBreakItem>) {
         super();
 
+        this.name = 'ClassBreak Style';
+        this.type = StyleTypes.classBreaks;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
 
@@ -90,11 +93,11 @@ export class ClassBreakStyle extends Style {
             let breakMin = minimum + i * breakIncrement;
             let breakMax = breakMin + breakIncrement;
             if (i === 0) {
-                breakMin = Number.NEGATIVE_INFINITY;
+                breakMin = 0;
             }
 
             if (i === count - 1) {
-                breakMax = Number.POSITIVE_INFINITY;
+                breakMax = Constants.POSITIVE_INFINITY_SCALE;
             }
 
             const subStyle = func(colors[i], breakMin, breakMax);

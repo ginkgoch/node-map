@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
+import { StyleTypes } from "./StyleTypes";
+import { Constants } from "../shared";
 
 export abstract class Style {
     type: string;
@@ -9,9 +11,9 @@ export abstract class Style {
     minimumScale: number;
 
     constructor(name?: string) {
-        this.type = 'unknown';
+        this.type = StyleTypes.unknown;
         this.name = name || 'unknown';
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
         this.minimumScale = 0;
     }
 
@@ -52,6 +54,17 @@ export abstract class Style {
         return Style._serialize(this);
     }
 
+    private static _serialize(obj: any) {
+        const json: any = {};
+        _.forIn(obj, (v, k) => {
+            if (typeof v !== 'function' && v !== undefined) {
+                json[k] = this._serializeValue(v);
+            }
+        });
+
+        return json;
+    }
+
     private static _serializeValue(obj: any): any {
         if (obj.json !== undefined || typeof obj.json === 'function') {
             return obj.json();
@@ -64,17 +77,6 @@ export abstract class Style {
         }
     }
 
-    private static _serialize(obj: any) {
-        const json: any = {};
-        _.forIn(obj, (v, k) => {
-            if (typeof v !== 'function' && v !== undefined) {
-                json[k] = this._serializeValue(v);
-            }
-        });
-
-        return json;
-    }
-
     props(): any {
         let props = this._props();
         return props;
@@ -85,7 +87,6 @@ export abstract class Style {
      */
     protected _props(): any {
         const raw: any = {};
-        const keys = this._propKeys();
         _.forIn(this, (v, k) => {
             if (this._propKeys().some(key => key === k)) {
                 raw[k] = v;

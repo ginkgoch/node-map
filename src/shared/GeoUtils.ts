@@ -8,6 +8,10 @@ const INCH_PER_FT = 12;
 const INCH_PER_DD = 4374754;
 const DPI = 96;
 
+export let Constants = {
+    POSITIVE_INFINITY_SCALE: 1e10
+};
+
 export class GeoUtils {
     static scale(envelope: IEnvelope, envelopeUnit: Unit, viewportSize: Size, dpi = DPI) {
         const inchPerUnit = GeoUtils.inchPerUnit(envelopeUnit);
