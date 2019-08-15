@@ -12,4 +12,11 @@ export class LineStyle extends Style {
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
         this.lineWidth = lineWidth;
     }
+
+    protected _propKeys(): string[] {
+        return [
+            'strokeStyle',
+            'lineWidth'
+        ];
+    }
 }

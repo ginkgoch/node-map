@@ -19,4 +19,14 @@ export class GeneralStyle extends Style {
         this.symbol = symbol;
         this.radius = radius;
     }
+
+    protected _propKeys(): string[] {
+        return [
+            'fillStyle',
+            'lineWidth',
+            'strokeStyle',
+            'symbol',
+            'radius'
+        ];
+    }
 }

@@ -1,8 +1,8 @@
 import _ from "lodash";
-import { Style, PointSymbolType, Colors, PointStyle, FillStyle, LineStyle } from ".";
+import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle } from ".";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
-import { GeneralStyle, StyleUtils } from ".";
+import { StyleUtils } from ".";
 
 export class ClassBreakStyle extends Style {
     field: string;
@@ -36,11 +36,11 @@ export class ClassBreakStyle extends Style {
 
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => {
-            this._drawFeature(f, styleJson, render);
+            this._drawFeature(f, render);
         });
     }
 
-    private _drawFeature(f: IFeature, styleJson: any, render: Render) {
+    private _drawFeature(f: IFeature, render: Render) {
         if (!f.properties.has(this.field)) {
             return;
         }

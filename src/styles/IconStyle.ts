@@ -38,13 +38,23 @@ export class IconStyle extends Style {
         }
     }
 
-    protected _json(): any {
-        let json = super._json();
+    protected _props(): any {
+        let json = super._props();
         json = _.pickBy(json, (v, k) => {
             if (k === 'offsetX' && v === 0) return false;
             if (k === 'offsetY' && v === 0) return false;
             if (k === 'icon') return false;
             return true;
         });
+
+        return json;
+    }
+
+    protected _propKeys(): string[] {
+        return [
+            'offsetX',
+            'offsetY',
+            'icon'
+        ];
     }
 }
