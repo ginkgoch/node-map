@@ -46,6 +46,8 @@ export class IconStyle extends Style {
             if (k === 'icon') return false;
             return true;
         });
+
+        return json;
     }
 
     protected _propKeys(): string[] {

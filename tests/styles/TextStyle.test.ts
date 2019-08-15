@@ -29,7 +29,7 @@ describe('TextStyle', () => {
 
     it('draw - 1', () => {
         const style = new TextStyle('Hello World', '#ff0000');
-        
+
         const canvas = Render.create(128, 128);
         const feature = new Feature(new Point(0, 0));
         style.draw(feature, canvas);
@@ -40,7 +40,7 @@ describe('TextStyle', () => {
 
     it('draw - 2', () => {
         const style = new TextStyle('Hello World', 'green', '20px ARIAL');
-        
+
         const canvas = Render.create(128, 128);
         const feature = new Feature(new Point(0, 0));
         style.draw(feature, canvas);
@@ -52,7 +52,7 @@ describe('TextStyle', () => {
     it('draw - 3', () => {
         const style = new TextStyle('Hello World', '#ff0000');
         style.textAlign = 'left';
-        
+
         const canvas = Render.create(128, 128);
         const feature = new Feature(new Point(0, 0));
         style.draw(feature, canvas);
@@ -64,14 +64,39 @@ describe('TextStyle', () => {
     it('draw - 4', () => {
         const textStyle = new TextStyle('Hello World', '#ff0000');
         const lineStyle = new LineStyle('green', 1);
-        
+
         const canvas = Render.create(128, 128);
-        const coordinates = [[-170, -80], [170, 80]].map(c => ({x: c[0], y: c[1]}));
+        const coordinates = [[-170, -80], [170, 80]].map(c => ({ x: c[0], y: c[1] }));
         const feature = new Feature(new LineString(coordinates));
         lineStyle.draw(feature, canvas);
         textStyle.draw(feature, canvas);
         canvas.flush();
 
         compareImage(canvas.image, 'text-4.png', true);
+    });
+
+    it('json', () => {
+        const textStyle = new TextStyle('Hello World', '#ff0000');
+        expect(textStyle.json()).toEqual({
+            type: 'unknown',
+            name: 'Text Style',
+            maximumScale: Infinity,
+            minimumScale: 0,
+            content: 'Hello World',
+            textAlign: 'center',
+            font: '12px ARIAL',
+            lineWidth: 0,
+            fillStyle: '#ff0000'
+        });
+    });
+
+    it('props', () => {
+        const textStyle = new TextStyle('Hello World', '#ff0000');
+        expect(textStyle.props()).toEqual({
+            textAlign: 'center',
+            font: '12px ARIAL',
+            lineWidth: 0,
+            fillStyle: '#ff0000'
+        });
     });
 });

@@ -23,7 +23,7 @@ describe('PointStyle', () => {
 
         compareImage(canvas.image, 'point-circle.png');
     });
-    
+
     it('square', () => {
         const style = new PointStyle('red', 'yellow', 6, 20, "square");
         const canvas = Render.create(64, 64);
@@ -32,7 +32,7 @@ describe('PointStyle', () => {
 
         compareImage(canvas.image, 'point-square.png');
     });
-    
+
     it('rect', () => {
         const style = new PointStyle('green', 'yellow', 6, 20, "rect");
         const canvas = Render.create(64, 64);
@@ -40,5 +40,31 @@ describe('PointStyle', () => {
         canvas.flush();
 
         compareImage(canvas.image, 'point-rect.png');
+    });
+
+    it('json', () => {
+        const style = new PointStyle('green', 'yellow', 6, 20, "rect");
+        expect(style.json()).toEqual({
+            type: 'unknown',
+            name: 'Point Style',
+            maximumScale: Infinity,
+            minimumScale: 0,
+            symbol: 'rect',
+            fillStyle: 'green',
+            strokeStyle: 'yellow',
+            lineWidth: 6,
+            radius: 20
+        });
+    });
+
+    it('props', () => {
+        const style = new PointStyle('green', 'yellow', 6, 20, "rect");
+        expect(style.props()).toEqual({
+            symbol: 'rect',
+            fillStyle: 'green',
+            strokeStyle: 'yellow',
+            lineWidth: 6,
+            radius: 20
+        });
     });
 });

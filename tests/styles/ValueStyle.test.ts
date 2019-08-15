@@ -14,7 +14,7 @@ describe('ValueStyle', () => {
         source.push(new Feature(new Point(90, 45), new Map([['type', '3']])));
         source.push(new Feature(new Point(90, -45), new Map([['type', '4']])));
         source.pushField(new Field('type', 'char', 40));
-        
+
         const style = new ValueStyle('type', [
             { value: '1', style: new PointStyle('red') },
             { value: '2', style: new PointStyle('blue') },
@@ -24,7 +24,7 @@ describe('ValueStyle', () => {
 
         const layer = new FeatureLayer(source);
         layer.styles.push(style);
-        
+
         await layer.open();
         const canvas = Render.create(256, 256, { minx: -180, miny: -90, maxx: 180, maxy: 90 });
         await layer.draw(canvas);
@@ -59,17 +59,29 @@ describe('ValueStyle', () => {
         });
 
         source.pushField(new Field('type', 'char', 40));
-        const style = ValueStyle.auto('point', 'type', features.map(f => f.properties.get('type')), 
+        const style = ValueStyle.auto('point', 'type', features.map(f => f.properties.get('type')),
             '#ff0000', '#0000ff', '#000000');
 
         const layer = new FeatureLayer(source);
         layer.styles.push(style);
-        
+
         await layer.open();
         const canvas = Render.create(256, 256, envelope);
         await layer.draw(canvas);
         canvas.flush();
 
         compareImage(canvas.image, 'valueStyle-2.png');
+    });
+
+    it('json', () => { 
+        const values = ['1', '2', '3', '4'];
+        const style = ValueStyle.auto('point', 'type', values, '#ff0000', '#0000ff', '#000000');
+        expect(JSON.stringify(style.json())).toEqual('{"type":"unknown","name":"unknown","maximumScale":null,"minimumScale":0,"items":[{"value":"1","style":{"type":"unknown","name":"1","maximumScale":null,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"2","style":{"type":"unknown","name":"2","maximumScale":null,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"3","style":{"type":"unknown","name":"3","maximumScale":null,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"4","style":{"type":"unknown","name":"4","maximumScale":null,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#000000","lineWidth":1,"radius":12}}],"field":"type"}');
+    });
+
+    it('props', () => {
+        const values = ['1', '2', '3', '4'];
+        const style = ValueStyle.auto('point', 'type', values, '#ff0000', '#0000ff', '#000000');
+        expect(style.props()).toEqual({});
     });
 });

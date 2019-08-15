@@ -49,6 +49,6 @@ describe('ClassBreakStyle', () => {
     it('props', () => {
         const style = ClassBreakStyle.auto('point', 'type', 100, 0, 4, '#ff0000', '#0000ff', undefined, 0);
         const props = style.props();
-        console.log(props);
+        expect(props).toEqual({});
     })
 });
