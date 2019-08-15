@@ -1,4 +1,4 @@
-import { StyleFactory } from "..";
+import { StyleFactory, Constants } from "..";
 
 describe('StyleFactory', () => {
     it('deserialize point style', () => {
@@ -40,7 +40,7 @@ describe('StyleFactory', () => {
         const json = {
             type: 'text-style',
             name: 'Text Style',
-            maximumScale: 1e10,
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             content: 'Hello World',
             textAlign: 'center',

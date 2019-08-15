@@ -1,4 +1,4 @@
-import { LineStyle } from "..";
+import { LineStyle, Constants } from "..";
 import { Feature, LineString } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
@@ -33,7 +33,7 @@ describe('LineStyle', () => {
         expect(style1.json()).toEqual({
             type: 'line-style',
             name: 'Line Style',
-            maximumScale: 1e10,
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             strokeStyle: '#00ff00',
             lineWidth: 6

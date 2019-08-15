@@ -1,4 +1,4 @@
-import { PointStyle } from "..";
+import { PointStyle, Constants } from "..";
 import { Point, Feature } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
@@ -47,7 +47,7 @@ describe('PointStyle', () => {
         expect(style.json()).toEqual({
             type: 'point-style',
             name: 'Point Style',
-            maximumScale: 1e10,
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             symbol: 'rect',
             fillStyle: 'green',

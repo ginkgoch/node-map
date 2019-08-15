@@ -1,4 +1,4 @@
-import { TextStyle, LineStyle, Render } from "..";
+import { TextStyle, LineStyle, Render, Constants } from "..";
 import { Feature, Point, LineString } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
 
@@ -80,7 +80,7 @@ describe('TextStyle', () => {
         expect(textStyle.json()).toEqual({
             type: 'text-style',
             name: 'Text Style',
-            maximumScale: 1e10,
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             content: 'Hello World',
             textAlign: 'center',

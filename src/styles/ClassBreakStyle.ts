@@ -3,6 +3,7 @@ import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleTypes } 
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
 import { StyleUtils } from ".";
+import { Constants } from "../shared";
 
 export class ClassBreakStyle extends Style {
     field: string;
@@ -96,7 +97,7 @@ export class ClassBreakStyle extends Style {
             }
 
             if (i === count - 1) {
-                breakMax = 1e10;
+                breakMax = Constants.POSITIVE_INFINITY_SCALE;
             }
 
             const subStyle = func(colors[i], breakMin, breakMax);
