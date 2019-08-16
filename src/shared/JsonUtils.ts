@@ -36,8 +36,8 @@ export class JsonUtils {
     }
 
     static valueToJson(obj: any): any {
-        if (obj.json !== undefined || typeof obj.json === 'function') {
-            return obj.json();
+        if (obj.toJSON !== undefined && typeof obj.toJSON === 'function') {
+            return obj.toJSON();
         } else if (Array.isArray(obj)) {
             return obj.map(o => this.valueToJson(o));
         } else if (typeof obj === 'object') {

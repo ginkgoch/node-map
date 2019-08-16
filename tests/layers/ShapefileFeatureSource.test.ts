@@ -48,7 +48,7 @@ describe('ShapefileFeatureSource', () => {
 
     it('json', () => {
         const source = new ShapefileFeatureSource('./fileNotExist.shp');
-        const json = source.json();
+        const json = source.toJSON();
 
         TestUtils.compareOrLog(json, {
             type: 'shapefile-feature-source',

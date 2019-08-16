@@ -20,8 +20,8 @@ export class MemoryFeatureSource extends FeatureSource {
         this._maxFeatureId = this._interFeatures.features.length;
     }
 
-    protected _json(): any {
-        const json = super._json();
+    protected _toJSON(): any {
+        const json = super._toJSON();
         json.type = JsonKnownTypes.memoryFeatureSource;
         json.features = this._interFeatures.json();
         json.fields = JsonUtils.valueToJson(this._interFields);

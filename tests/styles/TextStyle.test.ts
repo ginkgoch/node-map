@@ -77,7 +77,7 @@ describe('TextStyle', () => {
 
     it('json', () => {
         const textStyle = new TextStyle('Hello World', '#ff0000');
-        expect(textStyle.json()).toEqual({
+        expect(textStyle.toJSON()).toEqual({
             type: 'text-style',
             name: 'Text Style',
             maximumScale: Constants.POSITIVE_INFINITY_SCALE,

@@ -75,6 +75,6 @@ function testStyleDeserialization(json: any) {
     const sf = StyleFactory;
     const style = sf.parseJson(json);
 
-    const newJson = style.json();
+    const newJson = style.toJSON();
     expect(newJson).toEqual(json);
 }

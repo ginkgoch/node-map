@@ -45,7 +45,7 @@ export class Projection {
         this._to = new Srs(to);
     }
 
-    json() {
+    toJSON() {
         return {
             from: this._from.json(),
             to: this._to.json()

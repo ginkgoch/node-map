@@ -231,15 +231,15 @@ export abstract class FeatureSource extends Opener {
     //#endregion
 
     //#region toJson
-    json(): any {
-        return this._json();
+    toJSON(): any {
+        return this._toJSON();
     }
 
-    protected _json(): any {
+    protected _toJSON(): any {
         return {
             type: this.type,
             name: this.name,
-            projection: this.projection.json()
+            projection: this.projection.toJSON()
         };
     }
 

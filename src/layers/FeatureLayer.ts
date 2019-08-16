@@ -74,16 +74,16 @@ export class FeatureLayer extends Opener {
         return render.image;
     }
 
-    json(): any {
-        return this._json();
+    toJSON(): any {
+        return this._toJSON();
     }
 
-    protected _json() {
+    protected _toJSON() {
         return {
             type: JsonKnownTypes.featureLayer,
             name: this.name,
-            source: this.source.json(),
-            styles: this.styles.map(style => style.json()),
+            source: this.source.toJSON(),
+            styles: this.styles.map(style => style.toJSON()),
             minimumScale: this.minimumScale,
             maximumScale: this.maximumScale
         }

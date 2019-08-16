@@ -23,7 +23,7 @@ export class Field {
         }
     }
 
-    json() {
+    toJSON() {
         return {
             name: this.name,
             type: this.type,

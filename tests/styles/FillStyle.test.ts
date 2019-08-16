@@ -19,7 +19,7 @@ describe('FillStyle', () => {
 
     it('json', () => {
         const style = new FillStyle('#00ff00', 'red', 4);
-        expect(JSON.stringify(style.json())).toEqual(`{"type":"fill-style","name":"Fill Style","maximumScale":10000000000,"minimumScale":0,"lineWidth":4,"fillStyle":"#00ff00","strokeStyle":"red"}`);
+        expect(JSON.stringify(style.toJSON())).toEqual(`{"type":"fill-style","name":"Fill Style","maximumScale":10000000000,"minimumScale":0,"lineWidth":4,"fillStyle":"#00ff00","strokeStyle":"red"}`);
     });
 
     it('props', () => {

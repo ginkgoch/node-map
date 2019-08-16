@@ -45,12 +45,12 @@ export abstract class Style {
         features.forEach(f => render.drawFeature(f, styleJson));
     }
 
-    json(): any {
-        let json = this._json();
+    toJSON(): any {
+        let json = this._toJSON();
         return json;
     }
 
-    protected _json() {
+    protected _toJSON() {
         return JsonUtils.objectToJson(this);
     }
 

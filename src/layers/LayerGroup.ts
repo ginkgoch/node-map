@@ -42,15 +42,15 @@ export class LayerGroup {
         return this.layers.find(l => l.name === name);
     }
 
-    json(): any {
-        return this._json();
+    toJSON(): any {
+        return this._toJSON();
     }
 
-    protected _json(): any {
+    protected _toJSON(): any {
         return {
             type: JsonKnownTypes.layerGroup,
             name: this.name,
-            layers: this.layers.map(layer => layer.json())
+            layers: this.layers.map(layer => layer.toJSON())
         };
     }
 

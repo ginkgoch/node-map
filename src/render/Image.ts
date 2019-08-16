@@ -60,7 +60,7 @@ export class Image {
         return this.buffer || this._nativeCanvas(this.width, this.height).toBuffer();
     }
 
-    json(): any {
+    toJSON(): any {
         return {
             type: 'image',
             width: this.width,

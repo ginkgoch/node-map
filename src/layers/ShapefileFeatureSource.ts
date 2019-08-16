@@ -20,8 +20,8 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.flag = flag;
     }
 
-    protected _json() {
-        const json = super._json();
+    protected _toJSON() {
+        const json = super._toJSON();
         json.flag = this.flag;
         json.filePath = this.filePath;
         return json;
