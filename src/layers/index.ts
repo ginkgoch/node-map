@@ -6,3 +6,4 @@ export * from './FeatureSource';
 export * from './PropertyAggregator';
 export * from './MemoryFeatureSource';
 export * from './ShapefileFeatureSource';
+export * from './FeatureSourceFactory';

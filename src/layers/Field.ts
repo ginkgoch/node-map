@@ -31,4 +31,12 @@ export class Field {
             extra: JsonUtils.mapToJson(this.extra)
         };
     }
+
+    static parseJson(json: any) {
+        const field = new Field();
+        field.name = json.name;
+        field.length = json.length;
+        field.extra = JsonUtils.jsonToMap(json.extra);
+        return field;
+    }
 }

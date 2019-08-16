@@ -3,6 +3,7 @@ import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JsonKnownTypes } from '../shared';
+import { Projection } from "./Projection";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 
@@ -25,6 +26,15 @@ export class ShapefileFeatureSource extends FeatureSource {
             flag: this.flag,
             filePath: this.filePath
         };
+    }
+
+    static parseJson(json: any) {
+        const source = new ShapefileFeatureSource();
+        source.name = json.name;
+        source.projection = Projection.parseJson(json.projection);
+        source.flag = json.flag;
+        source.filePath = json.filePath;
+        return source;
     }
 
     /**

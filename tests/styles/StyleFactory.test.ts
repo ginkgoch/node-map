@@ -73,7 +73,7 @@ describe('StyleFactory', () => {
 
 function testStyleDeserialization(json: any) {
     const sf = StyleFactory;
-    const style = sf.create(json);
+    const style = sf.parseJson(json);
 
     const newJson = style.json();
     expect(newJson).toEqual(json);

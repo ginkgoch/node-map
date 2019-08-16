@@ -3,6 +3,8 @@ import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
 import { Opener, Validator, Constants, JsonKnownTypes } from "../shared";
+import { FeatureSourceFactory } from ".";
+import { StyleFactory } from "../styles";
 
 export class FeatureLayer extends Opener {
     name: string;
@@ -85,6 +87,18 @@ export class FeatureLayer extends Opener {
             minimumScale: this.minimumScale,
             maximumScale: this.maximumScale
         }
+    }
+
+    static parseJson(json: any) {
+        const source = FeatureSourceFactory.parseJson(json.source) as FeatureSource;
+        const layer = new FeatureLayer(source);
+        layer.name = json.name;
+        layer.minimumScale = json.minimumScale;
+        layer.maximumScale = json.maximumScale;
+        layer.styles = (<any[]>json.styles).map(j => {
+            return StyleFactory.parseJson(j);
+        });
+        return layer;
     }
 
     private _isVisible(scale: number, maxScale: number, minScale: number) {

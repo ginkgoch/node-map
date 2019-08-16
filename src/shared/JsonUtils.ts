@@ -10,6 +10,15 @@ export class JsonUtils {
         return json;
     }
 
+    static jsonToMap(json: any): Map<string, any> {
+        const map = new Map<string, any> ();
+        _.forIn(json, (v, k) => {
+            map.set(k, v);
+        });
+
+        return map;
+    }
+
     static objectToJson(obj: any): any {
         let json = this._objectToJson(obj);
         return json;

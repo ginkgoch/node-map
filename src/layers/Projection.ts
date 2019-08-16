@@ -6,7 +6,7 @@ import { Unit, GeoUtils } from "../shared";
 export class Srs {
     private _projection?: string;
     private _unit: Unit = Unit.unknown;
-    
+
     constructor(projection?: string) {
         this.projection = projection;
     }
@@ -27,7 +27,7 @@ export class Srs {
     }
 
     json() {
-        return { 
+        return {
             projection: this._projection,
             unit: this._unit
         };
@@ -52,11 +52,15 @@ export class Projection {
         };
     }
 
+    static parseJson(json: any): Projection {
+        return new Projection(json.from.projection, json.to.projection);
+    }
+
     //#region properties
     get from(): Srs {
         return this._from
-    } 
-    
+    }
+
     set from(fromProjection: Srs) {
         if (this._from !== fromProjection) {
             this._from = fromProjection;
@@ -66,8 +70,8 @@ export class Projection {
 
     get to(): Srs {
         return this._to
-    } 
-    
+    }
+
     set to(toProjection: Srs) {
         if (this._to !== toProjection) {
             this._to = toProjection;

@@ -53,4 +53,14 @@ export class LayerGroup {
             layers: this.layers.map(layer => layer.json())
         };
     }
+
+    static parseJson(json: any) {
+        const group = new LayerGroup();
+        group.name = json.name;
+        group.layers = (<any[]>json.layers).map(j => {
+            return FeatureLayer.parseJson(j);
+        });
+
+        return group;
+    }
 }
