@@ -23,7 +23,7 @@ export class MemoryFeatureSource extends FeatureSource {
     protected _toJSON(): any {
         const json = super._toJSON();
         json.type = JSONKnownTypes.memoryFeatureSource;
-        json.features = this._interFeatures.json();
+        json.features = this._interFeatures.toJSON();
         json.fields = JSONUtils.valueToJSON(this._interFields);
         return json;
     }
