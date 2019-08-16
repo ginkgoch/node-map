@@ -12,7 +12,7 @@ export class TextStyle extends Style {
     strokeStyle: string | undefined;
     lineWidth: number;
 
-    constructor(content: string | undefined, fillStyle?: string, font?: string) {
+    constructor(content?: string, fillStyle?: string, font?: string) {
         super();
 
         this.name = 'Text Style';

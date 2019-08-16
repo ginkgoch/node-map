@@ -10,12 +10,12 @@ export class IconStyle extends Style {
     offsetX: number;
     offsetY: number;
 
-    constructor(icon: Image, offsetX = 0, offsetY = 0) {
+    constructor(icon?: Image, offsetX = 0, offsetY = 0) {
         super();
 
         this.name = 'Icon Style';
         this.type = JsonKnownTypes.iconStyle;
-        this.icon = icon;
+        this.icon = icon || new Image();
         this.offsetX = offsetX;
         this.offsetY = offsetY;
     }

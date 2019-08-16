@@ -8,58 +8,24 @@ import { TextStyle } from "./TextStyle";
 import { GeneralStyle } from "./GeneralStyle";
 import { ValueStyle } from "./ValueStyle";
 import { ClassBreakStyle } from "./ClassBreakStyle";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JsonKnownTypes, JsonTypeRegister, JsonUtils } from "../shared/JsonUtils";
 
 export class StyleFactory {
+    static register: JsonTypeRegister;
+
     static create(styleJson: any) {
-        return this._deserialize(styleJson);
-    }
-
-    private static _deserialize(json: any) {
-        const type = this._extractStyleType(json);
-        if (typeof type === 'function') {
-            const style = new type();
-            _.forIn(json, (v, k) => {
-                style[k] = this._deserializeValue(v);
-            });
-
-            return style;
-        } 
-        else if (typeof type === 'string' || type === 'image') {
-            return new Image(Buffer.from(json.buffer.data));
+        if (this.register === undefined) {
+            this.register = new JsonTypeRegister();
+            this.register.register(JsonKnownTypes.image, json => new Image(Buffer.from(json.buffer.data)), true);
+            this.register.register(JsonKnownTypes.fillStyle, () => new FillStyle());
+            this.register.register(JsonKnownTypes.iconStyle, () => new IconStyle());
+            this.register.register(JsonKnownTypes.lineStyle, () => new LineStyle());
+            this.register.register(JsonKnownTypes.textStyle, () => new TextStyle());
+            this.register.register(JsonKnownTypes.pointStyle, () => new PointStyle());
+            this.register.register(JsonKnownTypes.valueStyle, () => new ValueStyle());
+            this.register.register(JsonKnownTypes.generalStyle, () => new GeneralStyle());
+            this.register.register(JsonKnownTypes.classBreakStyle, () => new ClassBreakStyle());
         }
-        else {
-            return undefined;
-        }
-    }
-
-    private static _deserializeValue(json: any): any {
-        if (Array.isArray(json)) {
-            return json.map(j => this._deserializeValue(j));
-        } else if (json === null || json === undefined) {
-            return json;
-        } else if (json.type !== undefined) {
-            return this._deserialize(json);
-        } else {
-            return json;
-        }
-    }
-
-    private static _extractStyleType(json: any): any {
-        if (json.type !== undefined) {
-            switch (json.type) {
-                case JsonKnownTypes.pointStyle: return PointStyle;
-                case JsonKnownTypes.lineStyle: return LineStyle;
-                case JsonKnownTypes.fillStyle: return FillStyle;
-                case JsonKnownTypes.iconStyle: return IconStyle;
-                case JsonKnownTypes.textStyle: return TextStyle;
-                case JsonKnownTypes.generalStyle: return GeneralStyle;
-                case JsonKnownTypes.valueStyle: return ValueStyle;
-                case JsonKnownTypes.classBreakStyle: return ClassBreakStyle;
-                case 'image': return 'image';
-                default: 
-                    return undefined;
-            }
-        }
+        return JsonUtils.jsonToObject(styleJson, this.register);
     }
 }
