@@ -55,6 +55,14 @@ describe('Colors', () => {
         compareImage(image, 'colors-2.png');
     });
 
+    it('between - normal - 3', () => {
+        const colors = Colors.between('red', 'blue', 20);
+        expect(colors.length).toBe(20);
+
+        const image = drawColors(colors);
+        compareImage(image, 'colors-between-3.png', true);
+    });
+
     it('between - forward - 1', () => {
         const colors = Colors.forward('#ff0000', 20, 100, 'all');
         expect(colors.length).toBe(20);
@@ -117,6 +125,16 @@ describe('Colors', () => {
 
         const image = drawColors(colors);
         compareImage(image, 'colors-6-b.png');
+    });
+
+    it('color by name', () => {
+        const color = Colors.color('SLATEGRAY');
+        expect(color).toEqual(Colors.SLATEGRAY);
+    });
+
+    it('color by name - lower', () => {
+        const color = Colors.color('slategray');
+        expect(color).toEqual(Colors.SLATEGRAY);
     });
 });
 
