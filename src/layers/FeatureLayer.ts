@@ -2,7 +2,7 @@ import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
-import { Opener, Validator } from "../shared";
+import { Opener, Validator, Constants } from "../shared";
 
 export class FeatureLayer extends Opener {
     name: string;
@@ -18,7 +18,7 @@ export class FeatureLayer extends Opener {
         this.source = source;
         this.styles = new Array<Style>();
         this.minimumScale = 0;
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     }
 
     pushStyles(styles: Array<Style>) {
@@ -70,6 +70,20 @@ export class FeatureLayer extends Opener {
         render.flush();
 
         return render.image;
+    }
+
+    json(): any {
+        return this._json();
+    }
+
+    protected _json() {
+        return {
+            name: this.name,
+            source: this.source.json(),
+            styles: this.styles.map(style => style.json()),
+            minimumScale: this.minimumScale,
+            maximumScale: this.maximumScale
+        }
     }
 
     private _isVisible(scale: number, maxScale: number, minScale: number) {

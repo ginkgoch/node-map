@@ -40,6 +40,12 @@ describe('FeatureLayer', () => {
 
         compareImage(render.image, 'layer-area.png');
     });
+
+    it('json', () => {
+        const layer = lineLayer();
+        const json = layer.json();
+        expect(json).toEqual({ "name": "Unknown", "source": { "type": "memory-feature-source", "features": { "id": 0, "type": "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[-100, 80], [-40, -80], [0, 20], [40, -80], [100, 80]] }, "properties": {} }] }, "fields": [] }, "styles": [{ "type": "line-style", "name": "Line Style", "maximumScale": 10000000000, "minimumScale": 0, "strokeStyle": "#886600", "lineWidth": 4 }], "minimumScale": 0, "maximumScale": 10000000000 });
+    });
 });
 
 function lineLayer() {

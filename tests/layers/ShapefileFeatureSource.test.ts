@@ -43,4 +43,13 @@ describe('ShapefileFeatureSource', () => {
             expect(e.toString()).toMatch(/exist/);
         }
     });
+
+    it('json', () => {
+        const source = new ShapefileFeatureSource('./fileNotExist.shp');
+        const json = source.json();
+        expect(json).toEqual({
+            flag: 'rs',
+            filePath: './fileNotExist.shp'
+        });
+    });
 });

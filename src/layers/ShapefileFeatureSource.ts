@@ -19,6 +19,13 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.flag = flag;
     }
 
+    protected _json() {
+        return {
+            flag: this.flag,
+            filePath: this.filePath
+        };
+    }
+
     /**
      * @override
      */
