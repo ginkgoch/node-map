@@ -7,14 +7,26 @@ const compareImage = TestUtils.compareImageFunc(name => './tests/data/map/' + na
 
 describe('Map', () => {
     it('draw', async () => {
-        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
-        const layer = new FeatureLayer(source);
-        layer.pushStyles([new FillStyle('yellow', 'blue', 1)]);
-
-        const map = new GKMap(512, 256);
-        map.pushLayers([layer]);
-
+        const map = getMap();
         const image = await map.draw();
         compareImage(image, 'us-states-1.png');
     });
+
+    it('json', () => {
+        const map = getMap();
+        const json = map.toJSON();
+        const newMap = GKMap.parseJSON(json);
+        const newJSON = newMap.toJSON();
+        expect(newJSON).toEqual(json);
+    });
 });
+
+function getMap() {
+    const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+    const layer = new FeatureLayer(source);
+    layer.pushStyles([new FillStyle('yellow', 'blue', 1)]);
+
+    const map = new GKMap(512, 256);
+    map.pushLayers([layer]);
+    return map;
+}

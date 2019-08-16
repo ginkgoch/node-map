@@ -26,11 +26,15 @@ export class Srs {
         }
     }
 
-    json() {
+    toJSON() {
         return {
             projection: this._projection,
             unit: this._unit
         };
+    }
+
+    static parseJSON(json: any) {
+        return new Srs(json.projection);
     }
 }
 
@@ -47,8 +51,8 @@ export class Projection {
 
     toJSON() {
         return {
-            from: this._from.json(),
-            to: this._to.json()
+            from: this._from.toJSON(),
+            to: this._to.toJSON()
         };
     }
 
