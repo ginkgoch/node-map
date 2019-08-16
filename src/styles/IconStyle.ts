@@ -1,20 +1,21 @@
-import { Style } from "./Style";
-import { Image, Render } from "../render";
 import _ from "lodash";
 import { IFeature, Point, MultiPoint, GeometryCollection, Geometry } from "ginkgoch-geom";
-import { StyleTypes } from ".";
+
+import { Style } from "./Style";
+import { Image, Render } from "../render";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class IconStyle extends Style {
     icon: Image;
     offsetX: number;
     offsetY: number;
 
-    constructor(icon: Image, offsetX = 0, offsetY = 0) {
+    constructor(icon?: Image, offsetX = 0, offsetY = 0) {
         super();
 
         this.name = 'Icon Style';
-        this.type = StyleTypes.icon;
-        this.icon = icon;
+        this.type = JsonKnownTypes.iconStyle;
+        this.icon = icon || new Image();
         this.offsetX = offsetX;
         this.offsetY = offsetY;
     }

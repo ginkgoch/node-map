@@ -1,13 +1,12 @@
 import { ICoordinate, IEnvelope, Geometry, LinearRing, Polygon } from "ginkgoch-geom";
 import proj4 from 'proj4';
 import _ from "lodash";
-import { Unit } from "../shared/Unit";
-import { GeoUtils } from "../shared/GeoUtils";
+import { Unit, GeoUtils } from "../shared";
 
 export class Srs {
     private _projection?: string;
     private _unit: Unit = Unit.unknown;
-    
+
     constructor(projection?: string) {
         this.projection = projection;
     }
@@ -26,6 +25,13 @@ export class Srs {
             this._unit = GeoUtils.unit(this._projection);
         }
     }
+
+    json() {
+        return {
+            projection: this._projection,
+            unit: this._unit
+        };
+    }
 }
 
 export class Projection {
@@ -39,11 +45,22 @@ export class Projection {
         this._to = new Srs(to);
     }
 
+    json() {
+        return {
+            from: this._from.json(),
+            to: this._to.json()
+        };
+    }
+
+    static parseJson(json: any): Projection {
+        return new Projection(json.from.projection, json.to.projection);
+    }
+
     //#region properties
     get from(): Srs {
         return this._from
-    } 
-    
+    }
+
     set from(fromProjection: Srs) {
         if (this._from !== fromProjection) {
             this._from = fromProjection;
@@ -53,8 +70,8 @@ export class Projection {
 
     get to(): Srs {
         return this._to
-    } 
-    
+    }
+
     set to(toProjection: Srs) {
         if (this._to !== toProjection) {
             this._to = toProjection;

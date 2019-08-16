@@ -1,6 +1,8 @@
-import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature } from "ginkgoch-geom";
+import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature, GeometryFactory } from "ginkgoch-geom";
 import { Field } from "./Field";
 import { FeatureSource } from "./FeatureSource";
+import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
+import { Projection } from "./Projection";
 
 export class MemoryFeatureSource extends FeatureSource {
     _interFeatures: FeatureCollection;
@@ -10,9 +12,29 @@ export class MemoryFeatureSource extends FeatureSource {
     constructor(features?: IFeature[]) {
         super();
 
+        this.type = JsonKnownTypes.memoryFeatureSource;
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
+
+        this._maxFeatureId = this._interFeatures.features.length;
+    }
+
+    protected _json(): any {
+        const json = super._json();
+        json.type = JsonKnownTypes.memoryFeatureSource;
+        json.features = this._interFeatures.json();
+        json.fields = JsonUtils.valueToJson(this._interFields);
+        return json;
+    }
+
+    static parseJson(json: any) {
+        const source = new MemoryFeatureSource();
+        source.name = json.name;
+        source.projection = Projection.parseJson(json.projection);
+        source._interFeatures = FeatureCollection.create(json.features);
+        source._interFields = (<any[]>json.fields).map(j => Field.parseJson(j));
+        return source;
     }
 
     /**

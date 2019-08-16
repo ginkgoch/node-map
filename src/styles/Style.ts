@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
-import { StyleTypes } from "./StyleTypes";
 import { Constants } from "../shared";
+import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
 
 export abstract class Style {
     type: string;
@@ -11,7 +11,7 @@ export abstract class Style {
     minimumScale: number;
 
     constructor(name?: string) {
-        this.type = StyleTypes.unknown;
+        this.type = JsonKnownTypes.unknown;
         this.name = name || 'unknown';
         this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
         this.minimumScale = 0;
@@ -51,30 +51,7 @@ export abstract class Style {
     }
 
     protected _json() {
-        return Style._serialize(this);
-    }
-
-    private static _serialize(obj: any) {
-        const json: any = {};
-        _.forIn(obj, (v, k) => {
-            if (typeof v !== 'function' && v !== undefined) {
-                json[k] = this._serializeValue(v);
-            }
-        });
-
-        return json;
-    }
-
-    private static _serializeValue(obj: any): any {
-        if (obj.json !== undefined || typeof obj.json === 'function') {
-            return obj.json();
-        } else if (Array.isArray(obj)) {
-            return obj.map(o => this._serializeValue(o));
-        } else if (typeof obj === 'object') {
-            return this._serialize(obj);
-        } else {
-            return obj;
-        }
+        return JsonUtils.objectToJson(this);
     }
 
     props(): any {

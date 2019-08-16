@@ -2,7 +2,9 @@ import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
-import { Opener, Validator } from "../shared";
+import { Opener, Validator, Constants, JsonKnownTypes } from "../shared";
+import { FeatureSourceFactory } from ".";
+import { StyleFactory } from "../styles";
 
 export class FeatureLayer extends Opener {
     name: string;
@@ -18,7 +20,7 @@ export class FeatureLayer extends Opener {
         this.source = source;
         this.styles = new Array<Style>();
         this.minimumScale = 0;
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     }
 
     pushStyles(styles: Array<Style>) {
@@ -70,6 +72,33 @@ export class FeatureLayer extends Opener {
         render.flush();
 
         return render.image;
+    }
+
+    json(): any {
+        return this._json();
+    }
+
+    protected _json() {
+        return {
+            type: JsonKnownTypes.featureLayer,
+            name: this.name,
+            source: this.source.json(),
+            styles: this.styles.map(style => style.json()),
+            minimumScale: this.minimumScale,
+            maximumScale: this.maximumScale
+        }
+    }
+
+    static parseJson(json: any) {
+        const source = FeatureSourceFactory.parseJson(json.source) as FeatureSource;
+        const layer = new FeatureLayer(source);
+        layer.name = json.name;
+        layer.minimumScale = json.minimumScale;
+        layer.maximumScale = json.maximumScale;
+        layer.styles = (<any[]>json.styles).map(j => {
+            return StyleFactory.parseJson(j);
+        });
+        return layer;
     }
 
     private _isVisible(scale: number, maxScale: number, minScale: number) {

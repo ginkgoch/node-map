@@ -1,7 +1,7 @@
+import _ from "lodash";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import _ from "lodash";
-import { StyleTypes } from "./StyleTypes";
+import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class FillStyle extends Style {
     fillStyle: string;
@@ -12,7 +12,7 @@ export class FillStyle extends Style {
         super();
 
         this.name = 'Fill Style';
-        this.type = StyleTypes.fill;
+        this.type = JsonKnownTypes.fillStyle;
         this.lineWidth = lineWidth;
         this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);

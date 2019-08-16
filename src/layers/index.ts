@@ -3,6 +3,7 @@ export * from './LayerGroup';
 export * from './Projection';
 export * from './FeatureLayer';
 export * from './FeatureSource';
-export * from './FieldFilterOptions';
+export * from './PropertyAggregator';
 export * from './MemoryFeatureSource';
 export * from './ShapefileFeatureSource';
+export * from './FeatureSourceFactory';
