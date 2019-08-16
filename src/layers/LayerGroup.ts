@@ -1,7 +1,7 @@
 import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { FeatureLayer } from ".";
 import { Render } from "../render";
-import { JsonKnownTypes } from "../shared";
+import { JSONKnownTypes } from "../shared";
 
 export class LayerGroup {
     name: string
@@ -42,23 +42,23 @@ export class LayerGroup {
         return this.layers.find(l => l.name === name);
     }
 
-    json(): any {
-        return this._json();
+    toJSON(): any {
+        return this._toJSON();
     }
 
-    protected _json(): any {
+    protected _toJSON(): any {
         return {
-            type: JsonKnownTypes.layerGroup,
+            type: JSONKnownTypes.layerGroup,
             name: this.name,
-            layers: this.layers.map(layer => layer.json())
+            layers: this.layers.map(layer => layer.toJSON())
         };
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const group = new LayerGroup();
         group.name = json.name;
         group.layers = (<any[]>json.layers).map(j => {
-            return FeatureLayer.parseJson(j);
+            return FeatureLayer.parseJSON(j);
         });
 
         return group;

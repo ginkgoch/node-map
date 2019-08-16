@@ -1,22 +1,22 @@
-import { JsonKnownTypes } from "../shared";
+import { JSONKnownTypes } from "../shared";
 import { MemoryFeatureSource } from "./MemoryFeatureSource";
 import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
 
 export class FeatureSourceFactory {
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const type = json && json.type;
         if (type !== undefined) {
-            return this._parseJson(json);
+            return this._parseJSON(json);
         }
         else return undefined;
     }
 
-    private static _parseJson(json: any) {
+    private static _parseJSON(json: any) {
         switch(json.type) {
-            case JsonKnownTypes.memoryFeatureSource:
-                return MemoryFeatureSource.parseJson(json);
-            case JsonKnownTypes.shapefileFeatureSource:
-                return ShapefileFeatureSource.parseJson(json);
+            case JSONKnownTypes.memoryFeatureSource:
+                return MemoryFeatureSource.parseJSON(json);
+            case JSONKnownTypes.shapefileFeatureSource:
+                return ShapefileFeatureSource.parseJSON(json);
             default:
                 return undefined;
         }

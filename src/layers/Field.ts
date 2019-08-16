@@ -1,4 +1,4 @@
-import { JsonUtils } from "../shared/JsonUtils";
+import { JSONUtils } from "../shared/JSONUtils";
 
 export class Field {
     name: string;
@@ -23,20 +23,20 @@ export class Field {
         }
     }
 
-    json() {
+    toJSON() {
         return {
             name: this.name,
             type: this.type,
             length: this.length,
-            extra: JsonUtils.mapToJson(this.extra)
+            extra: JSONUtils.mapToJSON(this.extra)
         };
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const field = new Field();
         field.name = json.name;
         field.length = json.length;
-        field.extra = JsonUtils.jsonToMap(json.extra);
+        field.extra = JSONUtils.jsonToMap(json.extra);
         return field;
     }
 }

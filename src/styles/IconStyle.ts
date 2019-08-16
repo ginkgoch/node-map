@@ -3,7 +3,7 @@ import { IFeature, Point, MultiPoint, GeometryCollection, Geometry } from "ginkg
 
 import { Style } from "./Style";
 import { Image, Render } from "../render";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 
 export class IconStyle extends Style {
     icon: Image;
@@ -14,7 +14,7 @@ export class IconStyle extends Style {
         super();
 
         this.name = 'Icon Style';
-        this.type = JsonKnownTypes.iconStyle;
+        this.type = JSONKnownTypes.iconStyle;
         this.icon = icon || new Image();
         this.offsetX = offsetX;
         this.offsetY = offsetY;

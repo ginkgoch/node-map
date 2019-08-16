@@ -1,7 +1,7 @@
 import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature, GeometryFactory } from "ginkgoch-geom";
 import { Field } from "./Field";
 import { FeatureSource } from "./FeatureSource";
-import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
 import { Projection } from "./Projection";
 
 export class MemoryFeatureSource extends FeatureSource {
@@ -12,7 +12,7 @@ export class MemoryFeatureSource extends FeatureSource {
     constructor(features?: IFeature[]) {
         super();
 
-        this.type = JsonKnownTypes.memoryFeatureSource;
+        this.type = JSONKnownTypes.memoryFeatureSource;
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
@@ -20,20 +20,20 @@ export class MemoryFeatureSource extends FeatureSource {
         this._maxFeatureId = this._interFeatures.features.length;
     }
 
-    protected _json(): any {
-        const json = super._json();
-        json.type = JsonKnownTypes.memoryFeatureSource;
+    protected _toJSON(): any {
+        const json = super._toJSON();
+        json.type = JSONKnownTypes.memoryFeatureSource;
         json.features = this._interFeatures.json();
-        json.fields = JsonUtils.valueToJson(this._interFields);
+        json.fields = JSONUtils.valueToJSON(this._interFields);
         return json;
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const source = new MemoryFeatureSource();
         source.name = json.name;
-        source.projection = Projection.parseJson(json.projection);
+        source.projection = Projection.parseJSON(json.projection);
         source._interFeatures = FeatureCollection.create(json.features);
-        source._interFields = (<any[]>json.fields).map(j => Field.parseJson(j));
+        source._interFields = (<any[]>json.fields).map(j => Field.parseJSON(j));
         return source;
     }
 

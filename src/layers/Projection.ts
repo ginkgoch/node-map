@@ -45,14 +45,14 @@ export class Projection {
         this._to = new Srs(to);
     }
 
-    json() {
+    toJSON() {
         return {
             from: this._from.json(),
             to: this._to.json()
         };
     }
 
-    static parseJson(json: any): Projection {
+    static parseJSON(json: any): Projection {
         return new Projection(json.from.projection, json.to.projection);
     }
 

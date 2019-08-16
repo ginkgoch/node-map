@@ -2,7 +2,7 @@ import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLi
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { Render } from "../render";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 
 export class TextStyle extends Style {
     content: string | undefined;
@@ -16,7 +16,7 @@ export class TextStyle extends Style {
         super();
 
         this.name = 'Text Style';
-        this.type = JsonKnownTypes.textStyle;
+        this.type = JSONKnownTypes.textStyle;
         this.content = content;
         this.textAlign = 'center';
         this.font = font || '12px ARIAL';

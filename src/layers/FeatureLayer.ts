@@ -2,7 +2,7 @@ import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
-import { Opener, Validator, Constants, JsonKnownTypes } from "../shared";
+import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
 import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 
@@ -74,29 +74,29 @@ export class FeatureLayer extends Opener {
         return render.image;
     }
 
-    json(): any {
-        return this._json();
+    toJSON(): any {
+        return this._toJSON();
     }
 
-    protected _json() {
+    protected _toJSON() {
         return {
-            type: JsonKnownTypes.featureLayer,
+            type: JSONKnownTypes.featureLayer,
             name: this.name,
-            source: this.source.json(),
-            styles: this.styles.map(style => style.json()),
+            source: this.source.toJSON(),
+            styles: this.styles.map(style => style.toJSON()),
             minimumScale: this.minimumScale,
             maximumScale: this.maximumScale
         }
     }
 
-    static parseJson(json: any) {
-        const source = FeatureSourceFactory.parseJson(json.source) as FeatureSource;
+    static parseJSON(json: any) {
+        const source = FeatureSourceFactory.parseJSON(json.source) as FeatureSource;
         const layer = new FeatureLayer(source);
         layer.name = json.name;
         layer.minimumScale = json.minimumScale;
         layer.maximumScale = json.maximumScale;
         layer.styles = (<any[]>json.styles).map(j => {
-            return StyleFactory.parseJson(j);
+            return StyleFactory.parseJSON(j);
         });
         return layer;
     }

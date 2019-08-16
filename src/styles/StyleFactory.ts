@@ -8,24 +8,24 @@ import { TextStyle } from "./TextStyle";
 import { GeneralStyle } from "./GeneralStyle";
 import { ValueStyle } from "./ValueStyle";
 import { ClassBreakStyle } from "./ClassBreakStyle";
-import { JsonKnownTypes, JsonTypeRegister, JsonUtils } from "../shared/JsonUtils";
+import { JSONKnownTypes, JSONTypeRegister, JSONUtils } from "../shared/JSONUtils";
 
 export class StyleFactory {
-    static register: JsonTypeRegister;
+    static register: JSONTypeRegister;
 
-    static parseJson(styleJson: any) {
+    static parseJSON(styleJson: any) {
         if (this.register === undefined) {
-            this.register = new JsonTypeRegister();
-            this.register.register(JsonKnownTypes.image, json => new Image(Buffer.from(json.buffer.data)), true);
-            this.register.register(JsonKnownTypes.fillStyle, () => new FillStyle());
-            this.register.register(JsonKnownTypes.iconStyle, () => new IconStyle());
-            this.register.register(JsonKnownTypes.lineStyle, () => new LineStyle());
-            this.register.register(JsonKnownTypes.textStyle, () => new TextStyle());
-            this.register.register(JsonKnownTypes.pointStyle, () => new PointStyle());
-            this.register.register(JsonKnownTypes.valueStyle, () => new ValueStyle());
-            this.register.register(JsonKnownTypes.generalStyle, () => new GeneralStyle());
-            this.register.register(JsonKnownTypes.classBreakStyle, () => new ClassBreakStyle());
+            this.register = new JSONTypeRegister();
+            this.register.register(JSONKnownTypes.image, json => new Image(Buffer.from(json.buffer.data)), true);
+            this.register.register(JSONKnownTypes.fillStyle, () => new FillStyle());
+            this.register.register(JSONKnownTypes.iconStyle, () => new IconStyle());
+            this.register.register(JSONKnownTypes.lineStyle, () => new LineStyle());
+            this.register.register(JSONKnownTypes.textStyle, () => new TextStyle());
+            this.register.register(JSONKnownTypes.pointStyle, () => new PointStyle());
+            this.register.register(JSONKnownTypes.valueStyle, () => new ValueStyle());
+            this.register.register(JSONKnownTypes.generalStyle, () => new GeneralStyle());
+            this.register.register(JSONKnownTypes.classBreakStyle, () => new ClassBreakStyle());
         }
-        return JsonUtils.jsonToObject(styleJson, this.register);
+        return JSONUtils.jsonToObject(styleJson, this.register);
     }
 }

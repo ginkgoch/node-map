@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } from ".";
 
 export class ValueStyle extends Style {
@@ -12,7 +12,7 @@ export class ValueStyle extends Style {
         super();
 
         this.name = 'Value Style';
-        this.type = JsonKnownTypes.valueStyle;
+        this.type = JSONKnownTypes.valueStyle;
         this.items = new Array<ValueItem>();
         items && items.forEach(item => {
             this.items.push(item);

@@ -43,7 +43,7 @@ describe('FeatureLayer', () => {
 
     it('json', () => {
         const layer = lineLayer();
-        const json = layer.json();
+        const json = layer.toJSON();
         TestUtils.compareOrLog(json, {
             "type": "feature-layer", "name": "Unknown",
             "source": {
@@ -58,11 +58,11 @@ describe('FeatureLayer', () => {
 
     it('parseJson - mem', () => {
         const layer = lineLayer();
-        const json = layer.json();
-        const newLayer = FeatureLayer.parseJson(json);
+        const json = layer.toJSON();
+        const newLayer = FeatureLayer.parseJSON(json);
 
         const s1 = JSON.stringify(json);
-        const s2 = JSON.stringify(newLayer.json());
+        const s2 = JSON.stringify(newLayer.toJSON());
         expect(s2).toEqual(s1);
     });
 
@@ -70,11 +70,11 @@ describe('FeatureLayer', () => {
         const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
         const layer = new FeatureLayer(source);
 
-        const json = layer.json();
-        const newLayer = FeatureLayer.parseJson(json);
+        const json = layer.toJSON();
+        const newLayer = FeatureLayer.parseJSON(json);
 
         const s1 = JSON.stringify(json);
-        const s2 = JSON.stringify(newLayer.json());
+        const s2 = JSON.stringify(newLayer.toJSON());
         expect(s2).toEqual(s1);
     });
 });
