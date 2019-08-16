@@ -1,8 +1,7 @@
 import { ICoordinate, IEnvelope, Geometry, LinearRing, Polygon } from "ginkgoch-geom";
 import proj4 from 'proj4';
 import _ from "lodash";
-import { Unit } from "../shared/Unit";
-import { GeoUtils } from "../shared/GeoUtils";
+import { Unit, GeoUtils } from "../shared";
 
 export class Srs {
     private _projection?: string;

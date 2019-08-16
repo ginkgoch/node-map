@@ -1,9 +1,8 @@
 import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
-import { Field } from "./Field";
+import { FeatureSource, Field } from ".";
 import { Validator, JsonKnownTypes } from '../shared';
-import { FeatureSource } from "./FeatureSource";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 

@@ -1,1 +1,0 @@
-export type FieldFilterOptions = 'all' | 'none' | string[];

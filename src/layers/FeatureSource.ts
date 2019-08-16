@@ -1,10 +1,9 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { Field } from "./Field";
 import { Opener, Validator, JsonKnownTypes } from "../shared";
-import { Projection } from "./Projection";
-import { FieldFilterOptions } from "./FieldFilterOptions";
-import { PropertyAggregator } from "./PropertyAggregator";
+import { Field, PropertyAggregator, Projection } from ".";
+
+export type FieldFilters = 'all' | 'none' | string[];
 
 export abstract class FeatureSource extends Opener {
     name: string;
@@ -26,7 +25,7 @@ export abstract class FeatureSource extends Opener {
         return Promise.resolve();
     }
 
-    async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
+    async features(envelope?: IEnvelope, fields?: FieldFilters): Promise<Feature[]> {
         Validator.checkOpened(this, !this._openRequired);
 
         let envelopeIn = envelope;
@@ -44,7 +43,7 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]>;
 
-    async feature(id: number, fields?: FieldFilterOptions): Promise<Feature | undefined> {
+    async feature(id: number, fields?: FieldFilters): Promise<Feature | undefined> {
         let fieldsNorm = await this._normalizeFields(fields);
         let feature = await this._feature(id, fieldsNorm);
         if (feature === undefined) {
@@ -57,7 +56,7 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _feature(id: number, fields: string[]): Promise<Feature | undefined>;
 
-    protected async _normalizeFields(fields?: FieldFilterOptions): Promise<string[]> {
+    protected async _normalizeFields(fields?: FieldFilters): Promise<string[]> {
         if (fields === 'none') return [];
 
         const allFields = (await this.fields()).map(f => f.name);
@@ -82,12 +81,12 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _fields(): Promise<Field[]>;
 
-    async propertyAggregator(fields?: FieldFilterOptions) {
+    async propertyAggregator(fields?: FieldFilters) {
         const properties = await this.properties(fields);
         return new PropertyAggregator(properties);
     }
 
-    async properties(fields?: FieldFilterOptions): Promise<Array<Map<string, any>>> {
+    async properties(fields?: FieldFilters): Promise<Array<Map<string, any>>> {
         Validator.checkOpened(this, !this._openRequired);
 
         const f = await this._normalizeFields(fields);
@@ -237,7 +236,6 @@ export abstract class FeatureSource extends Opener {
     }
 
     protected _json(): any {
-        //return JsonUtils.objectToJson(this)
         return {
             type: this.type,
             name: this.name,

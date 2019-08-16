@@ -1,6 +1,6 @@
+import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { FeatureLayer } from ".";
 import { Render } from "../render";
-import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { JsonKnownTypes } from "../shared";
 
 export class LayerGroup {
