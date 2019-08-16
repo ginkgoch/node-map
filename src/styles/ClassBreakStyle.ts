@@ -1,8 +1,9 @@
 import _ from "lodash";
-import { Style, PointSymbolType, Colors, PointStyle, FillStyle, LineStyle } from ".";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
-import { GeneralStyle, StyleUtils } from ".";
+import { Constants } from "../shared";
+import { JSONKnownTypes } from "../shared/JSONUtils";
+import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils } from ".";
 
 export class ClassBreakStyle extends Style {
     field: string;
@@ -11,6 +12,8 @@ export class ClassBreakStyle extends Style {
     constructor(field?: string, classBreaks?: Array<ClassBreakItem>) {
         super();
 
+        this.name = 'ClassBreak Style';
+        this.type = JSONKnownTypes.classBreakStyle;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
 
@@ -36,11 +39,11 @@ export class ClassBreakStyle extends Style {
 
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => {
-            this._drawFeature(f, styleJson, render);
+            this._drawFeature(f, render);
         });
     }
 
-    private _drawFeature(f: IFeature, styleJson: any, render: Render) {
+    private _drawFeature(f: IFeature, render: Render) {
         if (!f.properties.has(this.field)) {
             return;
         }
@@ -90,11 +93,11 @@ export class ClassBreakStyle extends Style {
             let breakMin = minimum + i * breakIncrement;
             let breakMax = breakMin + breakIncrement;
             if (i === 0) {
-                breakMin = Number.NEGATIVE_INFINITY;
+                breakMin = 0;
             }
 
             if (i === count - 1) {
-                breakMax = Number.POSITIVE_INFINITY;
+                breakMax = Constants.POSITIVE_INFINITY_SCALE;
             }
 
             const subStyle = func(colors[i], breakMin, breakMax);

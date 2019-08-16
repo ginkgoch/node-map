@@ -1,5 +1,6 @@
 import assert from 'assert';
 
+//#region color resource
 class ColorResource {
     colorDictionary = new Map<string, ColorInfo>();
 
@@ -390,6 +391,7 @@ class ColorResource {
         return Math.floor(range[0] + r * (range[1] + 1 - range[0]));
     }
 }
+//#endregion
 
 interface ColorInfo {
     hueRange: number[] | null,
@@ -439,20 +441,19 @@ export interface RandomColorOption {
 }
 
 export class Colors {
-    static get resource() {
-        const colorResourceDesc = 'GK_COLOR_RESOURCE';
-        let colorResourceKey = Symbol.for(colorResourceDesc);
-        let colorResource: ColorResource = (<any>global)[colorResourceKey];
-        if (colorResource === undefined) {
-            (<any>global)[colorResourceKey] = colorResource = new ColorResource();
-            console.log('init color resources.')
-        }
+    static all = new Map<string, string[]>([["INDIANRED", ["#CD5C5C", "RGB(205, 92, 92)"]], ["LIGHTCORAL", ["#F08080", "RGB(240, 128, 128)"]], ["SALMON", ["#FA8072", "RGB(250, 128, 114)"]], ["DARKSALMON", ["#E9967A", "RGB(233, 150, 122)"]], ["LIGHTSALMON", ["#FFA07A", "RGB(255, 160, 122)"]], ["CRIMSON", ["#DC143C", "RGB(220, 20, 60)"]], ["RED", ["#FF0000", "RGB(255, 0, 0)"]], ["FIREBRICK", ["#B22222", "RGB(178, 34, 34)"]], ["DARKRED", ["#8B0000", "RGB(139, 0, 0)"]], ["PINK", ["#FFC0CB", "RGB(255, 192, 203)"]], ["LIGHTPINK", ["#FFB6C1", "RGB(255, 182, 193)"]], ["HOTPINK", ["#FF69B4", "RGB(255, 105, 180)"]], ["DEEPPINK", ["#FF1493", "RGB(255, 20, 147)"]], ["MEDIUMVIOLETRED", ["#C71585", "RGB(199, 21, 133)"]], ["PALEVIOLETRED", ["#DB7093", "RGB(219, 112, 147)"]], ["LIGHTSALMON", ["#FFA07A", "RGB(255, 160, 122)"]], ["CORAL", ["#FF7F50", "RGB(255, 127, 80)"]], ["TOMATO", ["#FF6347", "RGB(255, 99, 71)"]], ["ORANGERED", ["#FF4500", "RGB(255, 69, 0)"]], ["DARKORANGE", ["#FF8C00", "RGB(255, 140, 0)"]], ["ORANGE", ["#FFA500", "RGB(255, 165, 0)"]], ["GOLD", ["#FFD700", "RGB(255, 215, 0)"]], ["YELLOW", ["#FFFF00", "RGB(255, 255, 0)"]], ["LIGHTYELLOW", ["#FFFFE0", "RGB(255, 255, 224)"]], ["LEMONCHIFFON", ["#FFFACD", "RGB(255, 250, 205)"]], ["LIGHTGOLDENRODYELLOW", ["#FAFAD2", "RGB(250, 250, 210)"]], ["PAPAYAWHIP", ["#FFEFD5", "RGB(255, 239, 213)"]], ["MOCCASIN", ["#FFE4B5", "RGB(255, 228, 181)"]], ["PEACHPUFF", ["#FFDAB9", "RGB(255, 218, 185)"]], ["PALEGOLDENROD", ["#EEE8AA", "RGB(238, 232, 170)"]], ["KHAKI", ["#F0E68C", "RGB(240, 230, 140)"]], ["DARKKHAKI", ["#BDB76B", "RGB(189, 183, 107)"]], ["LAVENDER", ["#E6E6FA", "RGB(230, 230, 250)"]], ["THISTLE", ["#D8BFD8", "RGB(216, 191, 216)"]], ["PLUM", ["#DDA0DD", "RGB(221, 160, 221)"]], ["VIOLET", ["#EE82EE", "RGB(238, 130, 238)"]], ["ORCHID", ["#DA70D6", "RGB(218, 112, 214)"]], ["FUCHSIA", ["#FF00FF", "RGB(255, 0, 255)"]], ["MAGENTA", ["#FF00FF", "RGB(255, 0, 255)"]], ["MEDIUMORCHID", ["#BA55D3", "RGB(186, 85, 211)"]], ["MEDIUMPURPLE", ["#9370DB", "RGB(147, 112, 219)"]], ["REBECCAPURPLE", ["#663399", "RGB(102, 51, 153)"]], ["BLUEVIOLET", ["#8A2BE2", "RGB(138, 43, 226)"]], ["DARKVIOLET", ["#9400D3", "RGB(148, 0, 211)"]], ["DARKORCHID", ["#9932CC", "RGB(153, 50, 204)"]], ["DARKMAGENTA", ["#8B008B", "RGB(139, 0, 139)"]], ["PURPLE", ["#800080", "RGB(128, 0, 128)"]], ["INDIGO", ["#4B0082", "RGB(75, 0, 130)"]], ["SLATEBLUE", ["#6A5ACD", "RGB(106, 90, 205)"]], ["DARKSLATEBLUE", ["#483D8B", "RGB(72, 61, 139)"]], ["MEDIUMSLATEBLUE", ["#7B68EE", "RGB(123, 104, 238)"]], ["GREENYELLOW", ["#ADFF2F", "RGB(173, 255, 47)"]], ["CHARTREUSE", ["#7FFF00", "RGB(127, 255, 0)"]], ["LAWNGREEN", ["#7CFC00", "RGB(124, 252, 0)"]], ["LIME", ["#00FF00", "RGB(0, 255, 0)"]], ["LIMEGREEN", ["#32CD32", "RGB(50, 205, 50)"]], ["PALEGREEN", ["#98FB98", "RGB(152, 251, 152)"]], ["LIGHTGREEN", ["#90EE90", "RGB(144, 238, 144)"]], ["MEDIUMSPRINGGREEN", ["#00FA9A", "RGB(0, 250, 154)"]], ["SPRINGGREEN", ["#00FF7F", "RGB(0, 255, 127)"]], ["MEDIUMSEAGREEN", ["#3CB371", "RGB(60, 179, 113)"]], ["SEAGREEN", ["#2E8B57", "RGB(46, 139, 87)"]], ["FORESTGREEN", ["#228B22", "RGB(34, 139, 34)"]], ["GREEN", ["#008000", "RGB(0, 128, 0)"]], ["DARKGREEN", ["#006400", "RGB(0, 100, 0)"]], ["YELLOWGREEN", ["#9ACD32", "RGB(154, 205, 50)"]], ["OLIVEDRAB", ["#6B8E23", "RGB(107, 142, 35)"]], ["OLIVE", ["#808000", "RGB(128, 128, 0)"]], ["DARKOLIVEGREEN", ["#556B2F", "RGB(85, 107, 47)"]], ["MEDIUMAQUAMARINE", ["#66CDAA", "RGB(102, 205, 170)"]], ["DARKSEAGREEN", ["#8FBC8B", "RGB(143, 188, 139)"]], ["LIGHTSEAGREEN", ["#20B2AA", "RGB(32, 178, 170)"]], ["DARKCYAN", ["#008B8B", "RGB(0, 139, 139)"]], ["TEAL", ["#008080", "RGB(0, 128, 128)"]], ["AQUA", ["#00FFFF", "RGB(0, 255, 255)"]], ["CYAN", ["#00FFFF", "RGB(0, 255, 255)"]], ["LIGHTCYAN", ["#E0FFFF", "RGB(224, 255, 255)"]], ["PALETURQUOISE", ["#AFEEEE", "RGB(175, 238, 238)"]], ["AQUAMARINE", ["#7FFFD4", "RGB(127, 255, 212)"]], ["TURQUOISE", ["#40E0D0", "RGB(64, 224, 208)"]], ["MEDIUMTURQUOISE", ["#48D1CC", "RGB(72, 209, 204)"]], ["DARKTURQUOISE", ["#00CED1", "RGB(0, 206, 209)"]], ["CADETBLUE", ["#5F9EA0", "RGB(95, 158, 160)"]], ["STEELBLUE", ["#4682B4", "RGB(70, 130, 180)"]], ["LIGHTSTEELBLUE", ["#B0C4DE", "RGB(176, 196, 222)"]], ["POWDERBLUE", ["#B0E0E6", "RGB(176, 224, 230)"]], ["LIGHTBLUE", ["#ADD8E6", "RGB(173, 216, 230)"]], ["SKYBLUE", ["#87CEEB", "RGB(135, 206, 235)"]], ["LIGHTSKYBLUE", ["#87CEFA", "RGB(135, 206, 250)"]], ["DEEPSKYBLUE", ["#00BFFF", "RGB(0, 191, 255)"]], ["DODGERBLUE", ["#1E90FF", "RGB(30, 144, 255)"]], ["CORNFLOWERBLUE", ["#6495ED", "RGB(100, 149, 237)"]], ["MEDIUMSLATEBLUE", ["#7B68EE", "RGB(123, 104, 238)"]], ["ROYALBLUE", ["#4169E1", "RGB(65, 105, 225)"]], ["BLUE", ["#0000FF", "RGB(0, 0, 255)"]], ["MEDIUMBLUE", ["#0000CD", "RGB(0, 0, 205)"]], ["DARKBLUE", ["#00008B", "RGB(0, 0, 139)"]], ["NAVY", ["#000080", "RGB(0, 0, 128)"]], ["MIDNIGHTBLUE", ["#191970", "RGB(25, 25, 112)"]], ["CORNSILK", ["#FFF8DC", "RGB(255, 248, 220)"]], ["BLANCHEDALMOND", ["#FFEBCD", "RGB(255, 235, 205)"]], ["BISQUE", ["#FFE4C4", "RGB(255, 228, 196)"]], ["NAVAJOWHITE", ["#FFDEAD", "RGB(255, 222, 173)"]], ["WHEAT", ["#F5DEB3", "RGB(245, 222, 179)"]], ["BURLYWOOD", ["#DEB887", "RGB(222, 184, 135)"]], ["TAN", ["#D2B48C", "RGB(210, 180, 140)"]], ["ROSYBROWN", ["#BC8F8F", "RGB(188, 143, 143)"]], ["SANDYBROWN", ["#F4A460", "RGB(244, 164, 96)"]], ["GOLDENROD", ["#DAA520", "RGB(218, 165, 32)"]], ["DARKGOLDENROD", ["#B8860B", "RGB(184, 134, 11)"]], ["PERU", ["#CD853F", "RGB(205, 133, 63)"]], ["CHOCOLATE", ["#D2691E", "RGB(210, 105, 30)"]], ["SADDLEBROWN", ["#8B4513", "RGB(139, 69, 19)"]], ["SIENNA", ["#A0522D", "RGB(160, 82, 45)"]], ["BROWN", ["#A52A2A", "RGB(165, 42, 42)"]], ["MAROON", ["#800000", "RGB(128, 0, 0)"]], ["WHITE", ["#FFFFFF", "RGB(255, 255, 255)"]], ["SNOW", ["#FFFAFA", "RGB(255, 250, 250)"]], ["HONEYDEW", ["#F0FFF0", "RGB(240, 255, 240)"]], ["MINTCREAM", ["#F5FFFA", "RGB(245, 255, 250)"]], ["AZURE", ["#F0FFFF", "RGB(240, 255, 255)"]], ["ALICEBLUE", ["#F0F8FF", "RGB(240, 248, 255)"]], ["GHOSTWHITE", ["#F8F8FF", "RGB(248, 248, 255)"]], ["WHITESMOKE", ["#F5F5F5", "RGB(245, 245, 245)"]], ["SEASHELL", ["#FFF5EE", "RGB(255, 245, 238)"]], ["BEIGE", ["#F5F5DC", "RGB(245, 245, 220)"]], ["OLDLACE", ["#FDF5E6", "RGB(253, 245, 230)"]], ["FLORALWHITE", ["#FFFAF0", "RGB(255, 250, 240)"]], ["IVORY", ["#FFFFF0", "RGB(255, 255, 240)"]], ["ANTIQUEWHITE", ["#FAEBD7", "RGB(250, 235, 215)"]], ["LINEN", ["#FAF0E6", "RGB(250, 240, 230)"]], ["LAVENDERBLUSH", ["#FFF0F5", "RGB(255, 240, 245)"]], ["MISTYROSE", ["#FFE4E1", "RGB(255, 228, 225)"]], ["GAINSBORO", ["#DCDCDC", "RGB(220, 220, 220)"]], ["LIGHTGRAY", ["#D3D3D3", "RGB(211, 211, 211)"]], ["SILVER", ["#C0C0C0", "RGB(192, 192, 192)"]], ["DARKGRAY", ["#A9A9A9", "RGB(169, 169, 169)"]], ["GRAY", ["#808080", "RGB(128, 128, 128)"]], ["DIMGRAY", ["#696969", "RGB(105, 105, 105)"]], ["LIGHTSLATEGRAY", ["#778899", "RGB(119, 136, 153)"]], ["SLATEGRAY", ["#708090", "RGB(112, 128, 144)"]], ["DARKSLATEGRAY", ["#2F4F4F", "RGB(47, 79, 79)"]], ["BLACK", ["#000000", "RGB(0, 0, 0)"]]]);
 
-        return colorResource;
+    static color(name: string, type: 'html' | 'rgb' = 'html'): string | undefined {
+        const colorItem = this.all.get(name.toUpperCase());
+        if (colorItem === undefined) {
+            return undefined;
+        } else {
+            return type === 'rgb' ? colorItem[1] : colorItem[0];
+        }
     }
 
     static random(options?: RandomColorOption): string | number[] {
-        return this.resource.randomColor(options);
+        return this._resource.randomColor(options);
     }
 
     static randomHex() {
@@ -477,11 +478,17 @@ export class Colors {
         });
     }
 
-    static between(fromHex: string, toHex: string, count: number): string[] {
+    /**
+     * Gets a html color list between the specific from and end color.
+     * @param fromColor The from html color or name.
+     * @param toColor The to html color or name.
+     * @param count 
+     */
+    static between(fromColor: string, toColor: string, count: number): string[] {
         assert(count > 1, 'Count must be greater than 1 colors.');
 
-        const fromHSL = this.resource.HexToHSL(fromHex);
-        const toHSL = this.resource.HexToHSL(toHex);
+        const fromHSL = this._colorToHSL(fromColor);
+        const toHSL = this._colorToHSL(toColor);
         const segCount = count - 1;
 
         const incrementH = (toHSL[0] - fromHSL[0]) / segCount;
@@ -498,37 +505,37 @@ export class Colors {
         }
         hslColors.push(toHSL);
 
-        const hexColors = hslColors.map(hsl => this.resource.HSLToHex(hsl));
+        const hexColors = hslColors.map(hsl => this._resource.HSLToHex(hsl));
         return hexColors;
     }
 
-    static forward(hex: string, count: number,
+    static forward(color: string, count: number,
         forwardPercentage: number = 100,
         colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue') {
 
-        return this._forwardOrBackward(hex, count, forwardPercentage, colorFamily, true);
+        return this._forwardOrBackward(color, count, forwardPercentage, colorFamily, true);
     }
 
-    static backward(hex: string, count: number,
+    static backward(color: string, count: number,
         forwardPercentage: number = 100,
         colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue') {
 
-        return this._forwardOrBackward(hex, count, forwardPercentage, colorFamily, false);
+        return this._forwardOrBackward(color, count, forwardPercentage, colorFamily, false);
     }
 
-    private static _forwardOrBackward(hex: string, count: number,
+    private static _forwardOrBackward(color: string, count: number,
         forwardPercentage: number = 100,
         colorFamily: 'hue' | 'saturation' | 'luminosity' | 'all' = 'hue', forward = true) {
         let result = new Array<string>();
         if (count <= 0) return result;
 
-        result.push(hex);
+        result.push(color);
         if (count === 1) {
             return result;
         }
 
         const increment = forwardPercentage * .01 / (count - 1);
-        const fromHSL = this.resource.HexToHSL(hex);
+        const fromHSL = this._colorToHSL(color);
         const segCount = count - 1;
 
         const hslColors = new Array<number[]>();
@@ -540,7 +547,7 @@ export class Colors {
                 this._round(fromHSL[2] + i * this._increment(increment, colorFamily, 'luminosity', forward))]);
         }
 
-        const hexColors = hslColors.map(hsl => this.resource.HSLToHex(hsl));
+        const hexColors = hslColors.map(hsl => this._resource.HSLToHex(hsl));
         return hexColors;
     }
 
@@ -563,4 +570,592 @@ export class Colors {
             return 0;
         }
     }
+
+    private static get _resource() {
+        const colorResourceDesc = 'GK_COLOR_RESOURCE';
+        let colorResourceKey = Symbol.for(colorResourceDesc);
+        let colorResource: ColorResource = (<any>global)[colorResourceKey];
+        if (colorResource === undefined) {
+            (<any>global)[colorResourceKey] = colorResource = new ColorResource();
+        }
+
+        return colorResource;
+    }
+
+    private static _colorToHSL(color: string) {
+        if (!color.startsWith('#')) {
+            if (Colors.all.has(color.toUpperCase())) {
+                color = Colors.color(color.toUpperCase())!;
+            }
+        }
+
+        return this._resource.HexToHSL(color);
+    }
+
+    //#region well known colors
+
+    static get INDIANRED() {
+        return this.all.get('INDIANRED')![0];
+    }
+
+    static get LIGHTCORAL() {
+        return this.all.get('LIGHTCORAL')![0];
+    }
+
+    static get SALMON() {
+        return this.all.get('SALMON')![0];
+    }
+
+    static get DARKSALMON() {
+        return this.all.get('DARKSALMON')![0];
+    }
+
+    static get LIGHTSALMON() {
+        return this.all.get('LIGHTSALMON')![0];
+    }
+
+    static get CRIMSON() {
+        return this.all.get('CRIMSON')![0];
+    }
+
+    static get RED() {
+        return this.all.get('RED')![0];
+    }
+
+    static get FIREBRICK() {
+        return this.all.get('FIREBRICK')![0];
+    }
+
+    static get DARKRED() {
+        return this.all.get('DARKRED')![0];
+    }
+
+    static get PINK() {
+        return this.all.get('PINK')![0];
+    }
+
+    static get LIGHTPINK() {
+        return this.all.get('LIGHTPINK')![0];
+    }
+
+    static get HOTPINK() {
+        return this.all.get('HOTPINK')![0];
+    }
+
+    static get DEEPPINK() {
+        return this.all.get('DEEPPINK')![0];
+    }
+
+    static get MEDIUMVIOLETRED() {
+        return this.all.get('MEDIUMVIOLETRED')![0];
+    }
+
+    static get PALEVIOLETRED() {
+        return this.all.get('PALEVIOLETRED')![0];
+    }
+
+    static get CORAL() {
+        return this.all.get('CORAL')![0];
+    }
+
+    static get TOMATO() {
+        return this.all.get('TOMATO')![0];
+    }
+
+    static get ORANGERED() {
+        return this.all.get('ORANGERED')![0];
+    }
+
+    static get DARKORANGE() {
+        return this.all.get('DARKORANGE')![0];
+    }
+
+    static get ORANGE() {
+        return this.all.get('ORANGE')![0];
+    }
+
+    static get GOLD() {
+        return this.all.get('GOLD')![0];
+    }
+
+    static get YELLOW() {
+        return this.all.get('YELLOW')![0];
+    }
+
+    static get LIGHTYELLOW() {
+        return this.all.get('LIGHTYELLOW')![0];
+    }
+
+    static get LEMONCHIFFON() {
+        return this.all.get('LEMONCHIFFON')![0];
+    }
+
+    static get LIGHTGOLDENRODYELLOW() {
+        return this.all.get('LIGHTGOLDENRODYELLOW')![0];
+    }
+
+    static get PAPAYAWHIP() {
+        return this.all.get('PAPAYAWHIP')![0];
+    }
+
+    static get MOCCASIN() {
+        return this.all.get('MOCCASIN')![0];
+    }
+
+    static get PEACHPUFF() {
+        return this.all.get('PEACHPUFF')![0];
+    }
+
+    static get PALEGOLDENROD() {
+        return this.all.get('PALEGOLDENROD')![0];
+    }
+
+    static get KHAKI() {
+        return this.all.get('KHAKI')![0];
+    }
+
+    static get DARKKHAKI() {
+        return this.all.get('DARKKHAKI')![0];
+    }
+
+    static get LAVENDER() {
+        return this.all.get('LAVENDER')![0];
+    }
+
+    static get THISTLE() {
+        return this.all.get('THISTLE')![0];
+    }
+
+    static get PLUM() {
+        return this.all.get('PLUM')![0];
+    }
+
+    static get VIOLET() {
+        return this.all.get('VIOLET')![0];
+    }
+
+    static get ORCHID() {
+        return this.all.get('ORCHID')![0];
+    }
+
+    static get FUCHSIA() {
+        return this.all.get('FUCHSIA')![0];
+    }
+
+    static get MAGENTA() {
+        return this.all.get('MAGENTA')![0];
+    }
+
+    static get MEDIUMORCHID() {
+        return this.all.get('MEDIUMORCHID')![0];
+    }
+
+    static get MEDIUMPURPLE() {
+        return this.all.get('MEDIUMPURPLE')![0];
+    }
+
+    static get REBECCAPURPLE() {
+        return this.all.get('REBECCAPURPLE')![0];
+    }
+
+    static get BLUEVIOLET() {
+        return this.all.get('BLUEVIOLET')![0];
+    }
+
+    static get DARKVIOLET() {
+        return this.all.get('DARKVIOLET')![0];
+    }
+
+    static get DARKORCHID() {
+        return this.all.get('DARKORCHID')![0];
+    }
+
+    static get DARKMAGENTA() {
+        return this.all.get('DARKMAGENTA')![0];
+    }
+
+    static get PURPLE() {
+        return this.all.get('PURPLE')![0];
+    }
+
+    static get INDIGO() {
+        return this.all.get('INDIGO')![0];
+    }
+
+    static get SLATEBLUE() {
+        return this.all.get('SLATEBLUE')![0];
+    }
+
+    static get DARKSLATEBLUE() {
+        return this.all.get('DARKSLATEBLUE')![0];
+    }
+
+    static get MEDIUMSLATEBLUE() {
+        return this.all.get('MEDIUMSLATEBLUE')![0];
+    }
+
+    static get GREENYELLOW() {
+        return this.all.get('GREENYELLOW')![0];
+    }
+
+    static get CHARTREUSE() {
+        return this.all.get('CHARTREUSE')![0];
+    }
+
+    static get LAWNGREEN() {
+        return this.all.get('LAWNGREEN')![0];
+    }
+
+    static get LIME() {
+        return this.all.get('LIME')![0];
+    }
+
+    static get LIMEGREEN() {
+        return this.all.get('LIMEGREEN')![0];
+    }
+
+    static get PALEGREEN() {
+        return this.all.get('PALEGREEN')![0];
+    }
+
+    static get LIGHTGREEN() {
+        return this.all.get('LIGHTGREEN')![0];
+    }
+
+    static get MEDIUMSPRINGGREEN() {
+        return this.all.get('MEDIUMSPRINGGREEN')![0];
+    }
+
+    static get SPRINGGREEN() {
+        return this.all.get('SPRINGGREEN')![0];
+    }
+
+    static get MEDIUMSEAGREEN() {
+        return this.all.get('MEDIUMSEAGREEN')![0];
+    }
+
+    static get SEAGREEN() {
+        return this.all.get('SEAGREEN')![0];
+    }
+
+    static get FORESTGREEN() {
+        return this.all.get('FORESTGREEN')![0];
+    }
+
+    static get GREEN() {
+        return this.all.get('GREEN')![0];
+    }
+
+    static get DARKGREEN() {
+        return this.all.get('DARKGREEN')![0];
+    }
+
+    static get YELLOWGREEN() {
+        return this.all.get('YELLOWGREEN')![0];
+    }
+
+    static get OLIVEDRAB() {
+        return this.all.get('OLIVEDRAB')![0];
+    }
+
+    static get OLIVE() {
+        return this.all.get('OLIVE')![0];
+    }
+
+    static get DARKOLIVEGREEN() {
+        return this.all.get('DARKOLIVEGREEN')![0];
+    }
+
+    static get MEDIUMAQUAMARINE() {
+        return this.all.get('MEDIUMAQUAMARINE')![0];
+    }
+
+    static get DARKSEAGREEN() {
+        return this.all.get('DARKSEAGREEN')![0];
+    }
+
+    static get LIGHTSEAGREEN() {
+        return this.all.get('LIGHTSEAGREEN')![0];
+    }
+
+    static get DARKCYAN() {
+        return this.all.get('DARKCYAN')![0];
+    }
+
+    static get TEAL() {
+        return this.all.get('TEAL')![0];
+    }
+
+    static get AQUA() {
+        return this.all.get('AQUA')![0];
+    }
+
+    static get CYAN() {
+        return this.all.get('CYAN')![0];
+    }
+
+    static get LIGHTCYAN() {
+        return this.all.get('LIGHTCYAN')![0];
+    }
+
+    static get PALETURQUOISE() {
+        return this.all.get('PALETURQUOISE')![0];
+    }
+
+    static get AQUAMARINE() {
+        return this.all.get('AQUAMARINE')![0];
+    }
+
+    static get TURQUOISE() {
+        return this.all.get('TURQUOISE')![0];
+    }
+
+    static get MEDIUMTURQUOISE() {
+        return this.all.get('MEDIUMTURQUOISE')![0];
+    }
+
+    static get DARKTURQUOISE() {
+        return this.all.get('DARKTURQUOISE')![0];
+    }
+
+    static get CADETBLUE() {
+        return this.all.get('CADETBLUE')![0];
+    }
+
+    static get STEELBLUE() {
+        return this.all.get('STEELBLUE')![0];
+    }
+
+    static get LIGHTSTEELBLUE() {
+        return this.all.get('LIGHTSTEELBLUE')![0];
+    }
+
+    static get POWDERBLUE() {
+        return this.all.get('POWDERBLUE')![0];
+    }
+
+    static get LIGHTBLUE() {
+        return this.all.get('LIGHTBLUE')![0];
+    }
+
+    static get SKYBLUE() {
+        return this.all.get('SKYBLUE')![0];
+    }
+
+    static get LIGHTSKYBLUE() {
+        return this.all.get('LIGHTSKYBLUE')![0];
+    }
+
+    static get DEEPSKYBLUE() {
+        return this.all.get('DEEPSKYBLUE')![0];
+    }
+
+    static get DODGERBLUE() {
+        return this.all.get('DODGERBLUE')![0];
+    }
+
+    static get CORNFLOWERBLUE() {
+        return this.all.get('CORNFLOWERBLUE')![0];
+    }
+
+    static get ROYALBLUE() {
+        return this.all.get('ROYALBLUE')![0];
+    }
+
+    static get BLUE() {
+        return this.all.get('BLUE')![0];
+    }
+
+    static get MEDIUMBLUE() {
+        return this.all.get('MEDIUMBLUE')![0];
+    }
+
+    static get DARKBLUE() {
+        return this.all.get('DARKBLUE')![0];
+    }
+
+    static get NAVY() {
+        return this.all.get('NAVY')![0];
+    }
+
+    static get MIDNIGHTBLUE() {
+        return this.all.get('MIDNIGHTBLUE')![0];
+    }
+
+    static get CORNSILK() {
+        return this.all.get('CORNSILK')![0];
+    }
+
+    static get BLANCHEDALMOND() {
+        return this.all.get('BLANCHEDALMOND')![0];
+    }
+
+    static get BISQUE() {
+        return this.all.get('BISQUE')![0];
+    }
+
+    static get NAVAJOWHITE() {
+        return this.all.get('NAVAJOWHITE')![0];
+    }
+
+    static get WHEAT() {
+        return this.all.get('WHEAT')![0];
+    }
+
+    static get BURLYWOOD() {
+        return this.all.get('BURLYWOOD')![0];
+    }
+
+    static get TAN() {
+        return this.all.get('TAN')![0];
+    }
+
+    static get ROSYBROWN() {
+        return this.all.get('ROSYBROWN')![0];
+    }
+
+    static get SANDYBROWN() {
+        return this.all.get('SANDYBROWN')![0];
+    }
+
+    static get GOLDENROD() {
+        return this.all.get('GOLDENROD')![0];
+    }
+
+    static get DARKGOLDENROD() {
+        return this.all.get('DARKGOLDENROD')![0];
+    }
+
+    static get PERU() {
+        return this.all.get('PERU')![0];
+    }
+
+    static get CHOCOLATE() {
+        return this.all.get('CHOCOLATE')![0];
+    }
+
+    static get SADDLEBROWN() {
+        return this.all.get('SADDLEBROWN')![0];
+    }
+
+    static get SIENNA() {
+        return this.all.get('SIENNA')![0];
+    }
+
+    static get BROWN() {
+        return this.all.get('BROWN')![0];
+    }
+
+    static get MAROON() {
+        return this.all.get('MAROON')![0];
+    }
+
+    static get WHITE() {
+        return this.all.get('WHITE')![0];
+    }
+
+    static get SNOW() {
+        return this.all.get('SNOW')![0];
+    }
+
+    static get HONEYDEW() {
+        return this.all.get('HONEYDEW')![0];
+    }
+
+    static get MINTCREAM() {
+        return this.all.get('MINTCREAM')![0];
+    }
+
+    static get AZURE() {
+        return this.all.get('AZURE')![0];
+    }
+
+    static get ALICEBLUE() {
+        return this.all.get('ALICEBLUE')![0];
+    }
+
+    static get GHOSTWHITE() {
+        return this.all.get('GHOSTWHITE')![0];
+    }
+
+    static get WHITESMOKE() {
+        return this.all.get('WHITESMOKE')![0];
+    }
+
+    static get SEASHELL() {
+        return this.all.get('SEASHELL')![0];
+    }
+
+    static get BEIGE() {
+        return this.all.get('BEIGE')![0];
+    }
+
+    static get OLDLACE() {
+        return this.all.get('OLDLACE')![0];
+    }
+
+    static get FLORALWHITE() {
+        return this.all.get('FLORALWHITE')![0];
+    }
+
+    static get IVORY() {
+        return this.all.get('IVORY')![0];
+    }
+
+    static get ANTIQUEWHITE() {
+        return this.all.get('ANTIQUEWHITE')![0];
+    }
+
+    static get LINEN() {
+        return this.all.get('LINEN')![0];
+    }
+
+    static get LAVENDERBLUSH() {
+        return this.all.get('LAVENDERBLUSH')![0];
+    }
+
+    static get MISTYROSE() {
+        return this.all.get('MISTYROSE')![0];
+    }
+
+    static get GAINSBORO() {
+        return this.all.get('GAINSBORO')![0];
+    }
+
+    static get LIGHTGRAY() {
+        return this.all.get('LIGHTGRAY')![0];
+    }
+
+    static get SILVER() {
+        return this.all.get('SILVER')![0];
+    }
+
+    static get DARKGRAY() {
+        return this.all.get('DARKGRAY')![0];
+    }
+
+    static get GRAY() {
+        return this.all.get('GRAY')![0];
+    }
+
+    static get DIMGRAY() {
+        return this.all.get('DIMGRAY')![0];
+    }
+
+    static get LIGHTSLATEGRAY() {
+        return this.all.get('LIGHTSLATEGRAY')![0];
+    }
+
+    static get SLATEGRAY() {
+        return this.all.get('SLATEGRAY')![0];
+    }
+
+    static get DARKSLATEGRAY() {
+        return this.all.get('DARKSLATEGRAY')![0];
+    }
+
+    static get BLACK() {
+        return this.all.get('BLACK')![0];
+    }
+    //#endregion
 }

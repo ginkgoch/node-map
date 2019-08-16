@@ -1,6 +1,7 @@
 import { Feature, Point } from "ginkgoch-geom";
 import { MemoryFeatureSource } from "..";
 import { Field } from "..";
+import TestUtils from "../shared/TestUtils";
 
 describe('MemoryFeatureSource', () => {
     it('push feature', async () => {
@@ -32,7 +33,7 @@ describe('MemoryFeatureSource', () => {
         expect(features.length).toBe(2);
         expect(features[0].id).toBe(1);
         expect(features[1].id).toBe(2);
-        
+
         for (let i = 0; i < features.length; i++) {
             expect(features[i].geometry).toEqual(points[i]);
         }
@@ -44,7 +45,7 @@ describe('MemoryFeatureSource', () => {
         expect(features.length).toBe(2);
         expect(features[0].id).toBe(1);
         expect(features[1].id).toBe(2);
-        
+
         points[1] = new Point(19, 21);
         for (let i = 0; i < features.length; i++) {
             expect(features[i].geometry).toEqual(points[i]);
@@ -78,7 +79,7 @@ describe('MemoryFeatureSource', () => {
     it('field - push', async () => {
         const source = new MemoryFeatureSource();
         const field1 = new Field('name', 'char', 10);
-        const field2 = new Field('age', 'number', 4);        
+        const field2 = new Field('age', 'number', 4);
 
         await source.pushField(field1);
         await source.pushField(field2);
@@ -100,18 +101,18 @@ describe('MemoryFeatureSource', () => {
     it('field - update', async () => {
         const source = new MemoryFeatureSource();
         const field1 = new Field('name', 'char', 10);
-        const field2 = new Field('age', 'number', 4);        
+        const field2 = new Field('age', 'number', 4);
 
         await source.pushField(field1);
         await source.pushField(field2);
 
-        let field3 = new Field('gender', 'char', 10);        
+        let field3 = new Field('gender', 'char', 10);
         await source.updateField('age', field3);
         const fields = await source.fields();
         expect(fields.length).toBe(2);
         expect(fields[0]).toEqual(field1);
         expect(fields[1]).toEqual(field3);
-        
+
         await source.push(new Feature(new Point(1, 1), { 'name': 'Samuel', 'age': 20, 'gender': 'male' }));
         let features = await source.features();
         expect(features.length).toBe(1);
@@ -124,7 +125,7 @@ describe('MemoryFeatureSource', () => {
     it('field - remove', async () => {
         const source = new MemoryFeatureSource();
         const field1 = new Field('name', 'char', 10);
-        const field2 = new Field('age', 'number', 4);        
+        const field2 = new Field('age', 'number', 4);
 
         await source.pushField(field1);
         await source.pushField(field2);
@@ -134,9 +135,28 @@ describe('MemoryFeatureSource', () => {
         await source.removeField('gender');
         fields = await source.fields();
         expect(fields.length).toBe(2);
-        
+
         await source.removeField('age');
         fields = await source.fields();
         expect(fields.length).toBe(1);
+    });
+
+    it('json', async () => {
+        const source = new MemoryFeatureSource();
+        const field1 = new Field('name', 'char', 10);
+        const field2 = new Field('age', 'number', 4);
+        await source.pushField(field1);
+        await source.pushField(field2);
+        await source.push(new Feature(new Point(0, 1)));
+        await source.push(new Feature(new Point(1, 1)));
+        await source.push(new Feature(new Point(91, 19)));
+
+        const json = source.toJSON();
+        TestUtils.compareOrLog(json, {
+            "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 0 }, "to": { "unit": 0 } }, "features": { "id": 0, "type": "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "Point", "coordinates": [0, 1] }, "properties": {} }, { "id": 2, "type": "Feature", "geometry": { "type": "Point", "coordinates": [1, 1] }, "properties": {} }, { "id": 3, "type": "Feature", "geometry": { "type": "Point", "coordinates": [91, 19] }, "properties": {} }] }, "fields": [{ "name": "name", "type": "char", "length": 10, "extra": {} }, {
+                "name": "age", "type": "number", "length"
+                    : 4, "extra": {}
+            }]
+        }, false, false);
     });
 });

@@ -2,9 +2,12 @@ import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
-import { Opener, Validator } from "../shared";
+import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
+import { FeatureSourceFactory } from ".";
+import { StyleFactory } from "../styles";
 
 export class FeatureLayer extends Opener {
+    name: string;
     source: FeatureSource;
     styles: Array<Style>;
     minimumScale: number;
@@ -13,10 +16,17 @@ export class FeatureLayer extends Opener {
     constructor(source: FeatureSource) {
         super();
 
+        this.name = 'Unknown';
         this.source = source;
         this.styles = new Array<Style>();
         this.minimumScale = 0;
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
+    }
+
+    pushStyles(styles: Array<Style>) {
+        for (let style of styles) {
+            this.styles.push(style);
+        }
     }
 
     /**
@@ -57,11 +67,38 @@ export class FeatureLayer extends Opener {
 
     async thumbnail(width = 256, height = 256): Promise<Image> {
         const envelope = await this.envelope();
-        const render = Render.create(width, height, envelope, this.source.projection.fromUnit);
+        const render = Render.create(width, height, envelope, this.source.projection.from.unit);
         await this.draw(render);
         render.flush();
 
         return render.image;
+    }
+
+    toJSON(): any {
+        return this._toJSON();
+    }
+
+    protected _toJSON() {
+        return {
+            type: JSONKnownTypes.featureLayer,
+            name: this.name,
+            source: this.source.toJSON(),
+            styles: this.styles.map(style => style.toJSON()),
+            minimumScale: this.minimumScale,
+            maximumScale: this.maximumScale
+        }
+    }
+
+    static parseJSON(json: any) {
+        const source = FeatureSourceFactory.parseJSON(json.source) as FeatureSource;
+        const layer = new FeatureLayer(source);
+        layer.name = json.name;
+        layer.minimumScale = json.minimumScale;
+        layer.maximumScale = json.maximumScale;
+        layer.styles = (<any[]>json.styles).map(j => {
+            return StyleFactory.parseJSON(j);
+        });
+        return layer;
     }
 
     private _isVisible(scale: number, maxScale: number, minScale: number) {

@@ -1,7 +1,8 @@
+import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
 import { Render } from "../render";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 
 export class TextStyle extends Style {
     content: string | undefined;
@@ -11,15 +12,26 @@ export class TextStyle extends Style {
     strokeStyle: string | undefined;
     lineWidth: number;
 
-    constructor(content: string | undefined, fillStyle?: string, font?: string) {
+    constructor(content?: string, fillStyle?: string, font?: string) {
         super();
 
         this.name = 'Text Style';
+        this.type = JSONKnownTypes.textStyle;
         this.content = content;
         this.textAlign = 'center';
         this.font = font || '12px ARIAL';
         this.lineWidth = 0;
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
+    }
+
+    protected _propKeys(): string[] {
+        return [
+            'font',
+            'fillStyle',
+            'textAlign',
+            'strokeStyle',
+            'lineWidth'
+        ];
     }
 
     /**

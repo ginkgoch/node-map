@@ -22,9 +22,10 @@ export class Image {
      * // construct with image file path
      * const image = new Image('demo.png')
      */
+    constructor(buffer?: Buffer)
     constructor(imageFilePath?: string)
     constructor(width?: number, height?: number)
-    constructor(param?: string | number, height?: number) {
+    constructor(param?: string | number | Buffer, height?: number) {
         this.buffer = null;
         if (typeof param === 'number') {
             this.width = param;
@@ -35,6 +36,12 @@ export class Image {
         else if (typeof param === 'string') {
             this.source = NativeFactory.nativeImage();
             this.source.src = this.buffer = fs.readFileSync(param);
+            this.width = this.source.width;
+            this.height = this.source.height;
+        }
+        else if (param instanceof Buffer) {
+            this.source = NativeFactory.nativeImage();
+            this.source.src = this.buffer = param;
             this.width = this.source.width;
             this.height = this.source.height;
         }
@@ -51,6 +58,15 @@ export class Image {
      */
     toBuffer(): Buffer {
         return this.buffer || this._nativeCanvas(this.width, this.height).toBuffer();
+    }
+
+    toJSON(): any {
+        return {
+            type: 'image',
+            width: this.width,
+            height: this.height,
+            buffer: (<Buffer>this.buffer).toJSON()
+        }
     }
 
     private _nativeCanvas(width: number, height: number) {

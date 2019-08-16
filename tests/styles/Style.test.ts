@@ -7,10 +7,10 @@ import TestUtils from "../shared/TestUtils";
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
 describe('Style', () => {
-    it('json', () => {
+    it('props', () => {
         const pointStyle = new PointStyle();
-        const raw = pointStyle.json();
-        expect(Object.keys(raw).length).toBe(7);
+        const raw = pointStyle.props();
+        expect(Object.keys(raw).length).toBe(5);
     });
 
     it('PointStyle', () => {

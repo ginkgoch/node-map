@@ -1,4 +1,4 @@
-import { LineStyle } from "..";
+import { LineStyle, Constants } from "..";
 import { Feature, LineString } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
@@ -14,8 +14,8 @@ describe('LineStyle', () => {
         canvas.flush();
 
         compareImage(canvas.image, 'linestyle-1.png');
-    }); 
-    
+    });
+
     it('draw - 2', () => {
         const canvas = Render.create(64, 64);
         const style1 = new LineStyle('#00ff00', 6);
@@ -26,6 +26,23 @@ describe('LineStyle', () => {
         canvas.flush();
 
         compareImage(canvas.image, 'linestyle-2.png');
+    });
+
+    it('json', () => {
+        const style1 = new LineStyle('#00ff00', 6);
+        expect(style1.toJSON()).toEqual({
+            type: 'line-style',
+            name: 'Line Style',
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
+            minimumScale: 0,
+            strokeStyle: '#00ff00',
+            lineWidth: 6
+        });
+    });
+
+    it('props', () => {
+        const style1 = new LineStyle('#00ff00', 6);
+        expect(style1.props()).toEqual({ strokeStyle: '#00ff00', lineWidth: 6 });
     });
 });
 

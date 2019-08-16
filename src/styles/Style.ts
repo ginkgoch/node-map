@@ -1,15 +1,19 @@
 import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
+import { Constants } from "../shared";
+import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
 
 export abstract class Style {
+    type: string;
     name: string;
     maximumScale: number;
     minimumScale: number;
 
     constructor(name?: string) {
+        this.type = JSONKnownTypes.unknown;
         this.name = name || 'unknown';
-        this.maximumScale = Number.POSITIVE_INFINITY;
+        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
         this.minimumScale = 0;
     }
 
@@ -26,7 +30,7 @@ export abstract class Style {
             return;
         }
 
-        const styleJson = this.json();
+        const styleJson = this.props();
         this._draw(features, styleJson, render);
     }
 
@@ -41,22 +45,35 @@ export abstract class Style {
         features.forEach(f => render.drawFeature(f, styleJson));
     }
 
-    json(): any {
-        let json = this._json();
+    toJSON(): any {
+        let json = this._toJSON();
         return json;
+    }
+
+    protected _toJSON() {
+        return JSONUtils.objectToJSON(this);
+    }
+
+    props(): any {
+        let props = this._props();
+        return props;
     }
 
     /**
      * @virtual
      */
-    protected _json(): any {
+    protected _props(): any {
         const raw: any = {};
         _.forIn(this, (v, k) => {
-            if (typeof v !== 'function' && k !== 'name' && v !== undefined) {
+            if (this._propKeys().some(key => key === k)) {
                 raw[k] = v;
             }
         });
 
         return raw;
+    }
+
+    protected _propKeys(): string[] {
+        return [];
     }
 }

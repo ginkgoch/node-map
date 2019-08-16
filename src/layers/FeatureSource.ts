@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { Field } from "./Field";
-import { Opener, Validator } from "../shared";
-import { Projection } from "./Projection";
-import { FieldFilterOptions } from "./FieldFilterOptions";
-import { PropertyAggregator } from "./PropertyAggregator";
+import { Opener, Validator, JSONKnownTypes } from "../shared";
+import { Field, PropertyAggregator, Projection } from ".";
+
+export type FieldFilters = 'all' | 'none' | string[];
 
 export abstract class FeatureSource extends Opener {
     name: string;
     projection: Projection
+    type = JSONKnownTypes.unknown;
 
     constructor() {
         super();
@@ -17,7 +17,7 @@ export abstract class FeatureSource extends Opener {
         this.projection = new Projection();
     }
 
-    protected _open(): Promise<void> { 
+    protected _open(): Promise<void> {
         return Promise.resolve();
     }
 
@@ -25,7 +25,7 @@ export abstract class FeatureSource extends Opener {
         return Promise.resolve();
     }
 
-    async features(envelope?: IEnvelope, fields?: FieldFilterOptions): Promise<Feature[]> {
+    async features(envelope?: IEnvelope, fields?: FieldFilters): Promise<Feature[]> {
         Validator.checkOpened(this, !this._openRequired);
 
         let envelopeIn = envelope;
@@ -43,7 +43,7 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]>;
 
-    async feature(id: number, fields?: FieldFilterOptions): Promise<Feature | undefined> {
+    async feature(id: number, fields?: FieldFilters): Promise<Feature | undefined> {
         let fieldsNorm = await this._normalizeFields(fields);
         let feature = await this._feature(id, fieldsNorm);
         if (feature === undefined) {
@@ -56,7 +56,7 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _feature(id: number, fields: string[]): Promise<Feature | undefined>;
 
-    protected async _normalizeFields(fields?: FieldFilterOptions): Promise<string[]> {
+    protected async _normalizeFields(fields?: FieldFilters): Promise<string[]> {
         if (fields === 'none') return [];
 
         const allFields = (await this.fields()).map(f => f.name);
@@ -81,12 +81,12 @@ export abstract class FeatureSource extends Opener {
 
     protected abstract async _fields(): Promise<Field[]>;
 
-    async propertyAggregator(fields?: FieldFilterOptions) {
+    async propertyAggregator(fields?: FieldFilters) {
         const properties = await this.properties(fields);
         return new PropertyAggregator(properties);
     }
 
-    async properties(fields?: FieldFilterOptions): Promise<Array<Map<string, any>>> {
+    async properties(fields?: FieldFilters): Promise<Array<Map<string, any>>> {
         Validator.checkOpened(this, !this._openRequired);
 
         const f = await this._normalizeFields(fields);
@@ -113,11 +113,11 @@ export abstract class FeatureSource extends Opener {
     protected abstract async _envelope(): Promise<Envelope>;
 
     get srs(): string | undefined {
-        return this.projection.from;
+        return this.projection.from.projection;
     }
 
-    set srs(srs: string|undefined) {
-        this.projection.from = srs;
+    set srs(srs: string | undefined) {
+        this.projection.from.projection = srs;
     }
 
     protected _inverseProjection(envelope: IEnvelope): IEnvelope;
@@ -217,7 +217,7 @@ export abstract class FeatureSource extends Opener {
         this._notImplemented();
     }
 
-    async flushFields() { 
+    async flushFields() {
         Validator.checkOpenAndEditable(this, !this._openRequired);
 
         await this._flushFields();
@@ -228,6 +228,21 @@ export abstract class FeatureSource extends Opener {
     private _notImplemented() {
         throw new Error('Not implemented');
     }
+    //#endregion
+
+    //#region toJson
+    toJSON(): any {
+        return this._toJSON();
+    }
+
+    protected _toJSON(): any {
+        return {
+            type: this.type,
+            name: this.name,
+            projection: this.projection.toJSON()
+        };
+    }
+
     //#endregion
 
     private isEnvelope(obj: any) {
