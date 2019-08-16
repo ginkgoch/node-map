@@ -21,11 +21,10 @@ export class ShapefileFeatureSource extends FeatureSource {
     }
 
     protected _json() {
-        return {
-            type: this.type,
-            flag: this.flag,
-            filePath: this.filePath
-        };
+        const json = super._json();
+        json.flag = this.flag;
+        json.filePath = this.filePath;
+        return json;
     }
 
     static parseJson(json: any) {

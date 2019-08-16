@@ -1,11 +1,12 @@
 import { DbfField, DbfFieldType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
 import { JsonKnownTypes } from '../../src/shared';
+import TestUtils from '../shared/TestUtils';
 
 describe('ShapefileFeatureSource', () => {
     it('DbfField parsing', () => {
         const dbfField = new DbfField('STATE_NAME', DbfFieldType.number, 8, 4);
-        
+
         const source = new ShapefileFeatureSource() as any;
         const field = source._mapDbfFieldToField(dbfField) as Field;
         expect(field.name).toEqual(dbfField.name);
@@ -48,10 +49,17 @@ describe('ShapefileFeatureSource', () => {
     it('json', () => {
         const source = new ShapefileFeatureSource('./fileNotExist.shp');
         const json = source.json();
-        expect(json).toEqual({
+
+        TestUtils.compareOrLog(json, {
+            type: 'shapefile-feature-source',
+            name: 'Unknown',
+            projection:
+            {
+                from: { projection: undefined, unit: 0 },
+                to: { projection: undefined, unit: 0 }
+            },
             flag: 'rs',
-            filePath: './fileNotExist.shp',
-            type: JsonKnownTypes.shapefileFeatureSource
-        });
+            filePath: './fileNotExist.shp'
+        }, false, false);
     });
 });
