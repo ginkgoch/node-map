@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
 import { Constants } from "../shared";
-import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
 
 export abstract class Style {
     type: string;
@@ -11,7 +11,7 @@ export abstract class Style {
     minimumScale: number;
 
     constructor(name?: string) {
-        this.type = JsonKnownTypes.unknown;
+        this.type = JSONKnownTypes.unknown;
         this.name = name || 'unknown';
         this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
         this.minimumScale = 0;
@@ -51,7 +51,7 @@ export abstract class Style {
     }
 
     protected _toJSON() {
-        return JsonUtils.objectToJson(this);
+        return JSONUtils.objectToJSON(this);
     }
 
     props(): any {

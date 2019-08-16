@@ -2,7 +2,7 @@ import _ from "lodash";
 import { FeatureSource } from "./FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
-import { Opener, Validator, Constants, JsonKnownTypes } from "../shared";
+import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
 import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 
@@ -80,7 +80,7 @@ export class FeatureLayer extends Opener {
 
     protected _toJSON() {
         return {
-            type: JsonKnownTypes.featureLayer,
+            type: JSONKnownTypes.featureLayer,
             name: this.name,
             source: this.source.toJSON(),
             styles: this.styles.map(style => style.toJSON()),

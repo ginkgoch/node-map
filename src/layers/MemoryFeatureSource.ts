@@ -1,7 +1,7 @@
 import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature, GeometryFactory } from "ginkgoch-geom";
 import { Field } from "./Field";
 import { FeatureSource } from "./FeatureSource";
-import { JsonUtils, JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
 import { Projection } from "./Projection";
 
 export class MemoryFeatureSource extends FeatureSource {
@@ -12,7 +12,7 @@ export class MemoryFeatureSource extends FeatureSource {
     constructor(features?: IFeature[]) {
         super();
 
-        this.type = JsonKnownTypes.memoryFeatureSource;
+        this.type = JSONKnownTypes.memoryFeatureSource;
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
@@ -22,9 +22,9 @@ export class MemoryFeatureSource extends FeatureSource {
 
     protected _toJSON(): any {
         const json = super._toJSON();
-        json.type = JsonKnownTypes.memoryFeatureSource;
+        json.type = JSONKnownTypes.memoryFeatureSource;
         json.features = this._interFeatures.json();
-        json.fields = JsonUtils.valueToJson(this._interFields);
+        json.fields = JSONUtils.valueToJSON(this._interFields);
         return json;
     }
 

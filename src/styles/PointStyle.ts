@@ -1,6 +1,6 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 
 export class PointStyle extends Style {
     fillStyle: string;
@@ -18,7 +18,7 @@ export class PointStyle extends Style {
         super();
 
         this.name = 'Point Style';
-        this.type = JsonKnownTypes.pointStyle;
+        this.type = JSONKnownTypes.pointStyle;
         this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
         this.strokeStyle = strokeStyle || this.fillStyle;
         this.lineWidth = lineWidth;

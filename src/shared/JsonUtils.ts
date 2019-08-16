@@ -1,7 +1,7 @@
 import _ from "lodash";
 
-export class JsonUtils {
-    static mapToJson(map: Map<string, any>): any {
+export class JSONUtils {
+    static mapToJSON(map: Map<string, any>): any {
         const json: any = {};
         map.forEach((v, k) => {
             json[k] = v;
@@ -19,39 +19,39 @@ export class JsonUtils {
         return map;
     }
 
-    static objectToJson(obj: any): any {
-        let json = this._objectToJson(obj);
+    static objectToJSON(obj: any): any {
+        let json = this._objectToJSON(obj);
         return json;
     }
 
-    private static _objectToJson(obj: any) {
+    private static _objectToJSON(obj: any) {
         const json: any = {};
         _.forIn(obj, (v, k) => {
             if (typeof v !== 'function' && v !== undefined) {
-                json[k] = this.valueToJson(v);
+                json[k] = this.valueToJSON(v);
             }
         });
 
         return json;
     }
 
-    static valueToJson(obj: any): any {
+    static valueToJSON(obj: any): any {
         if (obj.toJSON !== undefined && typeof obj.toJSON === 'function') {
             return obj.toJSON();
         } else if (Array.isArray(obj)) {
-            return obj.map(o => this.valueToJson(o));
+            return obj.map(o => this.valueToJSON(o));
         } else if (typeof obj === 'object') {
-            return this._objectToJson(obj);
+            return this._objectToJSON(obj);
         } else {
             return obj;
         }
     }
 
-    static jsonToObject(json: any, register: JsonTypeRegister): any {
+    static jsonToObject(json: any, register: JSONTypeRegister): any {
         return this._jsonToObject(json, register);
     }
 
-    private static _jsonToObject(json: any, register: JsonTypeRegister): any {
+    private static _jsonToObject(json: any, register: JSONTypeRegister): any {
         if (Array.isArray(json)) {
             return json.map(j => this._jsonToObject(j, register));
         } else if (json === null || json === undefined) {
@@ -75,7 +75,7 @@ export class JsonUtils {
     }
 }
 
-export enum JsonKnownTypes {
+export enum JSONKnownTypes {
     unknown = 'unknown',
 
     image = 'image',
@@ -95,15 +95,15 @@ export enum JsonKnownTypes {
     layerGroup = 'layer-group',
 }
 
-export interface JsonObjectCreator {
+export interface JSONObjectCreator {
     create: (...args: any[]) => any,
     ignoreChildren: boolean
 }
 
-export class JsonTypeRegister {
-    registers: Map<string, JsonObjectCreator> = new Map<string, JsonObjectCreator>();
+export class JSONTypeRegister {
+    registers: Map<string, JSONObjectCreator> = new Map<string, JSONObjectCreator>();
 
-    register(name: string, creator: (...args: any[]) => any, ignoreChildren = false): JsonTypeRegister {
+    register(name: string, creator: (...args: any[]) => any, ignoreChildren = false): JSONTypeRegister {
         this.registers.set(name, {
             create: creator,
             ignoreChildren: ignoreChildren

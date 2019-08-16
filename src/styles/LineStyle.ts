@@ -1,6 +1,6 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import { JsonKnownTypes } from "../shared/JsonUtils";
+import { JSONKnownTypes } from "../shared/JSONUtils";
 
 export class LineStyle extends Style {
     strokeStyle: string;
@@ -10,7 +10,7 @@ export class LineStyle extends Style {
         super();
 
         this.name = 'Line Style';
-        this.type = JsonKnownTypes.lineStyle;
+        this.type = JSONKnownTypes.lineStyle;
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
         this.lineWidth = lineWidth;
     }

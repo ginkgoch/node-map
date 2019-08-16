@@ -1,6 +1,5 @@
 import { DbfField, DbfFieldType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
-import { JsonKnownTypes } from '../../src/shared';
 import TestUtils from '../shared/TestUtils';
 
 describe('ShapefileFeatureSource', () => {

@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
-import { Validator, JsonKnownTypes } from '../shared';
+import { Validator, JSONKnownTypes } from '../shared';
 import { Projection } from "./Projection";
 
 const DBF_FIELD_DECIMAL = 'decimal';
@@ -15,7 +15,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     constructor(filePath?: string, flag: string = 'rs') {
         super();
 
-        this.type = JsonKnownTypes.shapefileFeatureSource;
+        this.type = JSONKnownTypes.shapefileFeatureSource;
         this.filePath = filePath || '';
         this.flag = flag;
     }

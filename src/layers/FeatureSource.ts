@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { Opener, Validator, JsonKnownTypes } from "../shared";
+import { Opener, Validator, JSONKnownTypes } from "../shared";
 import { Field, PropertyAggregator, Projection } from ".";
 
 export type FieldFilters = 'all' | 'none' | string[];
@@ -8,7 +8,7 @@ export type FieldFilters = 'all' | 'none' | string[];
 export abstract class FeatureSource extends Opener {
     name: string;
     projection: Projection
-    type = JsonKnownTypes.unknown;
+    type = JSONKnownTypes.unknown;
 
     constructor() {
         super();
