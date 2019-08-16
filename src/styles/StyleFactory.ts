@@ -13,7 +13,7 @@ import { JsonKnownTypes, JsonTypeRegister, JsonUtils } from "../shared/JsonUtils
 export class StyleFactory {
     static register: JsonTypeRegister;
 
-    static parseJson(styleJson: any) {
+    static parseJSON(styleJson: any) {
         if (this.register === undefined) {
             this.register = new JsonTypeRegister();
             this.register.register(JsonKnownTypes.image, json => new Image(Buffer.from(json.buffer.data)), true);

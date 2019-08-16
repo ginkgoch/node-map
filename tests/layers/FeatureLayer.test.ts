@@ -59,7 +59,7 @@ describe('FeatureLayer', () => {
     it('parseJson - mem', () => {
         const layer = lineLayer();
         const json = layer.toJSON();
-        const newLayer = FeatureLayer.parseJson(json);
+        const newLayer = FeatureLayer.parseJSON(json);
 
         const s1 = JSON.stringify(json);
         const s2 = JSON.stringify(newLayer.toJSON());
@@ -71,7 +71,7 @@ describe('FeatureLayer', () => {
         const layer = new FeatureLayer(source);
 
         const json = layer.toJSON();
-        const newLayer = FeatureLayer.parseJson(json);
+        const newLayer = FeatureLayer.parseJSON(json);
 
         const s1 = JSON.stringify(json);
         const s2 = JSON.stringify(newLayer.toJSON());

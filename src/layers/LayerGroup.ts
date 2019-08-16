@@ -54,11 +54,11 @@ export class LayerGroup {
         };
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const group = new LayerGroup();
         group.name = json.name;
         group.layers = (<any[]>json.layers).map(j => {
-            return FeatureLayer.parseJson(j);
+            return FeatureLayer.parseJSON(j);
         });
 
         return group;

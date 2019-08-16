@@ -28,12 +28,12 @@ export class MemoryFeatureSource extends FeatureSource {
         return json;
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const source = new MemoryFeatureSource();
         source.name = json.name;
-        source.projection = Projection.parseJson(json.projection);
+        source.projection = Projection.parseJSON(json.projection);
         source._interFeatures = FeatureCollection.create(json.features);
-        source._interFields = (<any[]>json.fields).map(j => Field.parseJson(j));
+        source._interFields = (<any[]>json.fields).map(j => Field.parseJSON(j));
         return source;
     }
 

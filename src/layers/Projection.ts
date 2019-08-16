@@ -52,7 +52,7 @@ export class Projection {
         };
     }
 
-    static parseJson(json: any): Projection {
+    static parseJSON(json: any): Projection {
         return new Projection(json.from.projection, json.to.projection);
     }
 

@@ -27,10 +27,10 @@ export class ShapefileFeatureSource extends FeatureSource {
         return json;
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const source = new ShapefileFeatureSource();
         source.name = json.name;
-        source.projection = Projection.parseJson(json.projection);
+        source.projection = Projection.parseJSON(json.projection);
         source.flag = json.flag;
         source.filePath = json.filePath;
         return source;

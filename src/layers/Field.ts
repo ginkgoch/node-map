@@ -32,7 +32,7 @@ export class Field {
         };
     }
 
-    static parseJson(json: any) {
+    static parseJSON(json: any) {
         const field = new Field();
         field.name = json.name;
         field.length = json.length;
