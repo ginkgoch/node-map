@@ -1,13 +1,11 @@
 import _ from "lodash";
-import { LayerGroup, FeatureLayer } from "../layers";
 import { IEnvelope, Envelope } from "ginkgoch-geom";
 import { Render } from "../render";
-import { Unit, GeoUtils } from "../shared";
+import { LayerGroup, FeatureLayer, Srs } from "../layers";
 
 export class GKMap {
     name = 'GKMap';
-    srs?: string;
-    srsUnit?: Unit;
+    srs?: Srs;
     width: number;
     height: number;
     background?: string;
@@ -18,7 +16,7 @@ export class GKMap {
     constructor(width?: number, height?: number, srs?: string) {
         this.width = width || 256;
         this.height = height || 256;
-        this.srs = srs || 'EPSG:3857';
+        this.srs = new Srs(srs || 'EPSG:3857');
         this.groups = new Array<LayerGroup>();
     }
 
@@ -60,8 +58,7 @@ export class GKMap {
             envelope = await this.envelope();
         }
 
-        this.srsUnit = GeoUtils.unit(this.srs);
-        const render = Render.create(this.width, this.height, envelope, this.srsUnit);
+        const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
         for (let group of this.groups) {
             await group.draw(render);
         }
