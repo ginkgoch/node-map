@@ -54,29 +54,6 @@ export abstract class Style {
         return JsonUtils.objectToJson(this);
     }
 
-    // private static _serialize(obj: any) {
-    //     const json: any = {};
-    //     _.forIn(obj, (v, k) => {
-    //         if (typeof v !== 'function' && v !== undefined) {
-    //             json[k] = this._serializeValue(v);
-    //         }
-    //     });
-
-    //     return json;
-    // }
-
-    // private static _serializeValue(obj: any): any {
-    //     if (obj.json !== undefined || typeof obj.json === 'function') {
-    //         return obj.json();
-    //     } else if (Array.isArray(obj)) {
-    //         return obj.map(o => this._serializeValue(o));
-    //     } else if (typeof obj === 'object') {
-    //         return this._serialize(obj);
-    //     } else {
-    //         return obj;
-    //     }
-    // }
-
     props(): any {
         let props = this._props();
         return props;

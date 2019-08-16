@@ -1,7 +1,8 @@
-import { Style } from "./Style";
-import { Image, Render } from "../render";
 import _ from "lodash";
 import { IFeature, Point, MultiPoint, GeometryCollection, Geometry } from "ginkgoch-geom";
+
+import { Style } from "./Style";
+import { Image, Render } from "../render";
 import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class IconStyle extends Style {

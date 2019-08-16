@@ -1,6 +1,6 @@
+import _ from "lodash";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import _ from "lodash";
 import { JsonKnownTypes } from "../shared/JsonUtils";
 
 export class FillStyle extends Style {

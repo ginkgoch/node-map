@@ -1,6 +1,6 @@
+import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
-import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
 import { Render } from "../render";
 import { JsonKnownTypes } from "../shared/JsonUtils";
 

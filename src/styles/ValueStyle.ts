@@ -1,11 +1,8 @@
 import _ from "lodash";
 import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
-import { PointSymbolType, Style, PointStyle } from ".";
-import { StyleUtils } from "./StyleUtils";
-import { FillStyle } from "./FillStyle";
-import { LineStyle } from "./LineStyle";
 import { JsonKnownTypes } from "../shared/JsonUtils";
+import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } from ".";
 
 export class ValueStyle extends Style {
     items: ValueItem[];

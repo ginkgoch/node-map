@@ -1,6 +1,6 @@
+import _ from "lodash";
 import { PointStyle } from ".";
 import { LineStyle } from "./LineStyle";
-import _ from "lodash";
 import { Image } from '../render';
 import { FillStyle } from "./FillStyle";
 import { IconStyle } from "./IconStyle";
