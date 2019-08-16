@@ -11,6 +11,7 @@ export class MemoryFeatureSource extends FeatureSource {
     constructor(features?: IFeature[]) {
         super();
 
+        this.type = JsonKnownTypes.memoryFeatureSource;
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
         this._interFields = new Array<Field>();
@@ -18,12 +19,12 @@ export class MemoryFeatureSource extends FeatureSource {
         this._maxFeatureId = this._interFeatures.features.length;
     }
 
-    json() {
-        return {
-            type: JsonKnownTypes.memoryFeatureSource,
-            features: this._interFeatures.json(),
-            fields: JsonUtils.valueToJson(this._interFields)
-        };
+    protected _json(): any {
+        const json = super._json();
+        json.type = JsonKnownTypes.memoryFeatureSource;
+        json.features = this._interFeatures.json();
+        json.fields = JsonUtils.valueToJson(this._interFields);
+        return json;
     }
 
     /**

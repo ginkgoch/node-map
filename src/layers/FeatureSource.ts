@@ -1,15 +1,15 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Field } from "./Field";
-import { Opener, Validator } from "../shared";
+import { Opener, Validator, JsonKnownTypes } from "../shared";
 import { Projection } from "./Projection";
 import { FieldFilterOptions } from "./FieldFilterOptions";
 import { PropertyAggregator } from "./PropertyAggregator";
-import { JsonUtils } from "../shared/JsonUtils";
 
 export abstract class FeatureSource extends Opener {
     name: string;
     projection: Projection
+    type = JsonKnownTypes.unknown;
 
     constructor() {
         super();
@@ -237,7 +237,12 @@ export abstract class FeatureSource extends Opener {
     }
 
     protected _json(): any {
-        return JsonUtils.objectToJson(this)
+        //return JsonUtils.objectToJson(this)
+        return {
+            type: this.type,
+            name: this.name,
+            projection: this.projection.json()
+        };
     }
 
     //#endregion

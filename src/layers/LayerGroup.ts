@@ -1,6 +1,7 @@
 import { FeatureLayer } from ".";
 import { Render } from "../render";
 import { Envelope, IEnvelope } from "ginkgoch-geom";
+import { JsonKnownTypes } from "../shared";
 
 export class LayerGroup {
     name: string
@@ -39,5 +40,17 @@ export class LayerGroup {
 
     layer(name: string): FeatureLayer | undefined {
         return this.layers.find(l => l.name === name);
+    }
+
+    json(): any {
+        return this._json();
+    }
+
+    protected _json(): any {
+        return {
+            type: JsonKnownTypes.layerGroup,
+            name: this.name,
+            layers: this.layers.map(layer => layer.json())
+        };
     }
 }

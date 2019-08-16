@@ -51,5 +51,9 @@ export enum JsonKnownTypes {
     generalStyle = 'general-style',
     classBreakStyle = 'class-break-style',
 
-    memoryFeatureSource = 'memory-feature-source'
+    memoryFeatureSource = 'memory-feature-source',
+    shapefileFeatureSource = 'shapefile-feature-source',
+    
+    featureLayer = 'feature-layer',
+    layerGroup = 'layer-group'
 }

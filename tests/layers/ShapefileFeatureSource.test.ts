@@ -1,5 +1,6 @@
 import { DbfField, DbfFieldType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
+import { JsonKnownTypes } from '../../src/shared';
 
 describe('ShapefileFeatureSource', () => {
     it('DbfField parsing', () => {
@@ -49,7 +50,8 @@ describe('ShapefileFeatureSource', () => {
         const json = source.json();
         expect(json).toEqual({
             flag: 'rs',
-            filePath: './fileNotExist.shp'
+            filePath: './fileNotExist.shp',
+            type: JsonKnownTypes.shapefileFeatureSource
         });
     });
 });
