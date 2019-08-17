@@ -1,6 +1,6 @@
 import proj4 from 'proj4';
 import { Unit } from './Unit';
-import { IEnvelope } from 'ginkgoch-geom';
+import { IEnvelope, Envelope } from 'ginkgoch-geom';
 import { Size } from '../render';
 
 const INCH_PER_MT = 39.3701;
@@ -81,6 +81,23 @@ export class GeoUtils {
             case Unit.meter: 
             default:
                 return INCH_PER_MT;
+        }
+    }
+
+    static resolution(scale: number, unit: Unit) {
+        return scale / (this.inchPerUnit(unit) * DPI);
+    }
+
+    static maximumEnvelope(unit: Unit, maximumScale = Constants.DEFAULT_MAXIMUM_SCALE): Envelope {
+        switch (unit) {
+            case Unit.degrees: 
+                return new Envelope(-180, -90, 180, 90);
+            case Unit.meter:
+            case Unit.feet:
+            default:
+                const resolution = this.resolution(maximumScale, unit);
+                const hw = resolution * 128;
+                return new Envelope(-hw, -hw, hw, hw);
         }
     }
 }
