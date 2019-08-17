@@ -4,7 +4,15 @@
   "description": "This is a map kit for node.js. Provide capabilities to build map service with various data sources and customized styles.",
   "main": "dist/bundle.js",
   "types": "dist/index.d.ts",
-  "author": "Ginkgoch",
+  "author": {
+    "name": "Ginkgoch",
+    "email": "ginkgoch@outlook.com",
+    "url": "https://ginkgoch.com"
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/ginkgoch/node-shapefile"
+  },
   "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/jest",
@@ -27,8 +35,8 @@
     "@types/lodash": "^4.14.136",
     "@types/proj4": "^2.5.0",
     "@types/randomcolor": "^0.5.2",
-    "ginkgoch-geom": "^1.7.0",
-    "ginkgoch-shapefile": "^2.3.3",
+    "ginkgoch-geom": "^1.7.5",
+    "ginkgoch-shapefile": "^2.3.4",
     "lodash": "^4.17.15",
     "proj4": "^2.5.0",
     "randomcolor": "^0.5.4"
