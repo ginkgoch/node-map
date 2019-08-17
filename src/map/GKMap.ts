@@ -37,6 +37,7 @@ export class GKMap {
             height: this.height,
             maximumScale: this.maximumScale,
             minimumScale: this.minimumScale,
+            scales: this.scales,
             groups: this.groups.map(g => g.toJSON())
         };
 
@@ -55,6 +56,7 @@ export class GKMap {
         map.height = json.height;
         map.maximumScale = json.maximumScale;
         map.minimumScale = json.minimumScale;
+        map.scales = json.scales;
         map.groups = (<any[]>json.groups).map(g => LayerGroup.parseJSON(g));
         if (json.background !== undefined) {
             map.background = json.background;
