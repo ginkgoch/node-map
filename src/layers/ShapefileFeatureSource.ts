@@ -1,9 +1,10 @@
+import fs from "fs";
 import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JSONKnownTypes } from '../shared';
-import { Projection } from "./Projection";
+import { Projection, Srs } from "./Projection";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 
@@ -48,6 +49,11 @@ export class ShapefileFeatureSource extends FeatureSource {
 
         this._shapefile = new Shapefile(this.filePath, this.flag);
         this._shapefile.open();
+
+        const projFilePath = this.filePath.replace(/.shp/i, '.prj');
+        if (this.projection.from.projection === undefined && fs.existsSync(projFilePath)) {
+            this.projection.from = new Srs(fs.readFileSync(projFilePath).toString('utf8'));
+        }
     }
 
     protected async _close() {

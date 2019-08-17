@@ -13,12 +13,20 @@ export class GKMap {
     maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     minimumScale = 0;
     groups: Array<LayerGroup>;
+    scales: Array<number>;
 
-    constructor(width?: number, height?: number, srs?: string) {
+    constructor(width?: number, height?: number, srs?: string, scales?: Array<number>) {
         this.width = width || 256;
         this.height = height || 256;
         this.srs = new Srs(srs || 'EPSG:3857');
         this.groups = new Array<LayerGroup>();
+        this.scales = new Array<number>();
+
+        if (scales !== undefined) {
+            scales.forEach(s => this.scales.push(s));
+        } else {
+            this.scales = Constants.DEFAULT_SCALES;
+        }
     }
 
     toJSON() {
@@ -29,6 +37,7 @@ export class GKMap {
             height: this.height,
             maximumScale: this.maximumScale,
             minimumScale: this.minimumScale,
+            scales: this.scales,
             groups: this.groups.map(g => g.toJSON())
         };
 
@@ -47,6 +56,7 @@ export class GKMap {
         map.height = json.height;
         map.maximumScale = json.maximumScale;
         map.minimumScale = json.minimumScale;
+        map.scales = json.scales;
         map.groups = (<any[]>json.groups).map(g => LayerGroup.parseJSON(g));
         if (json.background !== undefined) {
             map.background = json.background;
