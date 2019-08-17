@@ -6,6 +6,11 @@ import TestUtils from '../shared/TestUtils';
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/map/' + name);
 
 describe('Map', () => {
+    it('constructor', () => {
+        const map = new GKMap();
+        expect(map.scales.length).toBe(20);
+    });
+
     it('draw', async () => {
         const map = getMap();
         const image = await map.draw();
