@@ -50,12 +50,6 @@ module.exports = {
       amd: "proj4",
       root: "proj4"
     },
-    "randomcolor": {
-      commonjs: "randomcolor",
-      commonjs2: "randomcolor",
-      amd: "randomcolor",
-      root: "randomcolor"
-    },
     "canvas": {
       commonjs: "canvas",
       commonjs2: "canvas",
