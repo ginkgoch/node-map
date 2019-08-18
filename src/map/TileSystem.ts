@@ -1,13 +1,15 @@
 import { Unit, Constants, GeoUtils } from "../shared";
 import { Envelope } from "ginkgoch-geom";
 
+export type TileOrigin = 'upperLeft' | 'lowerLeft' | 'upperRight' | 'lowerRight';
+
 export class TileSystem {
     constructor(public tileWidth = 256, public tileHeight = 256,
         public unit = Unit.meter,
         public scales: Array<number> = Constants.DEFAULT_SCALES,
-        public origin: 'upperLeft' | 'lowerLeft' | 'upperRight' | 'lowerRight' = "upperLeft") { }
+        public origin: TileOrigin = "upperLeft") { }
 
-    quadXYZtoTile(z: number, x: number, y: number) {
+    envelope(z: number, x: number, y: number) {
         const maximumEnvelope = GeoUtils.maximumEnvelope(this.unit, this.scales[0]);
 
         if (z < 0) z = 0;
@@ -48,5 +50,12 @@ export class TileSystem {
                 return new Envelope(minx, miny, maxx, maxy);
             }
         }
+    }
+
+    /**
+     * @deprecated This method is deprecated, please call `envelope(z: number, x: number, y: number)` instead.
+     */
+    quadXYZtoTile(z: number, x: number, y: number) {
+        return this.envelope(z, x, y);
     }
 }

@@ -98,7 +98,14 @@ export class GKMap {
         return _.flatMap(this.groups, g => g.layers).find(l => l.name === name);
     }
 
+    /**
+     * This method is deprecated. Please call image(envelope?: IEnvelope) instead.
+     */
     async draw(envelope?: IEnvelope) {
+        return await this.image(envelope);
+    }
+
+    async image(envelope?: IEnvelope) {
         if (!envelope) {
             envelope = await this.envelope();
         }
