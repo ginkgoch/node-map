@@ -4,8 +4,10 @@ import { Render } from "../render";
 import { JSONKnownTypes } from "../shared";
 
 export class LayerGroup {
-    name: string
-    layers: Array<FeatureLayer>
+    name: string;
+    visible: boolean = true;
+    layers: Array<FeatureLayer>;
+
     constructor(layers?: Array<FeatureLayer>, name: string = 'Unknown') {
         this.name = name;
         this.layers = new Array<FeatureLayer>();
@@ -32,7 +34,15 @@ export class LayerGroup {
     }
 
     async draw(render: Render): Promise<void> {
+        if (!this.visible) {
+            return;
+        }
+
         for (let layer of this.layers) {
+            if (!layer.visible) {
+                continue;
+            }
+
             await layer.open();
             await layer.draw(render);
         }
@@ -50,6 +60,7 @@ export class LayerGroup {
         return {
             type: JSONKnownTypes.layerGroup,
             name: this.name,
+            visible: this.visible,
             layers: this.layers.map(layer => layer.toJSON())
         };
     }
@@ -57,6 +68,7 @@ export class LayerGroup {
     static parseJSON(json: any) {
         const group = new LayerGroup();
         group.name = json.name;
+        group.visible = json.visible;
         group.layers = (<any[]>json.layers).map(j => {
             return FeatureLayer.parseJSON(j);
         });

@@ -33,6 +33,7 @@ describe('LineStyle', () => {
         expect(style1.toJSON()).toEqual({
             type: 'line-style',
             name: 'Line Style',
+            visible: true,
             maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             strokeStyle: '#00ff00',

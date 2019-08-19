@@ -52,7 +52,7 @@ describe('FeatureLayer', () => {
                         : "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[-100, 80], [-40, -80], [0, 20], [40, -80], [100, 80]] }, "properties": {} }]
                 }, "fields"
                     : []
-            }, "styles": [{ "type": "line-style", "name": "Line Style", "maximumScale": 10000000000, "minimumScale": 0, "strokeStyle": "#886600", "lineWidth": 4 }], "minimumScale": 0, "maximumScale": 10000000000
+            }, "styles": [{ "type": "line-style", "name": "Line Style", "visible": true, "maximumScale": 10000000000, "minimumScale": 0, "strokeStyle": "#886600", "lineWidth": 4 }], "minimumScale": 0, "maximumScale": 10000000000
         }, false, false);
     });
 
