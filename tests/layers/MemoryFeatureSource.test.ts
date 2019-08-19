@@ -153,7 +153,7 @@ describe('MemoryFeatureSource', () => {
 
         const json = source.toJSON();
         TestUtils.compareOrLog(json, {
-            "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 0 }, "to": { "unit": 0 } }, "features": { "id": 0, "type": "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "Point", "coordinates": [0, 1] }, "properties": {} }, { "id": 2, "type": "Feature", "geometry": { "type": "Point", "coordinates": [1, 1] }, "properties": {} }, { "id": 3, "type": "Feature", "geometry": { "type": "Point", "coordinates": [91, 19] }, "properties": {} }] }, "fields": [{ "name": "name", "type": "char", "length": 10, "extra": {} }, {
+            "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 'unknown' }, "to": { "unit": 'unknown' } }, "features": { "id": 0, "type": "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "Point", "coordinates": [0, 1] }, "properties": {} }, { "id": 2, "type": "Feature", "geometry": { "type": "Point", "coordinates": [1, 1] }, "properties": {} }, { "id": 3, "type": "Feature", "geometry": { "type": "Point", "coordinates": [91, 19] }, "properties": {} }] }, "fields": [{ "name": "name", "type": "char", "length": 10, "extra": {} }, {
                 "name": "age", "type": "number", "length"
                     : 4, "extra": {}
             }]

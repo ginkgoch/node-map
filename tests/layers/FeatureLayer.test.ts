@@ -47,7 +47,7 @@ describe('FeatureLayer', () => {
         TestUtils.compareOrLog(json, {
             "type": "feature-layer", "name": "Unknown",
             "source": {
-                "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 0 }, "to": { "unit": 0 } }, "features": {
+                "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 'unknown' }, "to": { "unit": 'unknown' } }, "features": {
                     "id": 0, "type"
                         : "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[-100, 80], [-40, -80], [0, 20], [40, -80], [100, 80]] }, "properties": {} }]
                 }, "fields"
