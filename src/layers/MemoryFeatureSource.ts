@@ -9,15 +9,16 @@ export class MemoryFeatureSource extends FeatureSource {
     _interFields: Array<Field>;
     _maxFeatureId: number;
 
-    constructor(features?: IFeature[]) {
+    constructor(features?: IFeature[], fields?: Field[], name?: string) {
         super();
 
         this.type = JSONKnownTypes.memoryFeatureSource;
+        this.name = name || this.name;
         this._maxFeatureId = 0;
         this._interFeatures = new FeatureCollection(features);
-        this._interFields = new Array<Field>();
-
         this._maxFeatureId = this._interFeatures.features.length;
+        this._interFields = new Array<Field>();
+        fields  && fields.forEach(f => this._interFields.push(f));
     }
 
     protected _toJSON(): any {
