@@ -65,7 +65,7 @@ export class GeoUtils {
             const unit = proj.oProj.units;
             switch (unit) {
                 case 'degrees': return Unit.degrees;
-                case 'm': return Unit.meter;
+                case 'm': return Unit.meters;
                 case 'us-ft': return Unit.feet;
                 default: return Unit.unknown;
             }
@@ -78,7 +78,7 @@ export class GeoUtils {
         switch(unit) {
             case Unit.degrees: return INCH_PER_DD;
             case Unit.feet: return INCH_PER_FT;
-            case Unit.meter: 
+            case Unit.meters: 
             default:
                 return INCH_PER_MT;
         }
@@ -92,7 +92,7 @@ export class GeoUtils {
         switch (unit) {
             case Unit.degrees: 
                 return new Envelope(-180, -90, 180, 90);
-            case Unit.meter:
+            case Unit.meters:
             case Unit.feet:
             default:
                 const resolution = this.resolution(maximumScale, unit);

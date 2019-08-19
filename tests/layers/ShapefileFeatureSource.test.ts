@@ -54,8 +54,8 @@ describe('ShapefileFeatureSource', () => {
             name: 'fileNotExist',
             projection:
             {
-                from: { projection: undefined, unit: 0 },
-                to: { projection: undefined, unit: 0 }
+                from: { projection: undefined, unit: 'unknown' },
+                to: { projection: undefined, unit: 'unknown' }
             },
             flag: 'rs',
             filePath: './fileNotExist.shp'

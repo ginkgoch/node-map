@@ -5,7 +5,7 @@ export type TileOrigin = 'upperLeft' | 'lowerLeft' | 'upperRight' | 'lowerRight'
 
 export class TileSystem {
     constructor(public tileWidth = 256, public tileHeight = 256,
-        public unit = Unit.meter,
+        public unit = Unit.meters,
         public scales: Array<number> = Constants.DEFAULT_SCALES,
         public origin: TileOrigin = "upperLeft") { }
 

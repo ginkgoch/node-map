@@ -23,7 +23,7 @@ export class Render {
     context: any;
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
-    constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meter) {
+    constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meters) {
         assert(image.width > 0, 'Image width must greater than 0.')
         assert(image.height > 0, 'Image height must greater than 0.')
 
