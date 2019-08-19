@@ -112,6 +112,10 @@ export class GKMap {
 
         const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
         for (let group of this.groups) {
+            if (!group.visible) {
+                continue;
+            }
+            
             await group.draw(render);
         }
 

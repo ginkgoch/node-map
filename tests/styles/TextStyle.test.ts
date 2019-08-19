@@ -80,6 +80,7 @@ describe('TextStyle', () => {
         expect(textStyle.toJSON()).toEqual({
             type: 'text-style',
             name: 'Text Style',
+            visible: true,
             maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             content: 'Hello World',

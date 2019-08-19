@@ -19,7 +19,17 @@ describe('FillStyle', () => {
 
     it('json', () => {
         const style = new FillStyle('#00ff00', 'red', 4);
-        expect(JSON.stringify(style.toJSON())).toEqual(`{"type":"fill-style","name":"Fill Style","maximumScale":10000000000,"minimumScale":0,"lineWidth":4,"fillStyle":"#00ff00","strokeStyle":"red"}`);
+        const expectedJSON = {
+            visible: true,
+            type: 'fill-style',
+            name: 'Fill Style',
+            maximumScale: 10000000000,
+            minimumScale: 0,
+            lineWidth: 4,
+            fillStyle: '#00ff00',
+            strokeStyle: 'red'
+        };
+        TestUtils.compareOrLog(style.toJSON(), expectedJSON, false, false);
     });
 
     it('props', () => {
@@ -29,7 +39,7 @@ describe('FillStyle', () => {
 });
 
 function gen() {
-    const coordinates = [[0, 80], [-160, -70], [160, -70], [0, 80]].map(c => ({x: c[0], y: c[1]}));
+    const coordinates = [[0, 80], [-160, -70], [160, -70], [0, 80]].map(c => ({ x: c[0], y: c[1] }));
     const geom = new Polygon(new LinearRing(coordinates));
     return geom;
 }

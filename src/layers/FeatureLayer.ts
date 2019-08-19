@@ -12,6 +12,7 @@ export class FeatureLayer extends Opener {
     styles: Array<Style>;
     minimumScale: number;
     maximumScale: number;
+    visible = true;
 
     constructor(source: FeatureSource) {
         super();
@@ -50,13 +51,13 @@ export class FeatureLayer extends Opener {
     }
 
     async draw(render: Render) {
-        Validator.checkOpened(this);
-
-        if (!this._isVisible(render.scale, this.maximumScale, this.minimumScale)) {
+        if (!this.visible || !this._scaleInRange(render.scale, this.maximumScale, this.minimumScale)) {
             return;
         }
 
-        const styles = this.styles.filter(s => this._isVisible(render.scale, s.maximumScale, s.minimumScale));
+        Validator.checkOpened(this);
+
+        const styles = this.styles.filter(s => s.visible && this._scaleInRange(render.scale, s.maximumScale, s.minimumScale));
         const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
         const envelope = render.envelope;
         const features = await this.source.features(envelope, fields);
@@ -101,7 +102,7 @@ export class FeatureLayer extends Opener {
         return layer;
     }
 
-    private _isVisible(scale: number, maxScale: number, minScale: number) {
+    private _scaleInRange(scale: number, maxScale: number, minScale: number) {
         return scale >= minScale && scale <= maxScale;
     }
 }

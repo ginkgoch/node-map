@@ -9,6 +9,7 @@ export abstract class Style {
     name: string;
     maximumScale: number;
     minimumScale: number;
+    visible = true;
 
     constructor(name?: string) {
         this.type = JSONKnownTypes.unknown;
@@ -26,7 +27,7 @@ export abstract class Style {
     }
 
     drawAll(features: IFeature[], render: Render) {
-        if (render.scale < this.minimumScale || render.scale > this.maximumScale) {
+        if (!this.visible || render.scale < this.minimumScale || render.scale > this.maximumScale) {
             return;
         }
 
