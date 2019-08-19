@@ -14,10 +14,10 @@ export class FeatureLayer extends Opener {
     maximumScale: number;
     visible = true;
 
-    constructor(source: FeatureSource) {
+    constructor(source: FeatureSource, name?: string) {
         super();
 
-        this.name = 'Unknown';
+        this.name = name || source.name;
         this.source = source;
         this.styles = new Array<Style>();
         this.minimumScale = 0;

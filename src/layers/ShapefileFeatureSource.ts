@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from 'path';
 import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
@@ -10,15 +11,32 @@ const DBF_FIELD_DECIMAL = 'decimal';
 
 export class ShapefileFeatureSource extends FeatureSource {
     flag: string;
-    filePath: string;
+    private _filePath: string;
     private _shapefile?: Shapefile;
 
-    constructor(filePath?: string, flag: string = 'rs') {
+    constructor(filePath?: string, flag: string = 'rs', name?: string) {
         super();
 
         this.type = JSONKnownTypes.shapefileFeatureSource;
-        this.filePath = filePath || '';
+        this._filePath = filePath || '';
+
+        if (name !== undefined) {
+            this.name = name;
+        } else if (filePath != undefined) {
+            this.name = ShapefileFeatureSource._filename(filePath);
+        }
         this.flag = flag;
+    }
+
+    public get filePath() {
+        return this._filePath;
+    }
+
+    public set filePath(filePath: string) {
+        this._filePath = filePath;
+        if (this.name === '' || this.name.match(/^unknown/i)) {
+            this.name = ShapefileFeatureSource._filename(filePath);
+        }
     }
 
     protected _toJSON() {
@@ -167,5 +185,9 @@ export class ShapefileFeatureSource extends FeatureSource {
     private _toDbfField(field: Field | DbfField) {
         let dbfField = field instanceof DbfField ? field : this._mapFieldToDbfField(field);
         return dbfField;
+    }
+
+    private static _filename(filePath: string) {
+        return path.basename(filePath).replace(/(.shp)|(.shx)|(.dbf)$/i, '');
     }
 }

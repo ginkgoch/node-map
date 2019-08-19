@@ -77,6 +77,12 @@ describe('FeatureLayer', () => {
         const s2 = JSON.stringify(newLayer.toJSON());
         expect(s2).toEqual(s1);
     });
+
+    it('name', () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        const layer = new FeatureLayer(source);
+        expect(layer.name).toEqual('USStates');
+    });
 });
 
 function lineLayer() {

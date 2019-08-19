@@ -51,7 +51,7 @@ describe('ShapefileFeatureSource', () => {
 
         TestUtils.compareOrLog(json, {
             type: 'shapefile-feature-source',
-            name: 'Unknown',
+            name: 'fileNotExist',
             projection:
             {
                 from: { projection: undefined, unit: 0 },
@@ -60,5 +60,19 @@ describe('ShapefileFeatureSource', () => {
             flag: 'rs',
             filePath: './fileNotExist.shp'
         }, false, false);
+    });
+
+    it('name', () => {
+        let source = new ShapefileFeatureSource('./fileNotExist.shp');
+        expect(source.name).toEqual('fileNotExist');
+
+        source = new ShapefileFeatureSource('./fileNotExist.SHP');
+        expect(source.name).toEqual('fileNotExist');
+
+        source = new ShapefileFeatureSource('./fileNotExist.DBF');
+        expect(source.name).toEqual('fileNotExist');
+
+        source.filePath = './fileChanged.shp';
+        expect(source.name).toEqual('fileNotExist');
     });
 });
