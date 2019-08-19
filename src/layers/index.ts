@@ -7,3 +7,4 @@ export * from './PropertyAggregator';
 export * from './MemoryFeatureSource';
 export * from './ShapefileFeatureSource';
 export * from './FeatureSourceFactory';
+export * from './LayerFactory';
