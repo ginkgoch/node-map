@@ -19,7 +19,7 @@ export class FeatureLayer extends Opener {
     constructor(source: FeatureSource, name?: string) {
         super();
 
-        this.id = uuid();
+        this.id = 'layer-' + uuid();
         this.name = name || source.name;
         this.source = source;
         this.styles = new Array<Style>();
@@ -85,6 +85,7 @@ export class FeatureLayer extends Opener {
     protected _toJSON() {
         return {
             type: JSONKnownTypes.featureLayer,
+            id: this.id,
             name: this.name,
             source: this.source.toJSON(),
             styles: this.styles.map(style => style.toJSON()),
@@ -102,6 +103,11 @@ export class FeatureLayer extends Opener {
         layer.styles = (<any[]>json.styles).map(j => {
             return StyleFactory.parseJSON(j);
         });
+
+        if (json.id !== undefined) {
+            layer.id = json.id;
+        }
+
         return layer;
     }
 

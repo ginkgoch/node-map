@@ -8,10 +8,10 @@ export class FillStyle extends Style {
     lineWidth: number;
     strokeStyle: string;
 
-    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 2) {
+    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 2, name?: string) {
         super();
 
-        this.name = 'Fill Style';
+        this.name = name || 'Fill Style';
         this.type = JSONKnownTypes.fillStyle;
         this.lineWidth = lineWidth;
         this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);

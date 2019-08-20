@@ -6,10 +6,10 @@ export class LineStyle extends Style {
     strokeStyle: string;
     lineWidth: number;
 
-    constructor(strokeStyle?: string, lineWidth = 2) {
+    constructor(strokeStyle?: string, lineWidth = 2, name?: string) {
         super();
 
-        this.name = 'Line Style';
+        this.name = name || 'Line Style';
         this.type = JSONKnownTypes.lineStyle;
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
         this.lineWidth = lineWidth;
