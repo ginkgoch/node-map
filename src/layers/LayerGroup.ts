@@ -2,13 +2,16 @@ import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { FeatureLayer } from ".";
 import { Render } from "../render";
 import { JSONKnownTypes } from "../shared";
+import uuid from "../shared/UUID";
 
 export class LayerGroup {
+    id: string;
     name: string;
     visible: boolean = true;
     layers: Array<FeatureLayer>;
 
     constructor(layers?: Array<FeatureLayer>, name: string = 'Unknown') {
+        this.id = uuid();
         this.name = name;
         this.layers = new Array<FeatureLayer>();
         layers && layers.forEach(layer => this.layers.push(layer));

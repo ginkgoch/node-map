@@ -2,6 +2,7 @@ import { LineString, Feature } from "ginkgoch-geom";
 import { MemoryFeatureSource, FeatureLayer, Render, LineStyle, ShapefileFeatureSource } from "..";
 import TestUtils from "../shared/TestUtils";
 import { FillStyle } from "../../src/styles";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/layers/' + name);
 
@@ -43,7 +44,10 @@ describe('FeatureLayer', () => {
 
     it('json', () => {
         const layer = lineLayer();
-        const json = layer.toJSON();
+        let json = layer.toJSON();
+
+        json.styles = (<object[]>json.styles).map(s => _.omit(s, 'id'));
+
         TestUtils.compareOrLog(json, {
             "type": "feature-layer", "name": "Unknown",
             "source": {

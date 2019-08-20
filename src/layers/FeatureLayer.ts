@@ -5,8 +5,10 @@ import { Render, Image } from "../render";
 import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
 import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
+import uuid from "../shared/UUID";
 
 export class FeatureLayer extends Opener {
+    id: string;
     name: string;
     source: FeatureSource;
     styles: Array<Style>;
@@ -17,6 +19,7 @@ export class FeatureLayer extends Opener {
     constructor(source: FeatureSource, name?: string) {
         super();
 
+        this.id = uuid();
         this.name = name || source.name;
         this.source = source;
         this.styles = new Array<Style>();

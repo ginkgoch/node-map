@@ -2,6 +2,7 @@ import { PointStyle, Constants } from "..";
 import { Point, Feature } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -44,7 +45,7 @@ describe('PointStyle', () => {
 
     it('json', () => {
         const style = new PointStyle('green', 'yellow', 6, 20, "rect");
-        expect(style.toJSON()).toEqual({
+        expect(_.omit(style.toJSON(), 'id')).toEqual({
             type: 'point-style',
             name: 'Point Style',
             visible: true,

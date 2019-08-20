@@ -2,6 +2,7 @@ import { FillStyle } from "..";
 import { Feature, Polygon, LinearRing } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -29,7 +30,10 @@ describe('FillStyle', () => {
             fillStyle: '#00ff00',
             strokeStyle: 'red'
         };
-        TestUtils.compareOrLog(style.toJSON(), expectedJSON, false, false);
+
+        let json = style.toJSON();
+        json = _.omit(json, 'id');
+        TestUtils.compareOrLog(json, expectedJSON, false, false);
     });
 
     it('props', () => {
