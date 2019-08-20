@@ -1,6 +1,7 @@
 import { TextStyle, LineStyle, Render, Constants } from "..";
 import { Feature, Point, LineString } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -77,7 +78,7 @@ describe('TextStyle', () => {
 
     it('json', () => {
         const textStyle = new TextStyle('Hello World', '#ff0000');
-        expect(textStyle.toJSON()).toEqual({
+        expect(_.omit(textStyle.toJSON(), 'id')).toEqual({
             type: 'text-style',
             name: 'Text Style',
             visible: true,

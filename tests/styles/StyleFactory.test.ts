@@ -1,4 +1,5 @@
 import { StyleFactory, Constants } from "..";
+import _ from "lodash";
 
 describe('StyleFactory', () => {
     it('deserialize point style', () => {
@@ -79,5 +80,5 @@ function testStyleDeserialization(json: any) {
     const style = sf.parseJSON(json);
 
     const newJson = style.toJSON();
-    expect(newJson).toEqual(json);
+    expect(_.omit(newJson, 'id')).toEqual(json);
 }

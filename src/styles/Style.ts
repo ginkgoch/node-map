@@ -3,8 +3,10 @@ import { Render } from "../render";
 import { IFeature } from "ginkgoch-geom";
 import { Constants } from "../shared";
 import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
+import uuid from "../shared/UUID";
 
 export abstract class Style {
+    id: string;
     type: string;
     name: string;
     maximumScale: number;
@@ -12,6 +14,7 @@ export abstract class Style {
     visible = true;
 
     constructor(name?: string) {
+        this.id = 'style-' + uuid();
         this.type = JSONKnownTypes.unknown;
         this.name = name || 'unknown';
         this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
@@ -52,7 +55,8 @@ export abstract class Style {
     }
 
     protected _toJSON() {
-        return JSONUtils.objectToJSON(this);
+        let json = JSONUtils.objectToJSON(this);
+        return json;
     }
 
     props(): any {

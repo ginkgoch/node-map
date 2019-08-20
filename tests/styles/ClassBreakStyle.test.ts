@@ -2,6 +2,7 @@ import { Feature, Point, Polygon, LinearRing, GeometryFactory } from "ginkgoch-g
 import { MemoryFeatureSource, Field, ValueStyle, FeatureLayer, Render } from "..";
 import TestUtils from "../shared/TestUtils";
 import { ClassBreakStyle } from "../../src/styles";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/styles/' + name);
 
@@ -42,7 +43,10 @@ describe('ClassBreakStyle', () => {
 
     it('json', () => {
         const style = ClassBreakStyle.auto('point', 'type', 100, 0, 4, '#ff0000', '#0000ff', undefined, 0);
-        const json = style.toJSON();
+        let json = style.toJSON();
+        json = _.omit(json, 'id');
+        json.classBreaks = (<object[]>json.classBreaks).map(c => _.omit(c, 'style.id'));
+
         const expectedJSON = {"visible":true,"type":"class-break-style","name":"ClassBreak Style","maximumScale":10000000000,"minimumScale":0,"field":"type","classBreaks":[{"minimum":0,"maximum":25,"style":{"visible":true,"type":"point-style","name":"0 ~ 25","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":25,"maximum":50,"style":{"visible":true,"type":"point-style","name":"25 ~ 50","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":50,"maximum":75,"style":{"visible":true,"type":"point-style","name":"50 ~ 75","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#aaff00","lineWidth":0,"radius":12}},{"minimum":75,"maximum":10000000000,"style":{"visible":true,"type":"point-style","name":"75 ~ 10000000000","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#0000ff","lineWidth":0,"radius":12}}]};
         TestUtils.compareOrLog(json, expectedJSON, false, false);
     });
