@@ -8,10 +8,10 @@ export class ValueStyle extends Style {
     items: ValueItem[];
     field: string;
 
-    constructor(field?: string, items?: ValueItem[]) {
+    constructor(field?: string, items?: ValueItem[], name?: string) {
         super();
 
-        this.name = 'Value Style';
+        this.name = name || 'Value Style';
         this.type = JSONKnownTypes.valueStyle;
         this.items = new Array<ValueItem>();
         items && items.forEach(item => {

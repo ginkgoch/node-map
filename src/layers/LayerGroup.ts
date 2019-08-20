@@ -11,7 +11,7 @@ export class LayerGroup {
     layers: Array<FeatureLayer>;
 
     constructor(layers?: Array<FeatureLayer>, name: string = 'Unknown') {
-        this.id = uuid();
+        this.id = 'group-' + uuid();
         this.name = name;
         this.layers = new Array<FeatureLayer>();
         layers && layers.forEach(layer => this.layers.push(layer));

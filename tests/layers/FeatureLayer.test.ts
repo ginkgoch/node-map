@@ -46,6 +46,7 @@ describe('FeatureLayer', () => {
         const layer = lineLayer();
         let json = layer.toJSON();
 
+        json = _.omit(json, 'id');
         json.styles = (<object[]>json.styles).map(s => _.omit(s, 'id'));
 
         TestUtils.compareOrLog(json, {

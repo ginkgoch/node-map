@@ -9,10 +9,10 @@ export class ClassBreakStyle extends Style {
     field: string;
     classBreaks: Array<ClassBreakItem>;
 
-    constructor(field?: string, classBreaks?: Array<ClassBreakItem>) {
+    constructor(field?: string, classBreaks?: Array<ClassBreakItem>, name?: string) {
         super();
 
-        this.name = 'ClassBreak Style';
+        this.name = name || 'Class Break Style';
         this.type = JSONKnownTypes.classBreakStyle;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
