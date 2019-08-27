@@ -1,4 +1,6 @@
 import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { RTRectangle } from "./RTRecord";
+import { Envelope } from "ginkgoch-geom";
 
 const defaultEncoding: 'utf-8' = 'utf-8';
 
@@ -17,6 +19,7 @@ export let RTConstants = Object.freeze({
     DEFAULT_ENCODING: defaultEncoding,
     RECORDSET_HEADER_CORRECTION: 1,
     RECORDSET_HEADER_SIZE: 8,
+    FILL_FACTOR: 0.5
 });
 
 export class RTUtils {
@@ -30,6 +33,18 @@ export class RTUtils {
 
     static sizeOfRectangle(float: boolean) {
         return float ? 16 : 32;
+    }
+
+    static remove<T>(source: Array<T>, obj: T) {
+        const index = source.findIndex(s => s === obj);
+        if (index >= 0) {
+            source.splice(index, 1);
+        }
+    }
+
+    static unionArea(rect1: RTRectangle, rect2: RTRectangle): number {
+        const unionRect = Envelope.union(rect1, rect2);
+        return unionRect.area();
     }
 }
 

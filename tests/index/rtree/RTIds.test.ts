@@ -7,4 +7,16 @@ describe('Ids', () => {
         const i2 = buff.readInt32LE(0);
         expect(i2).toBe(i1);
     });
+
+    it('arr ref', () => {
+        const arr = ['Z'];
+        fillContent(arr);
+        expect(arr.length).toBe(3);
+    });
+
 });
+
+function fillContent(arr: string[]) {
+    arr.push('A');
+    arr.push('B');
+}
