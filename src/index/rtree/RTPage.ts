@@ -104,7 +104,7 @@ export class RTDataPage extends RTPage {
     cursor = 1;
 
     constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
-        super(rtFile,  geomType, pageNo);
+        super(rtFile, geomType, pageNo);
 
         if (pageNo === undefined) {
             this.initEmptyPage();
@@ -172,7 +172,7 @@ export class RTDataPage extends RTPage {
     public maxRecordCount() {
         return 0;
     }
- 
+
     public insertRecord(record: RTRecord) { }
 
     public deleteRecord(id: number) { }
@@ -199,7 +199,7 @@ export class RTDataPage extends RTPage {
         this.header.recordCount = 1;
         this.header.pageId = this.pageNo;
         this.header.endDataOffset = RTConstants.RECORDSET_HEADER_SIZE;
-        this.header.pageFreeSpace = this.pageSize - pageHeaderSize -  this.header.endDataOffset - slotSize * 2;
+        this.header.pageFreeSpace = this.pageSize - pageHeaderSize - this.header.endDataOffset - slotSize * 2;
         this.header.placeholder = RTConstants.PAGE_HEADER_PLACEHOLDER;
 
         this.writer.seek(0);
@@ -240,4 +240,133 @@ export class RTDataPage extends RTPage {
     }
 
     public updateEntry(entry: RTEntry, id: number) { }
+}
+
+export class RTLeafPage extends RTDataPage {
+    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+        super(rtFile, geomType, pageNo);
+    }
+
+    public createRecord() {
+        const record = RTRecord.create(this.geomType);
+        return record;
+    }
+
+    record(id: number): RTRecord | null {
+        const recordCount = this.recordCount;
+        if (id < 0 || id > recordCount) {
+            return null
+        }
+        
+        id++;
+
+        const slotPosition = (id + 2) * RTConstants.PAGE_SLOT_SIZE;
+        this.reader!.seek(slotPosition, 'end');
+
+        const slot = new RTSlot();
+        slot.read(this.reader!);
+
+        const recordPosition = slot.offset + RTConstants.PAGE_HEADER_SIZE;
+        this.reader!.seek(recordPosition, 'begin');
+        
+        const record = this.createRecord();
+        record.read(this.reader!, this.isFloat);
+        return record;
+    }
+    
+    get firstRecord(): RTRecord | null {
+        this.cursor = 0;
+        const record = this.record(this.cursor);
+        
+        this.cursor++;
+        return record;
+    }
+
+    public get nextRecord(): RTRecord | null {
+        return null;
+    }
+
+    public insertRecord(record: RTRecord) { 
+        const tmpSize = record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE;
+        if (this.header.pageFreeSpace > tmpSize) {
+            this._insertRecord(record);
+        }
+    }
+
+    _insertRecord(record: RTRecord) {
+        this.writer!.seek(RTConstants.PAGE_HEADER_SIZE + this.header.endDataOffset);
+
+        const recordSize = record.size(this.isFloat);
+        const slot = new RTSlot();
+        slot.length = recordSize;
+        slot.offset = this.header.endDataOffset;
+
+        this.header.recordCount++;
+        this.header.endDataOffset += recordSize;
+        this.header.pageFreeSpace -= recordSize + RTConstants.PAGE_SLOT_SIZE;
+
+        this.writer!.seek(0);
+        this.header.write(this.writer!);
+
+        let position = RTConstants.PAGE_SLOT_SIZE * (this.header.recordCount + 1);
+        this.writer!.seek(position, 'end');
+        slot.write(this.writer!);
+
+        position = slot.offset + RTConstants.PAGE_HEADER_SIZE;
+        this.writer!.seek(position, 'begin');
+
+        record.write(this.writer!, this.isFloat);
+        this.isDirty = true;
+    }
+
+    public deleteRecord(id: number) { 
+        const recordCount = this.recordCount;
+        if (id < 0 || id >= recordCount) {
+            throw new Error(`id: ${id} out of range [${0}, ${recordCount}).`);
+        }
+
+        id++;
+
+        const nextSlot = new RTSlot();
+        const currSlot = new RTSlot();
+        let position = (id + RTConstants.ALIGNED_SLOT_COUNT) * RTConstants.PAGE_SLOT_SIZE;
+
+        for (let j = id; j < recordCount; j++) {
+            let nextPosition = position + RTConstants.PAGE_SLOT_SIZE;
+            this.reader!.seek(nextPosition, 'end');
+            nextSlot.read(this.reader!);
+            currSlot.length = nextSlot.length;
+            currSlot.offset = nextSlot.offset;
+            this.writer!.seek(position, 'end');
+            currSlot.write(this.writer!);
+            position = nextPosition;
+        }
+
+        this.header.recordCount--;
+        this.header.pageFreeSpace += RTConstants.PAGE_SLOT_SIZE;
+        this.writePageHeader();
+        this.isDirty = true;
+    }
+
+    public maxRecordCount() {
+        const record = this.createRecord();
+        const capacity = (this.pageSize - RTConstants.PAGE_HEADER_SIZE - RTConstants.RECORDSET_HEADER_SIZE - RTConstants.PAGE_SLOT_SIZE * 2) / (record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
+        return capacity;
+    }
+    
+    public get envelope() {
+        let rect = new Envelope(0, 0, 0, 0);
+        const recordCount = this.recordCount;
+        if (recordCount > 0) {
+            let record = this.record(0)!;
+            rect = record.envelope();
+
+            for (let i = 1; i < recordCount; i++) {
+                record = this.record(i)!;
+                rect = Envelope.union(rect, record.envelope());
+            }
+        }
+
+        return rect;
+    }
 }

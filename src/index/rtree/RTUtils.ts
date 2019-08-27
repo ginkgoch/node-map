@@ -24,11 +24,11 @@ export class RTUtils {
         throw new Error('not implemented.');
     }
 
-    static size(float = false) {
+    static sizeOfPoint(float = false) {
         return float ? 8 : 16;
     }
 
-    static sizeOfRect(float: boolean) {
+    static sizeOfRectangle(float: boolean) {
         return float ? 16 : 32;
     }
 }

@@ -1,6 +1,7 @@
 import { RTConstants, RTUtils } from "./RTUtils";
 import { Envelope } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
+import { RTGeomType } from "./RTGeomType";
 
 export class RTRecordHeader {
     keyLength = 0;
@@ -28,7 +29,7 @@ export abstract class RTRecord {
         return this.header.childNodeId;
     }
 
-    abstract envelope(): Envelope;
+    abstract envelope(): RTRectangle;
 
     point() {
         return new RTPoint();
@@ -41,8 +42,160 @@ export abstract class RTRecord {
     abstract overlaps(envelope: Envelope): boolean;
     abstract size(float: boolean): number;
     abstract area(): number;
+
+    static create(geomType: RTGeomType) {
+        switch (geomType) {
+            case RTGeomType.point:
+                return new RTPointRecord();
+            case RTGeomType.rectangle:
+                return new RTRectangleRecord();
+        }
+
+        throw new Error('not supported record type.')
+    }
 }
 
+export class RTPointRecord extends RTRecord {
+    _point: RTPoint = new RTPoint();
+    header = new RTRecordHeader();
+    data = 0;
+
+    constructor(recordHeader?: RTRecordHeader, point?: RTPoint, id?: number) {
+        super();
+
+        this.header = recordHeader || this.header;
+        this._point = point || this._point;
+        this.data = id || 0;
+    }
+
+    point() {
+        return this._point;
+    }
+
+    read(reader: BufferReader, float: boolean) {
+        this.header.read(reader);
+        this._point.read(reader, float);
+        this.data = reader.nextUInt32();
+    }
+
+    write(writer: BufferWriter, float: boolean) {
+        this.header.write(writer);
+        this._point.write(writer, float);
+        writer.writeUInt32(this.data);
+        writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
+    }
+
+    envelope() {
+        return new RTRectangle(this._point.x, this._point.y, this._point.x, this._point.y);
+    }
+
+    area() {
+        return 0;
+    }
+
+    size(float: boolean): number {
+        const size = RTConstants.RECORD_HEADER_SIZE + 
+            RTUtils.sizeOfPoint(float) + 
+            RTConstants.RECORD_DATA_LENGTH + 
+            RTConstants.RECORD_ALIGNED;
+        return size;
+    }
+
+    isContained(envelope: Envelope): boolean {
+        const rt1 = this.envelope();
+        return Envelope.contains(envelope, rt1);
+    }
+
+    contains(envelope: Envelope): boolean {
+        return false;
+    }
+
+    overlaps(envelope: Envelope): boolean {
+        return this.isContained(envelope);
+    }
+}
+
+export class RTRectangleRecord extends RTRecord {
+    id = 0;
+    header = new RTRecordHeader();
+    rect = new RTRectangle(0, 0, 0, 0);
+
+    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle, id?: number) {
+        super();
+
+        this.header = recordHeader || this.header;
+        this.rect = rect || this.rect;
+        this.data = id || 0;
+    }
+
+    envelope(): RTRectangle {
+        return this.rect;
+    }
+
+    read(reader: BufferReader, float: boolean): void {
+        this.header.read(reader);
+        this.rect.read(reader, float);
+        this.data = reader.nextUInt32();
+
+        const placeholder = reader.nextUInt32();
+        if (placeholder !== RTConstants.PAGE_HEADER_PLACEHOLDER) {
+            throw new Error('I/O not matched.');
+        }
+    }
+
+    write(writer: BufferWriter, float: boolean): void {
+        this.header.write(writer);
+        this.rect.write(writer, float);
+        writer.writeUInt32(this.data);
+        writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
+    }
+
+    isContained(envelope: Envelope): boolean {
+        return Envelope.contains(envelope, this.rect);
+    }
+
+    contains(envelope: Envelope): boolean {
+        return Envelope.contains(this.rect, envelope);
+    }
+
+    overlaps(envelope: Envelope): boolean {
+        return Envelope.overlaps(this.rect, envelope);
+    }
+
+    size(float: boolean): number {
+        const size = RTConstants.RECORD_HEADER_SIZE + 
+            RTUtils.sizeOfRectangle(float) +
+            RTConstants.RECORD_ALIGNED + 
+            RTConstants.RECORD_DATA_LENGTH;
+        return size; 
+    }
+
+    area(): number {
+        return this.rect.area();
+    }
+}
+
+export class RTEntry extends RTRectangleRecord {
+    constructor(recordHeader: RTRecordHeader, rect: RTRectangle) {
+        super(recordHeader, rect, 0);
+    }
+
+    size(float: boolean): number {
+        return RTConstants.RECORDSET_HEADER_SIZE + RTUtils.sizeOfRectangle(float);
+    }
+
+    read(reader: BufferReader, float: boolean) {
+        this.header.read(reader);
+        this.rect.read(reader, float);
+    }
+
+    write(writer: BufferWriter, float: boolean) {
+        this.header.write(writer);
+        this.rect.write(writer, float);
+    }
+}
+
+//#region rect and point
 export class RTPoint {
     x = 0;
     y = 0;
@@ -128,77 +281,4 @@ export class RTRectangle extends Envelope {
         return Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
     }
 }
-
-export class RTRectangleRecord extends RTRecord {
-    rect: RTRectangle;
-
-    constructor(recordHeader: RTRecordHeader, rect: RTRectangle, id: number) {
-        super();
-
-        this.header = recordHeader;
-        this.rect = rect;
-        this.data = id;
-    }
-
-    envelope(): Envelope {
-        throw new Error("Method not implemented.");
-    }
-
-    read(reader: BufferReader, float: boolean): void {
-        this.header.read(reader);
-        this.rect.read(reader, float);
-        this.data = reader.nextUInt32();
-
-        const placeholder = reader.nextUInt32();
-        if (placeholder !== RTConstants.PAGE_HEADER_PLACEHOLDER) {
-            throw new Error('I/O not matched.');
-        }
-    }
-
-    write(writer: BufferWriter, float: boolean): void {
-        this.header.write(writer);
-        this.rect.write(writer, float);
-        writer.writeUInt32(this.data);
-        writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
-    }
-
-    isContained(envelope: Envelope): boolean {
-        return Envelope.contains(envelope, this.rect);
-    }
-
-    contains(envelope: Envelope): boolean {
-        return Envelope.contains(this.rect, envelope);
-    }
-
-    overlaps(envelope: Envelope): boolean {
-        return Envelope.overlaps(this.rect, envelope);
-    }
-
-    size(float: boolean): number {
-        return float ? 16 : 32;
-    }
-
-    area(): number {
-        return this.rect.area();
-    }
-}
-
-export class RTEntry extends RTRectangleRecord {
-    constructor(recordHeader: RTRecordHeader, rect: RTRectangle) {
-        super(recordHeader, rect, 0);
-    }
-
-    size(float: boolean): number {
-        return RTConstants.RECORDSET_HEADER_SIZE + RTUtils.sizeOfRect(float);
-    }
-
-    read(reader: BufferReader, float: boolean) {
-        this.header.read(reader);
-        this.rect.read(reader, float);
-    }
-
-    write(writer: BufferWriter, float: boolean) {
-        this.header.write(writer);
-        this.rect.write(writer, float);
-    }
-}
+//#endregion
