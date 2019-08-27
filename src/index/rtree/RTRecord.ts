@@ -175,7 +175,7 @@ export class RTRectangleRecord extends RTRecord {
     }
 }
 
-export class RTEntry extends RTRectangleRecord {
+export class RTEntryRecord extends RTRectangleRecord {
     constructor(recordHeader: RTRecordHeader, rect: RTRectangle) {
         super(recordHeader, rect, 0);
     }

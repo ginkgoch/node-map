@@ -4,7 +4,7 @@ import { RTGeomType } from "./RTGeomType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { RTRecordSetHeader } from "./RTRecordSetHeader";
 import { Envelope } from "ginkgoch-geom";
-import { RTRecord, RTEntry } from "./RTRecord";
+import { RTRecord, RTEntryRecord } from "./RTRecord";
 import { RTConstants } from "./RTUtils";
 import { RTSlot } from "./RTSlot";
 import { RTFileHeader } from "./RTFileHeader";
@@ -240,7 +240,7 @@ export class RTDataPage extends RTPage {
         this.isDirty = true;
     }
 
-    public updateEntry(entry: RTEntry, id: number) { }
+    public updateEntry(entry: RTEntryRecord, id: number) { }
 }
 
 export class RTLeafPage extends RTDataPage {
