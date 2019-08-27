@@ -1,5 +1,4 @@
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
-import { StreamUtils } from "./RTUtils";
+import { RTConstants, RTUtils } from "./RTUtils";
 import { Envelope } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 
@@ -8,16 +7,16 @@ export class RTRecordHeader {
     elementLength = 0;
     childNodeId = 0;
 
-    read(stream: FileStream) {
-        this.keyLength = StreamUtils.readUInt16(stream);
-        this.elementLength = StreamUtils.readUInt16(stream);
-        this.childNodeId = StreamUtils.readUInt32(stream);
+    read(reader: BufferReader) {
+        this.keyLength = reader.nextUInt16();
+        this.elementLength = reader.nextUInt16();
+        this.childNodeId = reader.nextUInt32();
     }
 
-    write(stream: FileStream) {
-        StreamUtils.writeUInt16(stream, this.keyLength);
-        StreamUtils.writeUInt16(stream, this.elementLength);
-        StreamUtils.writeUInt32(stream, this.childNodeId);
+    write(writer: BufferWriter) {
+        writer.writeUInt16(this.keyLength);
+        writer.writeUInt16(this.elementLength);
+        writer.writeUInt32(this.childNodeId);
     }
 }
 
@@ -77,5 +76,129 @@ export class RTPoint {
             writer.writeDouble(this.x);
             writer.writeDouble(this.y);
         }
+    }
+}
+
+export class RTRectangle extends Envelope {
+    constructor(minx: number, miny: number, maxx: number, maxy: number) {
+        super(minx, miny, maxx, maxy);
+    }
+
+    read(reader: BufferReader, float: boolean) {
+        const nextValue = float ? reader.nextFloat : reader.nextDouble;
+
+        this.minx = nextValue();
+        this.miny = nextValue();
+        this.maxx = nextValue();
+        this.maxy = nextValue();
+    }
+
+    write(writer: BufferWriter, float: boolean) {
+        const writeValue = float ? writer.writeFloat : writer.writeDouble;
+        writeValue(this.minx);
+        writeValue(this.miny);
+        writeValue(this.maxx);
+        writeValue(this.maxy);
+    }
+
+    minDistanceTo(p: RTPoint) {
+        if (p.x < this.minx && p.y > this.maxy) {
+            return this.distance(this.minx - p.x, p.y - this.maxy);
+        }
+        if (p.x > this.maxx && p.y > this.maxy) {
+            return this.distance(p.x - this.maxx, p.y - this.maxy);
+        }
+        if (p.x > this.maxx && p.y < this.miny) {
+            return this.distance(p.x - this.maxx, this.miny - p.y);
+        }
+        if (p.x < this.minx && p.y < this.miny) {
+            return this.distance(this.minx - p.x, this.miny - p.y);
+        }
+        if (p.x < this.minx || p.x > this.maxx) {
+            return Math.min(Math.abs(this.minx - p.x), Math.abs(p.x - this.maxx));
+        }
+        if (p.y < this.miny || p.y > this.maxy) {
+            return Math.min(Math.abs(this.miny - p.y), Math.abs(p.y - this.maxy));
+        }
+
+        return 0;
+    }
+
+    private distance(h: number, w: number) {
+        return Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
+    }
+}
+
+export class RTRectangleRecord extends RTRecord {
+    rect: RTRectangle;
+
+    constructor(recordHeader: RTRecordHeader, rect: RTRectangle, id: number) {
+        super();
+
+        this.header = recordHeader;
+        this.rect = rect;
+        this.data = id;
+    }
+
+    envelope(): Envelope {
+        throw new Error("Method not implemented.");
+    }
+
+    read(reader: BufferReader, float: boolean): void {
+        this.header.read(reader);
+        this.rect.read(reader, float);
+        this.data = reader.nextUInt32();
+
+        const placeholder = reader.nextUInt32();
+        if (placeholder !== RTConstants.PAGE_HEADER_PLACEHOLDER) {
+            throw new Error('I/O not matched.');
+        }
+    }
+
+    write(writer: BufferWriter, float: boolean): void {
+        this.header.write(writer);
+        this.rect.write(writer, float);
+        writer.writeUInt32(this.data);
+        writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
+    }
+
+    isContained(envelope: Envelope): boolean {
+        return Envelope.contains(envelope, this.rect);
+    }
+
+    contains(envelope: Envelope): boolean {
+        return Envelope.contains(this.rect, envelope);
+    }
+
+    overlaps(envelope: Envelope): boolean {
+        return Envelope.overlaps(this.rect, envelope);
+    }
+
+    size(float: boolean): number {
+        return float ? 16 : 32;
+    }
+
+    area(): number {
+        return this.rect.area();
+    }
+}
+
+export class RTEntry extends RTRectangleRecord {
+    constructor(recordHeader: RTRecordHeader, rect: RTRectangle) {
+        super(recordHeader, rect, 0);
+    }
+
+    size(float: boolean): number {
+        return RTConstants.RECORDSET_HEADER_SIZE + RTUtils.sizeOfRect(float);
+    }
+
+    read(reader: BufferReader, float: boolean) {
+        this.header.read(reader);
+        this.rect.read(reader, float);
+    }
+
+    write(writer: BufferWriter, float: boolean) {
+        this.header.write(writer);
+        this.rect.write(writer, float);
     }
 }

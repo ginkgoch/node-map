@@ -8,14 +8,15 @@ export let RTConstants = Object.freeze({
     RECORD_DATA_LENGTH: 4,
     ACCURACY_TOLERANCE: 1e6,
     PAGE_HEADER_SIZE: 16,
-    RECORD_SET_HEADER_SIZE: 8,
+    PAGE_HEADER_PLACEHOLDER: 0x0F0F0F0F,
     RECORD_HEADER_SIZE: 8,
     PAGE_SLOT_SIZE: 4,
     MAGIC_CHAR_LENGTH: 15,
     POINT_EXT_LENGTH: 13,
     RECT_EXT_LENGTH: 12,
     DEFAULT_ENCODING: defaultEncoding,
-    RECORDSET_HEADER_CORRECTION: 1
+    RECORDSET_HEADER_CORRECTION: 1,
+    RECORDSET_HEADER_SIZE: 8,
 });
 
 export class RTUtils {
@@ -25,6 +26,10 @@ export class RTUtils {
 
     static size(float = false) {
         return float ? 8 : 16;
+    }
+
+    static sizeOfRect(float: boolean) {
+        return float ? 16 : 32;
     }
 }
 

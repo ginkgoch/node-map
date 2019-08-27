@@ -34,8 +34,9 @@
   "dependencies": {
     "@types/lodash": "^4.14.136",
     "@types/proj4": "^2.5.0",
-    "ginkgoch-geom": "^1.7.5",
-    "ginkgoch-shapefile": "^2.3.6",
+    "ginkgoch-buffer-io": "^1.1.2",
+    "ginkgoch-geom": "^1.7.7",
+    "ginkgoch-shapefile": "^2.3.9",
     "lodash": "^4.17.15",
     "proj4": "^2.5.0"
   }

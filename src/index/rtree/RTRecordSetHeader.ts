@@ -1,20 +1,21 @@
 import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
 import { StreamUtils } from "./RTUtils";
+import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 
 export class RTRecordSetHeader {
     root = 0;
     level = 0;
     placeholder = 0;
 
-    read(stream: FileStream) {
-        this.root = StreamUtils.readUInt32(stream);
-        this.level = StreamUtils.readUInt16(stream);
-        this.placeholder = StreamUtils.readUInt16(stream);
+    read(reader: BufferReader) {
+        this.root = reader.nextUInt32();
+        this.level = reader.nextUInt16();
+        this.placeholder = reader.nextUInt16();
     }
 
-    write(stream: FileStream) {
-        StreamUtils.writeUInt32(stream, this.root);
-        StreamUtils.writeUInt16(stream, this.level);
-        StreamUtils.writeUInt16(stream, this.placeholder);
+    write(writer: BufferWriter) {
+        writer.writeUInt32(this.root);
+        writer.writeUInt16(this.level);
+        writer.writeUInt16(this.placeholder);
     }
 }
