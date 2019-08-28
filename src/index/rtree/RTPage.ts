@@ -4,7 +4,7 @@ import { RTGeomType } from "./RTGeomType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { RTRecordSetHeader } from "./RTRecordSetHeader";
 import { Envelope } from "ginkgoch-geom";
-import { RTRecord, RTEntryRecord } from "./RTRecord";
+import { RTRecord, RTEntryRecord, RTRectangle } from "./RTRecord";
 import { RTConstants } from "./RTUtils";
 import { RTSlot } from "./RTSlot";
 import { RTFileHeader } from "./RTFileHeader";
@@ -157,8 +157,8 @@ export class RTDataPage extends RTPage {
         }
     }
 
-    public get envelope() {
-        return new Envelope(0, 0, 0, 0);
+    public get envelope(): RTRectangle {
+        return new RTRectangle(0, 0, 0, 0);
     }
 
     public get freePageNo() {
@@ -355,7 +355,7 @@ export class RTLeafPage extends RTDataPage {
         return capacity;
     }
     
-    public get envelope() {
+    public get envelope(): RTRectangle {
         let rect = new Envelope(0, 0, 0, 0);
         const recordCount = this.recordCount;
         if (recordCount > 0) {
@@ -368,7 +368,7 @@ export class RTLeafPage extends RTDataPage {
             }
         }
 
-        return rect;
+        return new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
     }
 }
 

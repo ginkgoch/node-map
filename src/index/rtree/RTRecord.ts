@@ -1,5 +1,5 @@
 import { RTConstants, RTUtils } from "./RTUtils";
-import { Envelope } from "ginkgoch-geom";
+import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { RTGeomType } from "./RTGeomType";
 
@@ -37,9 +37,9 @@ export abstract class RTRecord {
 
     abstract read(reader: BufferReader, float: boolean): void;
     abstract write(writer: BufferWriter, float: boolean): void;
-    abstract isContained(envelope: Envelope): boolean;
-    abstract contains(envelope: Envelope): boolean;
-    abstract overlaps(envelope: Envelope): boolean;
+    abstract isContained(envelope: IEnvelope): boolean;
+    abstract contains(envelope: IEnvelope): boolean;
+    abstract overlaps(envelope: IEnvelope): boolean;
     abstract size(float: boolean): number;
     abstract area(): number;
 
@@ -85,7 +85,7 @@ export class RTPointRecord extends RTRecord {
         writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
     }
 
-    envelope() {
+    envelope(): RTRectangle {
         return new RTRectangle(this._point.x, this._point.y, this._point.x, this._point.y);
     }
 
@@ -101,16 +101,16 @@ export class RTPointRecord extends RTRecord {
         return size;
     }
 
-    isContained(envelope: Envelope): boolean {
+    isContained(envelope: IEnvelope): boolean {
         const rt1 = this.envelope();
         return Envelope.contains(envelope, rt1);
     }
 
-    contains(envelope: Envelope): boolean {
+    contains(envelope: IEnvelope): boolean {
         return false;
     }
 
-    overlaps(envelope: Envelope): boolean {
+    overlaps(envelope: IEnvelope): boolean {
         return this.isContained(envelope);
     }
 }
@@ -132,6 +132,14 @@ export class RTRectangleRecord extends RTRecord {
         return this.rect;
     }
 
+    get rectangle() {
+        return this.rect;
+    }
+
+    set rectangle(rect: RTRectangle) {
+        this.rect = rect;
+    }
+
     read(reader: BufferReader, float: boolean): void {
         this.header.read(reader);
         this.rect.read(reader, float);
@@ -150,15 +158,15 @@ export class RTRectangleRecord extends RTRecord {
         writer.writeUInt32(RTConstants.PAGE_HEADER_PLACEHOLDER);
     }
 
-    isContained(envelope: Envelope): boolean {
+    isContained(envelope: IEnvelope): boolean {
         return Envelope.contains(envelope, this.rect);
     }
 
-    contains(envelope: Envelope): boolean {
+    contains(envelope: IEnvelope): boolean {
         return Envelope.contains(this.rect, envelope);
     }
 
-    overlaps(envelope: Envelope): boolean {
+    overlaps(envelope: IEnvelope): boolean {
         return Envelope.overlaps(this.rect, envelope);
     }
 
@@ -252,6 +260,11 @@ export class RTRectangle extends Envelope {
         writeValue(this.miny);
         writeValue(this.maxx);
         writeValue(this.maxy);
+    }
+
+    expandedArea(rect: RTRectangle) {
+        const expandedRect = Envelope.union(this, rect);
+        return expandedRect.area();
     }
 
     minDistanceTo(p: RTPoint) {

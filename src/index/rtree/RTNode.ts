@@ -1,8 +1,8 @@
 import { RTDataPage, RTLeafPage } from "./RTPage";
 import { RTGeomType } from "./RTGeomType";
 import { NotImplementedError, RTConstants, RTUtils } from "./RTUtils";
-import { RTRecord, RTRectangle } from "./RTRecord";
-import { Envelope } from "ginkgoch-geom";
+import { RTRecord, RTRectangle, RTEntryRecord } from "./RTRecord";
+import { Envelope, IEnvelope } from "ginkgoch-geom";
 
 export class RTNode {
     dataPage: RTDataPage;
@@ -103,7 +103,7 @@ export class RTNode {
         return count;
     }
 
-    get envelope() {
+    get envelope(): RTRectangle {
         return this.dataPage.envelope;
     }
 
@@ -111,17 +111,17 @@ export class RTNode {
         return this.dataPage.record(id);
     }
 
-    contains(rect: Envelope) {
+    contains(rect: IEnvelope) {
         const currentRect = this.envelope;
         return Envelope.contains(currentRect, rect);
     }
 
-    isContained(rect: Envelope) {
+    isContained(rect: IEnvelope) {
         const currentRect = this.envelope;
         return Envelope.contains(rect, currentRect);
     }
 
-    overlaps(rect: Envelope) {
+    overlaps(rect: IEnvelope) {
         const currentRect = this.envelope;
         return Envelope.overlaps(currentRect, rect);
     }
@@ -137,7 +137,7 @@ export class RTNode {
         return count;
     }
 
-    fillContains(rect: Envelope, ids: string[]): number {
+    fillContains(rect: IEnvelope, ids: string[]): number {
         let count = 0;
         let currentCount = this.recordCount;
         for (let i = 0; i < currentCount; i++) {
@@ -153,7 +153,7 @@ export class RTNode {
         return count;
     }
 
-    fillOverlaps(rect: Envelope, ids: string[]): number {
+    fillOverlaps(rect: IEnvelope, ids: string[]): number {
         let count = 0;
         if (!this.overlaps(rect)) {
             return count;
@@ -312,5 +312,156 @@ export class RTNode {
         }
 
         return ids;
+    }
+
+    static adjustTree(node: RTNode, id: number, splitted: boolean) {
+        const childNode = node.subNode(id);
+        if (childNode === null) {
+            return;
+        }
+
+        const entry = node.record(id) as RTEntryRecord;
+        if (entry === null) {
+            return;
+        }
+
+        if (splitted) {
+            entry.rectangle = childNode.envelope;
+            this.updateEntry(node, entry, id);
+        }
+        else {
+            const entryRect = entry.envelope();
+            const childRect = childNode.envelope;
+            if (!Envelope.contains(entryRect, childRect)) {
+                entry.rectangle = childRect;
+                this.updateEntry(node, entry, id);
+            }
+        }
+    }
+
+    static updateEntry(node: RTNode, entry: RTEntryRecord, id: number) {
+        node.dataPage.updateEntry(entry, id);
+        node.dataPage.flush();
+    }
+
+    findLeastEnlargement(rect: RTRectangle): number {
+        let area = Number.MAX_VALUE;
+        let id = 0;
+        let recordCount = this.recordCount;
+        for (let i = 0; i < recordCount; i++) {
+            const entry = this.record(i) as RTEntryRecord;
+            const entryArea = entry.rectangle.area();
+            const enlargeArea = entry.rectangle.expandedArea(rect) - entryArea;
+
+            if (enlargeArea < area) {
+                area = enlargeArea;
+                id = i;
+            }
+            else if (enlargeArea === area) {
+                const entry2 = this.record(id);
+                const rect2 = entry2!.envelope();
+                if (entryArea < rect2.area()) {
+                    id = i
+                }
+            }
+        }
+
+        return id;
+    }
+
+    insertRecord(record: RTRecord, nodeList: RTNode[]) {
+        const subNodeList = new Array<RTNode>();
+        const rect = record.envelope();
+        const index = this.findLeastEnlargement(rect);
+        const subNode = this.subNode(index);
+        if (subNode === null) {
+            return;
+        }
+
+        subNode.insertRecord(record, subNodeList);
+        const splitted = subNodeList.length === 2;
+        RTNode.adjustTree(this, index, splitted);
+
+        if (splitted) {
+            const entry = <RTEntryRecord>this.firstRecord;
+            const entryHeader = entry.header;
+            entryHeader.childNodeId = subNodeList[1].pageNo;
+            entry.rectangle = subNodeList[1].envelope;
+            this.insertRecordInThisNode(entry, nodeList);
+        }
+    }
+
+    insertRecordInThisNode(record: RTRecord, nodeList: RTNode[]) {
+        const capacity = this.dataPage.maxRecordCount();
+        const recordCount = this.recordCount;
+        if (recordCount < capacity) {
+            this.dataPage.insertRecord(record);
+            this.dataPage.flush();
+        }
+        else {
+            this.splitNode(record, nodeList);
+            if (this.isRoot) {
+                this.splitRoot(nodeList);
+            }
+        }
+    }
+
+    splitNodeByType(record: RTRecord, nodeListIn: RTNode[], nodeListOut: RTNode[]) {
+        nodeListOut.length = 0;
+        const recordCount = this.recordCount;
+        const count = recordCount + 1;
+        const recArr = new Array<RTRecord>();
+        const rectList = new Array<RTRectangle>();
+        const rtArr = new Array<RTRectangle>();
+
+        for (let i = 0; i < recordCount; i++) {
+            const currentRecord = this.record(i)!;
+            const currentRecordRect = currentRecord.envelope();
+            recArr.push(currentRecord);
+            rtArr.push(currentRecordRect);
+            rectList.push(currentRecordRect);
+        }
+
+        const recordRect = record.envelope();
+        recArr.push(record);
+        rtArr.push(recordRect);
+        rectList.push(recordRect);
+
+        const spList = this.quadSplit(rectList);
+        const curPageNo = this.pageNo;
+        const level = this.level;
+
+        nodeListIn[0].pageNo = curPageNo;
+        nodeListIn[0].level = level;
+        for (let i = 0; i < spList[0].length; i++) {
+            const id = spList[0][i];
+            nodeListIn[0].dataPage.insertRecord(recArr[id]);
+        }
+
+        nodeListIn[0].dataPage.flush();
+        const newPageNo = this.freePageNo;
+        nodeListIn[1].pageNo = newPageNo;
+        nodeListIn[1].level = level;
+
+        for (let i = 0; i < spList[1].length; i++) {
+            const id = spList[1][i];
+            nodeListIn[1].dataPage.insertRecord(recArr[id]);
+        }
+
+        nodeListIn[1].dataPage.flush();
+        nodeListIn.forEach(n => nodeListOut.push(n));
+    }
+
+    private get freePageNo() {
+        return this.dataPage.freePageNo;
+    }
+
+    splitNode(record: RTRecord, nodeList: RTNode[]) {
+        nodeList.length = 0;
+    }
+
+    splitRoot(nodes: RTNode[]) {
+        const leftNode = nodes[0];
+        //TODO
     }
 }
