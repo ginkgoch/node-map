@@ -1,5 +1,5 @@
 import { RTConstants, RTUtils } from "./RTUtils";
-import { Envelope, IEnvelope } from "ginkgoch-geom";
+import { Envelope, IEnvelope, Point } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { RTGeomType } from "./RTGeomType";
 
@@ -206,13 +206,9 @@ export class RTEntryRecord extends RTRectangleRecord {
 }
 
 //#region rect and point
-export class RTPoint {
-    x = 0;
-    y = 0;
-
+export class RTPoint extends Point {
     constructor(x: number = 0, y: number = 0) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
     }
 
     equals(pt: RTPoint) {

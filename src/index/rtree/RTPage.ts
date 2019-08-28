@@ -22,10 +22,10 @@ export abstract class RTPage {
     protected reader?: BufferReader;
     protected writer?: BufferWriter;
 
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
         this.rtFile = rtFile;
         this.geomType = geomType;
-        this.fileStream = rtFile.fileStream();
+        this.fileStream = rtFile.fileStream;
         this.isFloat = rtFile.isFloat;
 
         if (pageNo) {
@@ -415,7 +415,7 @@ export class RTChildPage extends RTLeafPage {
 export class RTHeaderPage extends RTPage {
     public header: RTFileHeader = new RTFileHeader();
 
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
         super(rtFile, geomType, pageNo);
     }
 
