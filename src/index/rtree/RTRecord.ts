@@ -43,7 +43,7 @@ export abstract class RTRecord {
     abstract size(float: boolean): number;
     abstract area(): number;
 
-    static create(geomType: RTGeomType) {
+    static create(geomType: RTGeomType): RTRecord {
         switch (geomType) {
             case RTGeomType.point:
                 return new RTPointRecord();
@@ -184,7 +184,9 @@ export class RTRectangleRecord extends RTRecord {
 }
 
 export class RTEntryRecord extends RTRectangleRecord {
-    constructor(recordHeader: RTRecordHeader, rect: RTRectangle) {
+    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle) {
+        recordHeader = recordHeader || new RTRecordHeader();
+        rect = rect || new RTRectangle(0, 0, 0, 0);
         super(recordHeader, rect, 0);
     }
 
@@ -288,6 +290,15 @@ export class RTRectangle extends Envelope {
         }
 
         return 0;
+    }
+
+    contains(point: RTPoint) {
+        let result = true;
+        if ((point.x < this.minx || point.x > this.maxx) && (point.y < this.miny || point.y > this.maxy)) {
+            result = false;
+        }
+
+        return result;
     }
 
     private distance(h: number, w: number) {

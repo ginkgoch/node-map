@@ -5,7 +5,7 @@ const HEADER_LENGTH = 32;
 const RECORD_LENGTH = 16;
 const CACHE_LENGTH = 512;
 
-export class IdsHeader {
+export class RTIdsHeader {
     nextValidBlock = 0;
 
     public read(stream: FileStream) {
@@ -25,7 +25,7 @@ export class IdsHeader {
     }
 }
 
-export class IdsRecord {
+export class RTIdsRecord {
     id: string = '';
     length: number = 0;
 
@@ -45,9 +45,9 @@ export class IdsRecord {
     }
 }
 
-export class Ids {
-    record = new IdsRecord();
-    header = new IdsHeader();
+export class RTIds {
+    record = new RTIdsRecord();
+    header = new RTIdsHeader();
 
     private _fd?: number;
     private _stream?: FileStream;
@@ -106,7 +106,7 @@ export class Ids {
         const stream = new FileStream(filePath, 'w');
 
         try {
-            const header = new IdsHeader();
+            const header = new RTIdsHeader();
             header.nextValidBlock = 0;
             header.write(stream);
         }

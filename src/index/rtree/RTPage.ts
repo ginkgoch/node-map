@@ -248,7 +248,7 @@ export class RTLeafPage extends RTDataPage {
         super(rtFile, geomType, pageNo);
     }
 
-    public createRecord() {
+    public createRecord(): RTRecord {
         const record = RTRecord.create(this.geomType);
         return record;
     }
@@ -369,6 +369,46 @@ export class RTLeafPage extends RTDataPage {
         }
 
         return new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
+    }
+}
+
+export class RTChildPage extends RTLeafPage {
+    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+        super(rtFile, geomType, pageNo);
+    }
+
+    createRecord(): RTRecord {
+        const record = new RTEntryRecord();
+        return record;
+    }
+
+    maxRecordCount() {
+        const entry = new RTEntryRecord();
+        const count = (this.pageSize - 
+            RTConstants.PAGE_HEADER_SIZE - 
+            RTConstants.RECORDSET_HEADER_SIZE - 
+            RTConstants.PAGE_SLOT_SIZE * 2) / (entry.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
+
+        return count;
+    }
+
+    updateEntry(entry: RTEntryRecord, id: number) {
+        const recordCount = this.recordCount;
+        if (id < 0 || id >= recordCount) {
+            throw new Error(`id ${id} out of range [${0}, ${recordCount}].`);
+        }
+
+        id++;
+        let position = (id + RTConstants.ALIGNED_SLOT_COUNT) * RTConstants.PAGE_SLOT_SIZE;
+        this.reader!.seek(position, 'end');
+
+        const slot = new RTSlot();
+        slot.read(this.reader!);
+
+        position = slot.offset + RTConstants.PAGE_HEADER_SIZE;
+        this.writer!.seek(position);
+        entry.write(this.writer!, this.isFloat);
+        this.isDirty = true;
     }
 }
 
