@@ -26,6 +26,29 @@ export class RTIndex {
         this._idsEngine = new RTIds();
     }
 
+    open() {
+        if (this.opened) {
+            return;
+        }
+
+        this._rtFile.open(this.filePath, this.flag);
+        this._idsEngine.flag = this.flag;
+        this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
+        this._idsEngine.open();
+        this._hasIdx = true;
+        this.opened = true;
+    }
+
+    close() {
+        if (!this.opened) { 
+            return;
+        }
+
+        this.opened = false;
+        this._rtFile.close();
+        this._idsEngine.close();
+    }
+
     invalidCache() {
         this._idsEngine.invalidCache();
     }
@@ -104,28 +127,6 @@ export class RTIndex {
         const idsFilePath = this._idsFilePath(filePath);
         RTIds.createEmpty(idsFilePath);
         index.close();
-    }
-
-    open() {
-        if (this.opened) {
-            return;
-        }
-
-        this._rtFile.open(this.filePath, this.flag);
-        this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
-        this._idsEngine.open();
-        this._hasIdx = true;
-        this.opened = true;
-    }
-
-    close() {
-        if (!this.opened) { 
-            return;
-        }
-
-        this.opened = false;
-        this._rtFile.close();
-        this._idsEngine.close();
     }
 
     idsIntersects(rect: IEnvelope) {

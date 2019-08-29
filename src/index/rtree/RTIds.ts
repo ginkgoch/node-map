@@ -95,7 +95,7 @@ export class RTIds {
         this.record.length = Buffer.from(id, 'utf-8').length;
         this.record.write(this._stream!);
 
-        this.header.nextValidBlock += (this.record.length + 3) / RECORD_LENGTH + 1;
+        this.header.nextValidBlock += Math.floor((this.record.length + 3) / RECORD_LENGTH) + 1;
         this._stream!.seek(0);
         this.header.write(this._stream!);
 

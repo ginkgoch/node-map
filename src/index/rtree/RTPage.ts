@@ -36,7 +36,13 @@ export abstract class RTPage {
 
     load() {
         this.pageSize = this.rtFile.pageSize;
+
         this.buff = Buffer.alloc(this.pageSize);
+        this.fileStream!.seek(this.pageNo * this.pageSize);
+        
+        const currentPageBuff  = this.fileStream!.read(this.pageSize);
+        currentPageBuff.copy(this.buff, 0, currentPageBuff.length);
+
         this.reader = new BufferReader(this.buff);
         this.writer = new BufferWriter(this.buff);
     }
@@ -254,9 +260,31 @@ export class RTLeafPage extends RTDataPage {
         if (this.header.pageFreeSpace > tmpSize) {
             this._insertRecord(record);
         }
+        else {
+            this._compress();
+            this._insertRecord(record);
+        }
     }
 
-    _insertRecord(record: RTRecord) {
+    private _compress() {
+        const count = this.recordCount;
+        const records = new Array<RTRecord>();
+        for (let i = 0; i < count; i++) {
+            records[i] = this.record(i)!;
+        }
+
+        this.header.recordCount = 1;
+        this.header.endDataOffset = RTConstants.RECORDSET_HEADER_SIZE;
+        this.header.pageFreeSpace = this.pageSize - RTConstants.PAGE_HEADER_SIZE - 
+            this.header.endDataOffset - RTConstants.PAGE_SLOT_SIZE * 2;
+
+        this.writePageHeader();
+        for (let i = 0; i < records.length; i++) {
+            this._insertRecord(records[i]);
+        }
+    }
+
+    private _insertRecord(record: RTRecord) {
         this.writer!.seek(RTConstants.PAGE_HEADER_SIZE + this.header.endDataOffset);
 
         const recordSize = record.size(this.isFloat);
