@@ -1,7 +1,9 @@
 import assert from 'assert';
 import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
 import { RTGeomType } from "./RTGeomType";
-import { RTLeafPage, RTHeaderPage } from "./RTPage";
+import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
+import { RTFileHeader } from './RTFileHeader';
+import { RTConstants } from './RTUtils';
 
 const DESCRIPTION = 'Gist data file\0';
 
@@ -27,47 +29,93 @@ export class RTFile {
         this.open(filePath, 'rs+');
     }
 
+    get geomType(): RTGeomType {
+        return this.headerPage!.header.extId;
+    }
+
+    get pageCount(): number {
+        const pageCount = this.fileStream!.total / this.pageSize;
+        return pageCount;
+    }
+
+    get RootNodePage(): RTDataPage | null {
+        if (!this.opened) {
+            return null;
+        }
+
+        let rootPage: RTDataPage;
+        const pageCount = this.pageCount;
+        if (pageCount === 2) {
+            rootPage = new RTLeafPage(this, this.geomType, 1);
+        }
+        else {
+            rootPage = new RTChildPage(this, this.geomType, 1);
+        }
+
+        return rootPage;
+    }
+
     open(filePath: string, flag: string = 'rs'): boolean {
         if (this.opened) {
             return true;
         }
-        
-        let success = false;
+
         this.fileStream = new FileStream(filePath, flag);
         this.opened = true;
         this.headerPage = new RTHeaderPage(this);
 
-        success = this._readFileHeader();
-        assert (this.headerPage.header.description === DESCRIPTION, 'Invalid index file.');
+        this._readFileHeader();
+        assert(this.headerPage.header.description === DESCRIPTION, 'Invalid index file.');
 
-        if (success) {
-            if (this.headerPage.header.pageSize !== 0) {
-                this.pageSize = this.headerPage.header.pageSize;
-            }
-            else {
-                this.pageSize = 8 * 1024;
-            }
+        if (this.headerPage.header.pageSize !== 0) {
+            this.pageSize = this.headerPage.header.pageSize;
+        }
+        else {
+            this.pageSize = 8 * 1024;
         }
 
         this.isFloat = this.headerPage.header.isFloat;
         this.flag = flag;
 
-        return success;
+        return true;
     }
 
     close() {
-        throw new Error("Method not implemented.");
+        if (this.fileStream === undefined || !this.opened) {
+            return;
+        }
+
+        this.fileStream && this.fileStream.close();
+        this.fileStream = undefined;
+        this.opened = false;
     }
 
-    private _readFileHeader(): boolean {
-        throw new Error("Method not implemented.");
+    private _readFileHeader() {
+        this.headerPage!.read();
     }
 
     private _writeFileHeader() {
-        throw new Error("Method not implemented.");
+        this.headerPage!.write();
     }
 
     private _initFileHeader(geomType: RTGeomType, isFloat: boolean) {
-        throw new Error("Method not implemented.");
+        this.pageSize = this.pageSize || 8 * 1024;
+        this.headerPage = new RTHeaderPage(this, geomType, 0);
+
+        const fileHeader = new RTFileHeader();
+        fileHeader.description = DESCRIPTION;
+        fileHeader.extId = geomType;
+        fileHeader.freePageId = 0;
+        fileHeader.pageSize = this.pageSize;
+        fileHeader.isFloat = isFloat;
+
+        if (geomType === RTGeomType.point) {
+            fileHeader.extName = RTConstants.RECORD_POINT_TYPE;
+        }
+        else {
+            fileHeader.extName = RTConstants.RECORD_RECT_TYPE;
+        }
+
+        this.headerPage.header = fileHeader;
     }
 }

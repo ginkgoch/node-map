@@ -20,7 +20,9 @@ export let RTConstants = Object.freeze({
     DEFAULT_ENCODING: defaultEncoding,
     RECORDSET_HEADER_CORRECTION: 1,
     RECORDSET_HEADER_SIZE: 8,
-    FILL_FACTOR: 0.5
+    FILL_FACTOR: 0.5,
+    RECORD_POINT_TYPE: 'RT_POINT_EXT\0',
+    RECORD_RECT_TYPE: 'RT_RECT_EXT\0'
 });
 
 export class RTUtils {
