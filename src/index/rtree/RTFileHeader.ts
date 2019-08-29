@@ -1,4 +1,4 @@
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { FileStream } from "ginkgoch-filestream";
 import { RTConstants, StreamUtils } from "./RTUtils";
 
 export class RTFileHeader {

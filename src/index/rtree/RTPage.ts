@@ -1,4 +1,4 @@
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { FileStream } from "ginkgoch-filestream";
 import { RTFile } from "./RTFile";
 import { RTGeomType } from "./RTGeomType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";

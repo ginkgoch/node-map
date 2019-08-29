@@ -1,3 +1,5 @@
+import {RTIndex} from '../../../src/index/rtree/RTIndex';
+
 describe('Ids', () => {
     it('readInt', () => {
         const buff = Buffer.alloc(4);
@@ -14,6 +16,11 @@ describe('Ids', () => {
         expect(arr.length).toBe(3);
     });
 
+    it('idx file path', () => {
+        const idxFilePath = './test/file.idx';
+        const idsFilePath = RTIndex.idsFilePath(idxFilePath);
+        expect(idsFilePath).toEqual('./test/file.ids');
+    });
 });
 
 function fillContent(arr: string[]) {

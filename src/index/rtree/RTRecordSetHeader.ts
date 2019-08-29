@@ -1,5 +1,3 @@
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
-import { StreamUtils } from "./RTUtils";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 
 export class RTRecordSetHeader {

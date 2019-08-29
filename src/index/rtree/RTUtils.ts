@@ -1,4 +1,4 @@
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { FileStream } from "ginkgoch-filestream";
 import { RTRectangle } from "./RTRecord";
 import { Envelope } from "ginkgoch-geom";
 import { RTGeomType } from "./RTGeomType";

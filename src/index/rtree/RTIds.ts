@@ -1,9 +1,8 @@
 import fs from 'fs';
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { FileStream } from "ginkgoch-filestream";
 
 const HEADER_LENGTH = 32;
 const RECORD_LENGTH = 16;
-const CACHE_LENGTH = 512;
 
 export class RTIdsHeader {
     nextValidBlock = 0;

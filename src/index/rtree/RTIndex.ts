@@ -1,6 +1,9 @@
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
 import { IEnvelope, Point } from "ginkgoch-geom";
+import { RTNode, RTLeaf, RTChild } from "./RTNode";
+import { RTLeafPage, RTChildPage } from "./RTPage";
+import { RTGeomType } from "./RTGeomType";
 
 export class RTIndex {
     private _rtFile: RTFile;
@@ -10,7 +13,7 @@ export class RTIndex {
     flag: string;
     filePath: string;
 
-    constructor(filePath: string, flag: string = 'rs') {
+    constructor(filePath: string = '', flag: string = 'rs') {
         this.flag = flag;
         this.filePath = filePath;
         this._rtFile = new RTFile();
@@ -78,7 +81,38 @@ export class RTIndex {
         return this._rtFile.pageSize;
     }
 
-    // get root() {
-    //     const dataPage = this._rtFile.
-    // }
+    get root(): RTNode | null {
+        const dataPage = this._rtFile.rootNodePage;
+        if (dataPage === null) {
+            return null;
+        }
+
+        let root: RTNode;
+        if (dataPage.level === 1) {
+            root = new RTLeaf(<RTLeafPage>dataPage);
+        }
+        else {
+            root = new RTChild(<RTChildPage>dataPage);
+        }
+
+        return root;
+    }
+
+    static create(filePath: string, geomType: RTGeomType, float: boolean = false, pageSize = 8 * 1024) {
+        if (geomType === RTGeomType.point) {
+            const index = new RTIndex();
+            index._createPointIndexFile(filePath, float, pageSize);
+        }
+        else {
+            
+        }
+    }
+
+    private _createPointIndexFile(filePath: string, float: boolean, pageSize: number) {
+        throw new Error("Method not implemented.");
+    }
+
+    static idsFilePath(idxFilePath: string) {
+        return idxFilePath.replace(/\.idx$/i, '.ids');
+    }
 }

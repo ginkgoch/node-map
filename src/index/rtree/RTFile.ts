@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { FileStream } from "ginkgoch-shapefile/dist/shared/FileStream";
+import { FileStream } from "ginkgoch-filestream";
 import { RTGeomType } from "./RTGeomType";
 import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
 import { RTFileHeader } from './RTFileHeader';
@@ -38,7 +38,7 @@ export class RTFile {
         return pageCount;
     }
 
-    get RootNodePage(): RTDataPage | null {
+    get rootNodePage(): RTDataPage | null {
         if (!this.opened) {
             return null;
         }
