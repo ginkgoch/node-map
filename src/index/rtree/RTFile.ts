@@ -1,11 +1,12 @@
 import assert from 'assert';
+import fs from 'fs';
 import { FileStream } from "ginkgoch-filestream";
 import { RTGeomType } from "./RTGeomType";
 import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
 import { RTFileHeader } from './RTFileHeader';
 import { RTConstants } from './RTUtils';
 
-const DESCRIPTION = 'Gist data file\0';
+const DESCRIPTION = 'Gist data file ';
 
 export class RTFile {
     opened = false;
@@ -16,7 +17,8 @@ export class RTFile {
     headerPage?: RTHeaderPage;
 
     create(filePath: string, geomType: RTGeomType, float: boolean) {
-        this.fileStream = new FileStream(filePath);
+        const fd = fs.openSync(filePath, 'w+');
+        this.fileStream = new FileStream(fd);
         this._initFileHeader(geomType, this.isFloat);
         this._writeFileHeader();
         this.opened = true;
@@ -26,6 +28,8 @@ export class RTFile {
         leafPage.flush();
 
         this.close();
+        fs.closeSync(fd);
+        
         this.open(filePath, 'rs+');
     }
 

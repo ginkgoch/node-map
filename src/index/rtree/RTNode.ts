@@ -94,7 +94,7 @@ export class RTNode {
     }
 
     set pageNo(pageNo: number) {
-        this.dataPage.pageNo = pageNo;
+        this.dataPage.setPageNo(pageNo);
     }
 
     get firstRecord(): RTRecord | null {
@@ -496,7 +496,7 @@ export class RTNode {
         const rtFile = this.dataPage.rtFile;
         const geomType = this.dataPage.geomType;
         const rootPage = new RTChildPage(rtFile, geomType);
-        rootPage.pageNo = 1;
+        rootPage.setPageNo(1);
         rootPage.level = l.level + 1;
 
         const root = new RTChild(rootPage);

@@ -28,7 +28,7 @@ export abstract class RTPage {
         this.fileStream = rtFile.fileStream;
         this.isFloat = rtFile.isFloat;
 
-        if (pageNo) {
+        if (pageNo !== undefined) {
             this.pageNo = pageNo;
             this.load();
         }
@@ -87,7 +87,7 @@ export class RTDataPage extends RTPage {
         this.writeRecordSetHeader();
     }
 
-    public set pageNo(pageNo: number) {
+    public setPageNo(pageNo: number) {
         this.header.pageId = pageNo;
         this.pageNo = pageNo;
         this.writePageHeader();
@@ -383,13 +383,12 @@ export class RTHeaderPage extends RTPage {
 
     public read() {
         this.fileStream!.seek(0);
-        this.header!.read(this.fileStream!);
+        this.header.read(this.fileStream!);
     }
 
     public write() {
-        const stream = this.fileStream!;
-        stream.seek(0);
-        this.header.write(stream);
+        this.fileStream!.seek(0);
+        this.header.write(this.writer!);
         this.isDirty = true;
         this.flush();
     }
