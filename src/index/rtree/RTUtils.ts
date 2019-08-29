@@ -26,10 +26,6 @@ export let RTConstants = Object.freeze({
 });
 
 export class RTUtils {
-    static notImplemented() {
-        throw new Error('not implemented.');
-    }
-
     static sizeOfGeom(geomType: RTGeomType, float: boolean) {
         if (geomType === RTGeomType.point) {
             return this.sizeOfPoint(float);
@@ -58,10 +54,6 @@ export class RTUtils {
         const unionRect = Envelope.union(rect1, rect2);
         return unionRect.area();
     }
-}
-
-export class NotImplementedError extends Error {
-
 }
 
 export class StreamUtils {
