@@ -1,9 +1,14 @@
+import assert from 'assert';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
 import { IEnvelope, Point } from "ginkgoch-geom";
 import { RTNode, RTLeaf, RTChild } from "./RTNode";
 import { RTLeafPage, RTChildPage } from "./RTPage";
 import { RTGeomType } from "./RTGeomType";
+import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangle, RTRectangleRecord } from "./RTRecord";
+import { RTUtils } from "./RTUtils";
+
+const FILE_NOT_OPENED = 'Index file not opened.';
 
 export class RTIndex {
     private _rtFile: RTFile;
@@ -12,6 +17,7 @@ export class RTIndex {
 
     flag: string;
     filePath: string;
+    opened = false;
 
     constructor(filePath: string = '', flag: string = 'rs') {
         this.flag = flag;
@@ -28,38 +34,22 @@ export class RTIndex {
     delete(rect: IEnvelope): void;
     delete(geom: Point | IEnvelope): void {
         if (geom instanceof Point) {
-            this._deletePoint(geom);
+            this._deletePoint(geom.x, geom.y);
         }
         else {
             this._deleteRect(geom);
         }
     }
 
-    private _deleteRect(rect: IEnvelope) {
-        throw new Error("Method not implemented.");
-    }
-
-    private _deletePoint(point: Point) {
-        throw new Error("Method not implemented.");
-    }
-
-    add(point: Point, id: string): void;
-    add(rect: IEnvelope, id: string): void;
-    add(geom: Point|IEnvelope, id: string): void {
+    push(point: Point, id: string): void;
+    push(rect: IEnvelope, id: string): void;
+    push(geom: Point | IEnvelope, id: string): void {
         if (geom instanceof Point) {
-            this._addPoint(geom, id);
+            this._insertPoint(geom.x, geom.y, id);
         }
         else {
-            this._addRect(geom, id);
+            this._insertRect(geom, id);
         }
-    }
-
-    private _addRect(geom: IEnvelope, id: string) {
-        throw new Error("Method not implemented.");
-    }
-
-    private _addPoint(geom: Point, id: string) {
-        throw new Error("Method not implemented.");
     }
 
     static recommendPageSize(recordCount: number) {
@@ -81,6 +71,10 @@ export class RTIndex {
         return this._rtFile.pageSize;
     }
 
+    set pageSize(pageSize: number) {
+        this._rtFile.pageSize = pageSize;
+    }
+
     get root(): RTNode | null {
         const dataPage = this._rtFile.rootNodePage;
         if (dataPage === null) {
@@ -98,21 +92,112 @@ export class RTIndex {
         return root;
     }
 
+    get count(): number {
+        assert(this.opened, FILE_NOT_OPENED);
+
+        return this.root!.allRecordCount;
+    }
+
     static create(filePath: string, geomType: RTGeomType, float: boolean = false, pageSize = 8 * 1024) {
-        if (geomType === RTGeomType.point) {
-            const index = new RTIndex();
-            index._createPointIndexFile(filePath, float, pageSize);
-        }
-        else {
-            
-        }
+        const index = new RTIndex();
+        index._createIndexFile(filePath, geomType, float, pageSize);
+        const idsFilePath = this._idsFilePath(filePath);
+        RTIds.createEmpty(idsFilePath);
+        index.close();
     }
 
-    private _createPointIndexFile(filePath: string, float: boolean, pageSize: number) {
-        throw new Error("Method not implemented.");
+    open() {
+        if (this.opened) {
+            return;
+        }
+
+        this._rtFile.open(this.filePath, this.flag);
+        this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
+        this._idsEngine.open();
+        this._hasIdx = true;
+        this.opened = true;
     }
 
-    static idsFilePath(idxFilePath: string) {
+    close() {
+        if (!this.opened) { 
+            return;
+        }
+
+        this.opened = false;
+        this._rtFile.close();
+        this._idsEngine.close();
+    }
+
+    idsIntersects(rect: IEnvelope) {
+        return this.idsInsides(rect);
+    }
+
+    idsInsides(rect: IEnvelope) {
+        assert(this.opened, FILE_NOT_OPENED);
+
+        const root = this.root!;
+        const idx = new Array<number>();
+        root.fillOverlaps(rect, idx);
+        idx.sort();
+        
+        const ids = new Array<string>();
+        idx.forEach(id => {
+            ids.push(this._idsEngine.id(id));
+        });
+
+        return ids;
+    }
+
+    private _createIndexFile(filePath: string, geomType: RTGeomType, float: boolean, pageSize: number) {
+        this.pageSize = pageSize;
+        this._rtFile.create(filePath, geomType, float);
+    }
+
+    private static _idsFilePath(idxFilePath: string) {
         return idxFilePath.replace(/\.idx$/i, '.ids');
+    }
+
+    private _insertPoint(x: number, y: number, id: string) {
+        const blockId = this._idsEngine.write(id);
+        const recordHeader = new RTRecordHeader();
+        recordHeader.keyLength = RTUtils.sizeOfPoint(this._rtFile.isFloat);
+        recordHeader.elementLength = 4;
+        recordHeader.childNodeId = 0;
+
+        const point = new RTPoint(x, y);
+        const pointRecord = new RTPointRecord(recordHeader, point, blockId);
+        const nodeList = new Array<RTNode>();
+        this.root!.insertRecord(pointRecord, nodeList);
+    }
+
+    private _deletePoint(x: number, y: number) {
+        const pointRecord = new RTPointRecord();
+        pointRecord.setPoint(new RTPoint(x, y));
+        this.root!.delete(pointRecord);
+    }
+
+    private _insertRect(rect: IEnvelope, id: string) {
+        const blockId = this._idsEngine.write(id);
+        const recordHeader = new RTRecordHeader();
+        recordHeader.keyLength = RTUtils.sizeOfRectangle(this._rtFile.isFloat);
+        recordHeader.elementLength = 4;
+        recordHeader.childNodeId = 0;
+
+        const rectangle = this._parseRect(rect);
+        const rectRecord = new RTRectangleRecord(recordHeader, rectangle, blockId);
+        const nodeList = new Array<RTNode>();
+        this.root!.insertRecord(rectRecord, nodeList);
+    }
+
+    private _deleteRect(rect: IEnvelope) {
+        const rectangle = this._parseRect(rect);
+        const rectRecord = new RTRectangleRecord();
+        rectRecord.rectangle = rectangle;
+        this.root!.delete(rectRecord);
+    }
+
+    private _parseRect(rect: IEnvelope) {
+        const rectangle = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
+        return rectangle;
     }
 }

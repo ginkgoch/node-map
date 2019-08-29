@@ -72,6 +72,10 @@ export class RTPointRecord extends RTRecord {
         return this._point;
     }
 
+    setPoint(point: RTPoint) {
+        this._point = point;
+    }
+
     read(reader: BufferReader, float: boolean) {
         this.header.read(reader);
         this._point.read(reader, float);

@@ -18,7 +18,7 @@ describe('Ids', () => {
 
     it('idx file path', () => {
         const idxFilePath = './test/file.idx';
-        const idsFilePath = RTIndex.idsFilePath(idxFilePath);
+        const idsFilePath = (<any>RTIndex)._idsFilePath(idxFilePath);
         expect(idsFilePath).toEqual('./test/file.ids');
     });
 });

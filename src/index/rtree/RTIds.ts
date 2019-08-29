@@ -68,6 +68,7 @@ export class RTIds {
         }
         if (this._fd !== undefined) {
             fs.closeSync(this._fd);
+            this._fd = undefined;
         }
     }
 
