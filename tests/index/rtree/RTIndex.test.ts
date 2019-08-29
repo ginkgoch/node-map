@@ -8,8 +8,18 @@ describe('RTIndex', () => {
 
     it('create', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-tmp.idx');
-        RTIndex.create(idxFilePath, RTGeomType.point);
 
-        expect(fs.existsSync(idxFilePath)).toBeTruthy();
+        try {
+            RTIndex.create(idxFilePath, RTGeomType.point);
+            expect(fs.existsSync(idxFilePath)).toBeTruthy();
+        }
+        finally {
+            ['.idx', '.ids'].forEach(ext => {
+                const filePath = idxFilePath.replace(/\.idx$/i, ext);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+            });
+        }
     });
 });

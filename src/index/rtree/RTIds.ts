@@ -103,7 +103,8 @@ export class RTIds {
     }
 
     static createEmpty(filePath: string) {
-        const stream = new FileStream(filePath, 'w');
+        const fd = fs.openSync(filePath, 'w+');
+        const stream = new FileStream(fd);
 
         try {
             const header = new RTIdsHeader();
@@ -112,6 +113,7 @@ export class RTIds {
         }
         finally {
             stream.close();
+            fs.closeSync(fd);
         }
     }
 }
