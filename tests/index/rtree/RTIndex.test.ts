@@ -47,8 +47,58 @@ describe('RTIndex', () => {
             expect(index.count).toBe(478);
         }
         finally {
-            // cleanIndexFiles(idxFilePath);
+            cleanIndexFiles(idxFilePath);
         }
+    });
+
+    it('create rect index - simple', () => {
+        const idxFilePath = path.join(idxFileFolder, 'index-create-rect-simple-tmp.idx');
+
+        try {
+            RTIndex.create(idxFilePath, RTGeomType.point, true);
+            const index = new RTIndex(idxFilePath, 'rs+');
+            index.open();
+
+            
+            index.push({ minx: -180, miny: -90, maxx: -160, maxy: -70 }, '1');
+            index.push({ minx: -180, miny: 70, maxx: -160, maxy: 90 }, '2');
+            index.push({ minx: 160, miny: 70, maxx: 180, maxy: 90 }, '3');
+            index.push({ minx: 160, miny: -90, maxx: 180, maxy: -70 }, '4');
+
+            index.close();
+            index.flag = 'rs';
+            index.open();
+            expect(index.count).toBe(4);
+        }
+        finally {
+            cleanIndexFiles(idxFilePath);
+        }
+
+    });
+
+    it('create point index - simple', () => {
+        const idxFilePath = path.join(idxFileFolder, 'index-create-point-simple-tmp.idx');
+
+        try {
+            RTIndex.create(idxFilePath, RTGeomType.point, true);
+            const index = new RTIndex(idxFilePath, 'rs+');
+            index.open();
+
+            
+            index.push(new Point(-180, -90), '1');
+            index.push(new Point(-180, 90), '2');
+            index.push(new Point(180, -90), '3');
+            index.push(new Point(180, 90), '4');
+
+            index.close();
+            index.flag = 'rs';
+            index.open();
+            expect(index.count).toBe(4);
+        }
+        finally {
+            cleanIndexFiles(idxFilePath);
+        }
+
     });
 });
 

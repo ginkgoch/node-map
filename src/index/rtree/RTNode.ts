@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { RTDataPage, RTLeafPage, RTChildPage } from "./RTPage";
 import { RTGeomType } from "./RTGeomType";
 import { RTConstants, RTUtils } from "./RTUtils";
@@ -122,10 +123,11 @@ export class RTNode {
         let count = 0;
         for (let i = 0; i < currentCount; i++) {
             const node = this.subNode(i);
+            
             if (node === null) {
                 continue;
             }
-
+            
             count += node.allRecordCount;
         }
 
@@ -500,16 +502,19 @@ export class RTNode {
         rootPage.level = l.level + 1;
 
         const root = new RTChild(rootPage);
-        const recordHeader = new RTRecordHeader();
+
+        let recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfGeom(geomType, rtFile.isFloat);
         recordHeader.elementLength = 0;
         recordHeader.childNodeId = l.dataPage.pageNo;
         const rt1 = l.dataPage.envelope;
         const rt2 = ll.dataPage.envelope;
-
         const entry1 = new RTEntryRecord(recordHeader, rt1);
+
+        recordHeader = _.clone(recordHeader);
         recordHeader.childNodeId = ll.dataPage.pageNo;
         const entry2 = new RTEntryRecord(recordHeader, rt2);
+
         root.dataPage.insertRecord(entry1);
         root.dataPage.insertRecord(entry2);
         root.dataPage.flush();
@@ -706,7 +711,6 @@ export class RTLeaf extends RTNode {
     }
 
     splitNode(record: RTRecord, nodeList: RTNode[]) {
-        nodeList.length = 0;
         const rtFile = this.dataPage.rtFile;
         const geomType = this.dataPage.geomType;
         const leafPageLeft = new RTLeafPage(rtFile, geomType);
