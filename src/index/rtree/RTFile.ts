@@ -19,7 +19,7 @@ export class RTFile {
     create(filePath: string, geomType: RTGeomType, float: boolean) {
         const fd = fs.openSync(filePath, 'w+');
         this.fileStream = new FileStream(fd);
-        this._initFileHeader(geomType, this.isFloat);
+        this._initFileHeader(geomType, float);
         this._writeFileHeader();
         this.opened = true;
 

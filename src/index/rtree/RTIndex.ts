@@ -121,7 +121,7 @@ export class RTIndex {
         return this.root!.allRecordCount;
     }
 
-    static create(filePath: string, geomType: RTGeomType, float: boolean = false, pageSize = 8 * 1024) {
+    static create(filePath: string, geomType: RTGeomType, float: boolean = true, pageSize = 8 * 1024) {
         const index = new RTIndex();
         index._createIndexFile(filePath, geomType, float, pageSize);
         const idsFilePath = this._idsFilePath(filePath);

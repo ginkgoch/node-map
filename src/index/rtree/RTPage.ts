@@ -375,11 +375,12 @@ export class RTChildPage extends RTLeafPage {
 
     maxRecordCount() {
         const entry = new RTEntryRecord();
-        const count = (this.pageSize - 
+        let count = (this.pageSize - 
             RTConstants.PAGE_HEADER_SIZE - 
             RTConstants.RECORDSET_HEADER_SIZE - 
             RTConstants.PAGE_SLOT_SIZE * 2) / (entry.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
 
+        count = Math.floor(count);
         return count;
     }
 

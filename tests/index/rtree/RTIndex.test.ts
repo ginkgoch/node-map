@@ -30,7 +30,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-point-tmp.idx');
         const shpFilePath = path.join(idxFileFolder, 'cities.shp');
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTGeomType.point, true);
             const index = new RTIndex(idxFilePath, 'rs+');
             index.open();
 
