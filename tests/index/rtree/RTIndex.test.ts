@@ -4,6 +4,7 @@ import { RTIndex } from "../../../src/index/rtree/RTIndex";
 import { RTGeomType } from '../../../src/index/rtree/RTGeomType';
 import { ShapefileFeatureSource } from "../../.";
 import { Point } from 'ginkgoch-geom';
+import _ from 'lodash';
 
 describe('RTIndex', () => {
     const idxFileFolder = './tests/data/index/';
@@ -29,6 +30,9 @@ describe('RTIndex', () => {
     it('create point index', async () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-point-tmp.idx');
         const shpFilePath = path.join(idxFileFolder, 'cities.shp');
+
+        cleanIndexFiles(idxFilePath);
+
         try {
             RTIndex.create(idxFilePath, RTGeomType.point, true);
             const index = new RTIndex(idxFilePath, 'rs+');
@@ -49,6 +53,19 @@ describe('RTIndex', () => {
         finally {
             cleanIndexFiles(idxFilePath);
         }
+    });
+
+    it('point index read', () => {
+        const idxFilePath = path.join(idxFileFolder, 'cities-index-demo.idx');
+        const index = new RTIndex(idxFilePath, 'rs');
+        index.open();
+        expect(index.count).toBe(478);
+        
+        const ids = index.idsIntersects({minx: -1e10, miny: -1e10, maxx: 1e10, maxy: 1e10}).map(i => parseInt(i));
+        expect(ids.length).toBe(478);
+        expect(_.max(ids)).toBe(478);
+        expect(_.min(ids)).toBe(1);
+        expect(_.uniq(ids).length).toBe(478);
     });
 
     it('create rect index - simple', () => {

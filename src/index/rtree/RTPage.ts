@@ -253,7 +253,12 @@ export class RTLeafPage extends RTDataPage {
     }
 
     public get nextRecord(): RTRecord | null {
-        return null;
+        let record: RTRecord | null = null;
+        if (!this.eof) {
+            record = this.record(this.cursor);
+            this.cursor++;
+        }
+        return record;
     }
 
     public insertRecord(record: RTRecord) { 

@@ -192,6 +192,7 @@ export class RTNode {
 
         if (this.isContained(rect)) {
             count = this.fillAll(ids);
+            return count;
         }
 
         const currentCount = this.recordCount;
