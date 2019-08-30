@@ -114,12 +114,12 @@ export class RTNode {
     }
 
     get allRecordCount(): number {
-        let count =  this.recordCount;
+        let currentCount =  this.recordCount;
         if (this.isLeaf) {
-            return count;
+            return currentCount;
         }
 
-        const currentCount = count;
+        let count = 0;
         for (let i = 0; i < currentCount; i++) {
             const node = this.subNode(i);
             if (node === null) {
