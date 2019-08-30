@@ -248,7 +248,7 @@ export class RTRectangle extends Envelope {
     }
 
     read(reader: BufferReader, float: boolean) {
-        const nextValue = float ? reader.nextFloat : reader.nextDouble;
+        const nextValue = float ? reader.nextFloat.bind(reader) : reader.nextDouble.bind(reader);
 
         this.minx = nextValue();
         this.miny = nextValue();
@@ -257,7 +257,7 @@ export class RTRectangle extends Envelope {
     }
 
     write(writer: BufferWriter, float: boolean) {
-        const writeValue = float ? writer.writeFloat : writer.writeDouble;
+        const writeValue = float ? writer.writeFloat.bind(writer) : writer.writeDouble.bind(writer);
         writeValue(this.minx);
         writeValue(this.miny);
         writeValue(this.maxx);

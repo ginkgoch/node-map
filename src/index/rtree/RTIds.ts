@@ -21,6 +21,8 @@ export class RTIdsHeader {
 
         buff = Buffer.alloc(HEADER_LENGTH - 4);
         stream.write(buff);
+
+        stream.invalidCache();
     }
 }
 
@@ -41,6 +43,8 @@ export class RTIdsRecord {
             buff = Buffer.alloc(RECORD_LENGTH - tmp);
             stream.write(buff);
         }
+
+        stream.invalidCache();
     }
 }
 

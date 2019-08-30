@@ -279,40 +279,40 @@ export class RTNode {
                 md2 = d2;
                 sel = id;
             }
+        }
 
-            const fillLeftRectList = () => {
-                leftRectList.push(sel);
-                RTUtils.remove(spRectList, sel);
-                mbr1.expand(rectArr[sel]);
-            };
+        const fillLeftRectList = () => {
+            leftRectList.push(sel);
+            RTUtils.remove(spRectList, sel);
+            mbr1.expand(rectArr[sel]);
+        };
 
-            const fillRightRectList = () => {
-                rightRectList.push(sel);
-                RTUtils.remove(spRectList, sel);
-                mbr2.expand(rectArr[sel]);
-            }
+        const fillRightRectList = () => {
+            rightRectList.push(sel);
+            RTUtils.remove(spRectList, sel);
+            mbr2.expand(rectArr[sel]);
+        }
 
-            if (md1 < md2) {
-                fillLeftRectList();
-            }
-            else if (md2 < md1) {
-                fillRightRectList();
-            }
-            else if (mbr1Area < mbr2Area) {
-                fillLeftRectList();
-            }
-            else if (mbr2Area < mbr1Area) {
-                fillRightRectList();                
-            }
-            else if (leftRectList.length < rightRectList.length) {
-                fillLeftRectList();
-            }
-            else if (rightRectList.length < leftRectList.length) {
-                fillRightRectList();
-            }
-            else {
-                fillLeftRectList();
-            }
+        if (md1 < md2) {
+            fillLeftRectList();
+        }
+        else if (md2 < md1) {
+            fillRightRectList();
+        }
+        else if (mbr1Area < mbr2Area) {
+            fillLeftRectList();
+        }
+        else if (mbr2Area < mbr1Area) {
+            fillRightRectList();                
+        }
+        else if (leftRectList.length < rightRectList.length) {
+            fillLeftRectList();
+        }
+        else if (rightRectList.length < leftRectList.length) {
+            fillRightRectList();
+        }
+        else {
+            fillLeftRectList();
         }
     }
 

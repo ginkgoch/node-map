@@ -44,7 +44,7 @@ describe('RTIndex', () => {
             index.close();
             index.flag = 'rs';
             index.open();
-            expect(index.count).toBe(0);
+            expect(index.count).toBe(478);
         }
         finally {
             // cleanIndexFiles(idxFilePath);

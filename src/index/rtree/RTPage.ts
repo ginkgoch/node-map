@@ -41,7 +41,7 @@ export abstract class RTPage {
         this.fileStream!.seek(this.pageNo * this.pageSize);
         
         const currentPageBuff  = this.fileStream!.read(this.pageSize);
-        currentPageBuff.copy(this.buff, 0, currentPageBuff.length);
+        currentPageBuff.copy(this.buff, 0, 0, currentPageBuff.length);
 
         this.reader = new BufferReader(this.buff);
         this.writer = new BufferWriter(this.buff);
@@ -54,6 +54,7 @@ export abstract class RTPage {
 
         this.fileStream.seek(this.pageNo * this.pageSize);
         this.fileStream.write(this.buff!)
+        this.fileStream.invalidCache();
     }
 
     public close() {
@@ -295,7 +296,6 @@ export class RTLeafPage extends RTDataPage {
         this.header.recordCount++;
         this.header.endDataOffset += recordSize;
         this.header.pageFreeSpace -= recordSize + RTConstants.PAGE_SLOT_SIZE;
-
         this.writer!.seek(0);
         this.header.write(this.writer!);
 
@@ -341,7 +341,8 @@ export class RTLeafPage extends RTDataPage {
 
     public maxRecordCount() {
         const record = this.createRecord();
-        const capacity = (this.pageSize - RTConstants.PAGE_HEADER_SIZE - RTConstants.RECORDSET_HEADER_SIZE - RTConstants.PAGE_SLOT_SIZE * 2) / (record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
+        let capacity = (this.pageSize - RTConstants.PAGE_HEADER_SIZE - RTConstants.RECORDSET_HEADER_SIZE - RTConstants.PAGE_SLOT_SIZE * 2) / (record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
+        capacity = Math.floor(capacity);
         return capacity;
     }
     
