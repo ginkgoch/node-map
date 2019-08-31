@@ -1,4 +1,4 @@
-import {RTIndex} from '../../../src/index/rtree/RTIndex';
+import { RTIndex } from '../../../src/indices';
 
 describe('Ids', () => {
     it('readInt', () => {

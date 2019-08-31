@@ -6,6 +6,7 @@ import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JSONKnownTypes } from '../shared';
 import { Projection, Srs } from "./Projection";
+import { RTIndex } from "../indices";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 
@@ -72,6 +73,17 @@ export class ShapefileFeatureSource extends FeatureSource {
         if (this.projection.from.projection === undefined && fs.existsSync(projFilePath)) {
             this.projection.from = new Srs(fs.readFileSync(projFilePath).toString('utf8'));
         }
+
+        if (this.indexEnabled) {
+            if (this.index === undefined && RTIndex.exists(this.filePath)) {
+                const idxFilePath = RTIndex.entry(this.filePath);
+                this.index = new RTIndex(idxFilePath, this.flag);
+            }
+
+            if (this.index !== undefined) {
+                this.index.open();
+            }
+        }
     }
 
     protected async _close() {
@@ -79,19 +91,38 @@ export class ShapefileFeatureSource extends FeatureSource {
             this._shapefile.close();
             this._shapefile = undefined;
         }
+
+        if (this.index) {
+            this.index.close();
+            this.index = undefined;
+        }
     }
 
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
-        const features = this.__shapefile.records({ envelope,  fields });
+        let features: Array<Feature>;
+        if (this.indexEnabled && this.index !== undefined) {
+            const ids = this.index.intersections(envelope);
+            features = new Array<Feature>();
+            for(let id of ids) {
+                const feature = this.__shapefile.get(parseInt(id));
+                if (feature !== null) {
+                    features.push(feature);
+                }
+            }
+        }
+        else {
+            features = this.__shapefile.records({ envelope, fields });
+        }
+
         return Promise.resolve(features);
     }
 
-    protected async _fields(): Promise<Field[]> { 
+    protected async _fields(): Promise<Field[]> {
         const fields = this.__shapefile.fields(true) as DbfField[];
         return fields.map(f => this._mapDbfFieldToField(f));
     }
 
-    protected async _envelope(): Promise<Envelope> { 
+    protected async _envelope(): Promise<Envelope> {
         return this.__shapefile.envelope();
     }
 
@@ -136,7 +167,7 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.__shapefile.removeField(fieldName);
     }
 
-    protected async _flushFields() { 
+    protected async _flushFields() {
         this.__shapefile.flushFields();
     }
 
@@ -163,8 +194,8 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     private _mapDbfFieldTypeToName(fieldType: DbfFieldType) {
         const enumType = DbfFieldType as any;
-        for(let key in enumType) {
-            if(enumType[key] === fieldType) {
+        for (let key in enumType) {
+            if (enumType[key] === fieldType) {
                 return key;
             }
         }

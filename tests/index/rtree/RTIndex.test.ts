@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 
-import { RTIndex } from "../../../src/index/rtree/RTIndex";
-import { RTRecordType } from '../../../src/index/rtree/RTRecordType';
+import { RTIndex, RTRecordType } from "../../../src/indices";
 import { ShapefileFeatureSource } from "../../.";
 import { Point } from 'ginkgoch-geom';
 
@@ -50,7 +49,7 @@ describe('RTIndex', () => {
             index.close();
             index.flag = 'rs';
             index.open();
-            expect(index.count).toBe(478);
+            expect(index.count()).toBe(478);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -69,7 +68,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'cities.idx');
         const index = new RTIndex(idxFilePath, 'rs');
         index.open();
-        expect(index.count).toBe(478);
+        expect(index.count()).toBe(478);
 
         checkIndexBasicQueryResult(index, 478);
     });
@@ -89,7 +88,7 @@ describe('RTIndex', () => {
 
             index.flag = 'rs';
             index.open();
-            expect(index.count).toBe(4);
+            expect(index.count()).toBe(4);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -114,7 +113,7 @@ describe('RTIndex', () => {
             index.close();
             index.open('rs');
             expect(index.flag).toEqual('rs');
-            expect(index.count).toBe(4);
+            expect(index.count()).toBe(4);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -137,7 +136,7 @@ describe('RTIndex', () => {
             idx.close();
 
             idx.open('rs');
-            const idxCount = idx.count;
+            const idxCount = idx.count();
             expect(idxCount).toBe(51);
         }
         finally {
@@ -187,6 +186,20 @@ describe('RTIndex', () => {
         expect(option.pageSize).toBe(4096);
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();
+    });
+
+    it('exists', () => {
+        let filePath = './tests/data/index/cities.shp';
+        let result = RTIndex.exists(filePath);
+        expect(result).toBeTruthy();
+
+        filePath = './tests/data/index/cities.dbf';
+        result = RTIndex.exists(filePath);
+        expect(result).toBeTruthy();
+
+        filePath = './tests/data/index/cities1.dbf';
+        result = RTIndex.exists(filePath);
+        expect(result).toBeFalsy();
     });
 });
 

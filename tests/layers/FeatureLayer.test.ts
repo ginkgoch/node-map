@@ -42,6 +42,20 @@ describe('FeatureLayer', () => {
         compareImage(render.image, 'layer-area.png');
     });
 
+    it('draw with index - shapefile', async () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        const layer = new FeatureLayer(source);
+        layer.styles.push(new FillStyle('#886600', 'red', 2));
+
+        await layer.open();
+        const envelope = await layer.envelope();
+        const render = Render.create(256, 256, envelope);
+        await layer.draw(render);
+        render.flush();
+
+        compareImage(render.image, 'layer-draw-index.png');
+    });
+
     it('json', () => {
         const layer = lineLayer();
         let json = layer.toJSON();
