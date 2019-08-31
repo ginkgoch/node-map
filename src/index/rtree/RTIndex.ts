@@ -26,11 +26,20 @@ export class RTIndex {
         this._idsEngine = new RTIds();
     }
 
-    open() {
+    open(flag?: string) {
+        if (flag !== undefined && this.flag !== flag) {
+            this.close();
+            this.flag = flag;
+        }
+
         if (this.opened) {
             return;
         }
 
+        this._open();
+    }
+
+    protected _open() {
         this._rtFile.open(this.filePath, this.flag);
         this._idsEngine.flag = this.flag;
         this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
@@ -45,6 +54,10 @@ export class RTIndex {
         }
 
         this.opened = false;
+        this._close();
+    }
+
+    protected _close() {
         this._rtFile.close();
         this._idsEngine.close();
     }
