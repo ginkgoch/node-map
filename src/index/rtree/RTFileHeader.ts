@@ -10,17 +10,7 @@ export class RTFileHeader {
     pageSize: number = 0;
     isFloat: boolean = false;
 
-    public init() {
-        this.description = '';
-        this.extId = 0;
-        this.freePageId = 0;
-        this.extName = '';
-        this.pageSize = 0;
-    }
-
     public read(stream: FileStream) {
-        this.init();
-
         const descBuff = stream.read(RTConstants.MAGIC_CHAR_LENGTH);
         this.description = descBuff.toString(RTConstants.DEFAULT_ENCODING);
         this.extId = StreamUtils.readUInt32(stream);
@@ -35,17 +25,6 @@ export class RTFileHeader {
         this.pageSize = StreamUtils.readUInt32(stream);
         this.isFloat = StreamUtils.readByte(stream) !== 0;
     }
-
-    // public write(stream: FileStream) {
-    //     const descBuff = Buffer.alloc(RTConstants.MAGIC_CHAR_LENGTH);
-    //     descBuff.write(this.description, RTConstants.DEFAULT_ENCODING);
-    //     stream.write(descBuff);
-    //     StreamUtils.writeUInt32(stream, this.extId);
-    //     StreamUtils.writeUInt32(stream, this.freePageId);
-    //     StreamUtils.writeString(stream, this.extName);
-    //     StreamUtils.writeUInt32(stream, this.pageSize);
-    //     StreamUtils.writeByte(stream, this.isFloat ? 1 : 0);
-    // }
 
     public write(writer: BufferWriter) {
         const descBuff = Buffer.alloc(RTConstants.MAGIC_CHAR_LENGTH);

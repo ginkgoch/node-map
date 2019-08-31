@@ -135,8 +135,8 @@ export class RTNode {
         return count;
     }
 
-    get envelope(): RTRectangle {
-        return this.dataPage.envelope;
+    envelope(): RTRectangle {
+        return this.dataPage.envelope();
     }
 
     record(id: number): RTRecord | null {
@@ -144,17 +144,17 @@ export class RTNode {
     }
 
     contains(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.contains(currentRect, rect);
     }
 
     isContained(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.contains(rect, currentRect);
     }
 
     overlaps(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.overlaps(currentRect, rect);
     }
 
@@ -357,12 +357,12 @@ export class RTNode {
         }
 
         if (splitted) {
-            entry.rectangle = childNode.envelope;
+            entry.rectangle = childNode.envelope();
             this.updateEntry(node, entry, id);
         }
         else {
             const entryRect = entry.envelope();
-            const childRect = childNode.envelope;
+            const childRect = childNode.envelope();
             if (!Envelope.contains(entryRect, childRect)) {
                 entry.rectangle = childRect;
                 this.updateEntry(node, entry, id);
@@ -417,7 +417,7 @@ export class RTNode {
             const entry = <RTEntryRecord>this.firstRecord;
             const entryHeader = entry.header;
             entryHeader.childNodeId = subNodeList[1].pageNo;
-            entry.rectangle = subNodeList[1].envelope;
+            entry.rectangle = subNodeList[1].envelope();
             this._insertRecord(entry, nodeList);
         }
     }
@@ -502,7 +502,7 @@ export class RTNode {
         recordHeader.keyLength = RTUtils.sizeOfGeom(geomType, float);
         recordHeader.elementLength = 0;
         recordHeader.childNodeId = node.dataPage.pageNo;
-        const rect = node.dataPage.envelope;
+        const rect = node.dataPage.envelope();
         const entry = new RTEntryRecord(recordHeader, rect);
         return entry;
     }
@@ -574,7 +574,7 @@ export class RTNode {
     findLeafPointRecord(record: RTRecord, leafInfo: RTLeafInfo, subNode: RTNode): boolean {
         let success = false;
         leafInfo.leaf = null;
-        const nodeRect = subNode.envelope;
+        const nodeRect = subNode.envelope();
         const point = record.point();
         if (nodeRect.contains(point)) {
             success = subNode.findLeaf(record, leafInfo);
@@ -614,7 +614,7 @@ export class RTNode {
     }
 
     findLeafPointRecords(record: RTRecord, subNode: RTNode, leaves: RTLeafRecordInfo[], idsEngine: RTIds) {
-        const nodeRect = subNode.envelope;
+        const nodeRect = subNode.envelope();
         const point = record.point();
         if (nodeRect.contains(point)) {
             const leafInfo = new RTLeafInfo(-1, null);

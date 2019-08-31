@@ -2,11 +2,9 @@ import { FileStream } from "ginkgoch-filestream";
 import { RTFile } from "./RTFile";
 import { RTGeomType } from "./RTGeomType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
-import { RTRecordSetHeader } from "./RTRecordSetHeader";
 import { Envelope } from "ginkgoch-geom";
 import { RTRecord, RTEntryRecord, RTRectangle } from "./RTRecord";
 import { RTConstants } from "./RTUtils";
-import { RTSlot } from "./RTSlot";
 import { RTFileHeader } from "./RTFileHeader";
 
 export abstract class RTPage {
@@ -126,7 +124,7 @@ export class RTDataPage extends RTPage {
         }
     }
 
-    public get envelope(): RTRectangle {
+    public envelope(): RTRectangle {
         return new RTRectangle(0, 0, 0, 0);
     }
 
@@ -351,7 +349,7 @@ export class RTLeafPage extends RTDataPage {
         return capacity;
     }
     
-    public get envelope(): RTRectangle {
+    public envelope(): RTRectangle {
         let rect = new Envelope(0, 0, 0, 0);
         const recordCount = this.recordCount;
         if (recordCount > 0) {
@@ -437,18 +435,7 @@ export class RTPageHeader {
     vacantRecordCount = 0;
     placeholder = 0x0F0F0F0F;
 
-    public init() {
-        this.pageId = 0;
-        this.pageFreeSpace = 0;
-        this.endDataOffset = 0;
-        this.recordCount = 0;
-        this.vacantRecordCount = 0;
-        this.placeholder = 0x0F0F0F0F;
-    }
-
     public read(reader: BufferReader) {
-        this.init();
-
         this.pageId = reader.nextUInt32();
         this.pageFreeSpace = reader.nextUInt16();
         this.endDataOffset = reader.nextUInt16();
@@ -464,5 +451,38 @@ export class RTPageHeader {
         stream.writeUInt16(this.recordCount);
         stream.writeUInt16(this.vacantRecordCount);
         stream.writeUInt32(this.placeholder);
+    }
+}
+
+export class RTSlot {
+    offset: number = 0;
+    length: number = 0;
+
+    read(reader: BufferReader) {
+        this.offset = reader.nextUInt16();
+        this.length = reader.nextUInt16();
+    }
+
+    write(writer: BufferWriter) {
+        writer.writeUInt16(this.offset);
+        writer.writeUInt16(this.length);
+    }
+}
+
+export class RTRecordSetHeader {
+    root = 0;
+    level = 0;
+    placeholder = 0;
+
+    read(reader: BufferReader) {
+        this.root = reader.nextUInt32();
+        this.level = reader.nextUInt16();
+        this.placeholder = reader.nextUInt16();
+    }
+
+    write(writer: BufferWriter) {
+        writer.writeUInt32(this.root);
+        writer.writeUInt16(this.level);
+        writer.writeUInt16(this.placeholder);
     }
 }
