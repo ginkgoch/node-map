@@ -58,7 +58,7 @@ describe('RTIndex', () => {
     });
 
     function checkIndexBasicQueryResult(index: RTIndex, expectedCount: number) {
-        const ids = index.idsIntersects({ minx: -1e10, miny: -1e10, maxx: 1e10, maxy: 1e10 }).map(i => parseInt(i));
+        const ids = index.intersections({ minx: -1e10, miny: -1e10, maxx: 1e10, maxy: 1e10 }).map(i => parseInt(i));
         expect(ids.length).toBe(expectedCount);
         expect(_.max(ids)).toBe(expectedCount);
         expect(_.min(ids)).toBe(1);

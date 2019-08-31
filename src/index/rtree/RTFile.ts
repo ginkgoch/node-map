@@ -16,7 +16,9 @@ export class RTFile {
     fileStream?: FileStream;
     headerPage?: RTHeaderPage;
 
-    create(filePath: string, geomType: RTGeomType, float: boolean) {
+    create(filePath: string, geomType: RTGeomType, float: boolean, pageSize: number) {
+        this.pageSize = pageSize;
+
         const fd = fs.openSync(filePath, 'w+');
         this.fileStream = new FileStream(fd);
         this._initFileHeader(geomType, float);

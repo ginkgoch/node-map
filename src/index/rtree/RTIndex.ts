@@ -139,45 +139,11 @@ export class RTIndex {
         this._create(filePath, geomType, options);
     }
 
-    private static _create(filePath: string, geomType: RTGeomType, options: RTIndexCreateOption) {
-        const index = new RTIndex();
-        index._createIndexFile(filePath, geomType, options.float!, options.pageSize!);
-        const idsFilePath = this._idsFilePath(filePath);
-        RTIds.createEmpty(idsFilePath);
-        index.close();
+    intersections(rect: IEnvelope) {
+        return this.insiders(rect);
     }
 
-    private static _defaultCreateOptions(options?: RTIndexCreateOption): RTIndexCreateOption {
-        options = options || {};
-        options = _.defaults(options, { pageSize: RTUtils.kilobytes(8), overwrite: false, float: true });
-        return options;
-    }
-
-    private static _cleanForOverwrite(filePath: string, options: RTIndexCreateOption) {
-        if (options.overwrite! === false) return;
-
-        FILE_EXTENSIONS.forEach(ext => {
-            const tmpPath = filePath.replace(/\.idx$/i, ext);
-            if (fs.existsSync(tmpPath)) {
-                fs.unlinkSync(tmpPath);
-            }
-        });
-    }
-
-    private static _skipCreate(filePath: string, options: RTIndexCreateOption): boolean {
-        const count = FILE_EXTENSIONS.filter(ext => {
-            const tmpPath = filePath.replace(/\.idx$/i, ext);
-            return fs.existsSync(tmpPath);
-        }).length;
-
-        return count === FILE_EXTENSIONS.length && !(options.overwrite!);
-    }
-
-    idsIntersects(rect: IEnvelope) {
-        return this.idsInsides(rect);
-    }
-
-    idsInsides(rect: IEnvelope) {
+    insiders(rect: IEnvelope) {
         assert(this.opened, FILE_NOT_OPENED);
 
         const root = this.root!;
@@ -185,21 +151,8 @@ export class RTIndex {
         root.fillOverlaps(rect, idx);
         idx.sort();
         
-        const ids = new Array<string>();
-        idx.forEach(id => {
-            ids.push(this._idsEngine.id(id));
-        });
-
+        const ids = idx.map(id => this._idsEngine.id(id)).sort();
         return ids;
-    }
-
-    private _createIndexFile(filePath: string, geomType: RTGeomType, float: boolean, pageSize: number) {
-        this.pageSize = pageSize;
-        this._rtFile.create(filePath, geomType, float);
-    }
-
-    private static _idsFilePath(idxFilePath: string) {
-        return idxFilePath.replace(/\.idx$/i, '.ids');
     }
 
     private _insertPoint(x: number, y: number, id: string) {
@@ -245,6 +198,48 @@ export class RTIndex {
         const rectangle = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
         return rectangle;
     }
+
+    //#region create private methods
+    private static _create(filePath: string, geomType: RTGeomType, options: RTIndexCreateOption) {
+        const index = new RTIndex();
+        index._rtFile.create(filePath, geomType, options.float!, options.pageSize!);
+
+        const idsFilePath = this._idsFilePath(filePath);
+        RTIds.createEmpty(idsFilePath);
+        index.close();
+    }
+
+    private static _defaultCreateOptions(options?: RTIndexCreateOption): RTIndexCreateOption {
+        options = options || {};
+        options = _.defaults(options, { pageSize: RTUtils.kilobytes(8), overwrite: false, float: true });
+        return options;
+    }
+
+    private static _cleanForOverwrite(filePath: string, options: RTIndexCreateOption) {
+        if (options.overwrite! === false) return;
+
+        FILE_EXTENSIONS.forEach(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            if (fs.existsSync(tmpPath)) {
+                fs.unlinkSync(tmpPath);
+            }
+        });
+    }
+
+    private static _skipCreate(filePath: string, options: RTIndexCreateOption): boolean {
+        const count = FILE_EXTENSIONS.filter(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            return fs.existsSync(tmpPath);
+        }).length;
+
+        return count === FILE_EXTENSIONS.length && !(options.overwrite!);
+    }
+
+    private static _idsFilePath(idxFilePath: string) {
+        return idxFilePath.replace(/\.idx$/i, '.ids');
+    }
+    //#endregion
+
 }
 
 export interface RTIndexCreateOption {
