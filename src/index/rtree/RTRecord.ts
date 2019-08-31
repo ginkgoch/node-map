@@ -124,12 +124,14 @@ export class RTRectangleRecord extends RTRecord {
     header = new RTRecordHeader();
     rect = new RTRectangle(0, 0, 0, 0);
 
-    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle, id?: number) {
+    constructor(recordHeader?: RTRecordHeader, rect?: IEnvelope, id?: number) {
         super();
 
-        this.header = recordHeader || this.header;
-        this.rect = rect || this.rect;
         this.data = id || 0;
+        this.header = recordHeader || this.header;
+        if (rect !== undefined) {
+            this.rect = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
+        }
     }
 
     envelope(): RTRectangle {
@@ -188,9 +190,8 @@ export class RTRectangleRecord extends RTRecord {
 }
 
 export class RTEntryRecord extends RTRectangleRecord {
-    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle) {
+    constructor(recordHeader?: RTRecordHeader, rect?: IEnvelope) {
         recordHeader = recordHeader || new RTRecordHeader();
-        rect = rect || new RTRectangle(0, 0, 0, 0);
         super(recordHeader, rect, 0);
     }
 

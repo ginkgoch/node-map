@@ -181,22 +181,14 @@ export class RTIndex {
         recordHeader.elementLength = 4;
         recordHeader.childNodeId = 0;
 
-        const rectangle = this._parseRect(rect);
-        const rectRecord = new RTRectangleRecord(recordHeader, rectangle, blockId);
+        const rectRecord = new RTRectangleRecord(recordHeader, rect, blockId);
         const nodeList = new Array<RTNode>();
         this.root!.insertRecord(rectRecord, nodeList);
     }
 
     private _deleteRect(rect: IEnvelope) {
-        const rectangle = this._parseRect(rect);
-        const rectRecord = new RTRectangleRecord();
-        rectRecord.rectangle = rectangle;
+        const rectRecord = new RTRectangleRecord(undefined, rect, undefined);
         this.root!.delete(rectRecord);
-    }
-
-    private _parseRect(rect: IEnvelope) {
-        const rectangle = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
-        return rectangle;
     }
 
     //#region create private methods
