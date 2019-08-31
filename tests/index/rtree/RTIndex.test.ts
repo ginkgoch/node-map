@@ -187,6 +187,20 @@ describe('RTIndex', () => {
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();
     });
+
+    it('exists', () => {
+        let filePath = './tests/data/index/cities.shp';
+        let result = RTIndex.exists(filePath);
+        expect(result).toBeTruthy();
+
+        filePath = './tests/data/index/cities.dbf';
+        result = RTIndex.exists(filePath);
+        expect(result).toBeTruthy();
+
+        filePath = './tests/data/index/cities1.dbf';
+        result = RTIndex.exists(filePath);
+        expect(result).toBeFalsy();
+    });
 });
 
 function cleanIndexFiles(basePath: string) {

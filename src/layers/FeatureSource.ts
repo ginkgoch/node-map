@@ -2,7 +2,7 @@ import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Opener, Validator, JSONKnownTypes } from "../shared";
 import { Field, PropertyAggregator, Projection } from ".";
-import { BaseIndex } from "../indices/index";
+import { BaseIndex } from "../indices";
 
 export type FieldFilters = 'all' | 'none' | string[];
 

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from "path";
 import _ from 'lodash';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
@@ -99,6 +100,22 @@ export class RTIndex extends BaseIndex {
         }
     }
 
+    static exists(filePath: string) {
+        const ext = path.extname(filePath);
+        const regex = new RegExp(ext + '$', 'i');
+        const count = FILE_EXTENSIONS.filter(ex => {
+            const indexFilePath = filePath.replace(regex, ex);
+            return fs.existsSync(indexFilePath);
+        }).length;
+
+        return count === FILE_EXTENSIONS.length;
+    }
+
+    static entry(filePath: string) {
+        const ext = path.extname(filePath);
+        return filePath.replace(ext, '.idx');
+    }
+
     get pageSize() {
         return this._rtFile.pageSize;
     }
@@ -144,7 +161,10 @@ export class RTIndex extends BaseIndex {
         root.fillOverlaps(rect, idx);
         idx.sort();
         
-        const ids = idx.map(id => this._idsEngine.id(id)).sort();
+        const ids = idx.map(id => this._idsEngine.id(id)).sort((a, b) => {
+            const [ai, bi] = [parseInt(a), parseInt(b)];
+            return ai - bi;
+        });
         return ids;
     }
 
