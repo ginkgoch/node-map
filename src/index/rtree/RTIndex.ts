@@ -129,14 +129,14 @@ export class RTIndex {
         return this.root!.allRecordCount;
     }
 
-    static create(filePath: string, geomType: RTRecordType, options?: RTIndexCreateOption) {
+    static create(filePath: string, recordType: RTRecordType, options?: RTIndexCreateOption) {
         options = this._defaultCreateOptions(options);
         this._cleanForOverwrite(filePath, options);
         if (this._skipCreate(filePath, options)) {
             return;
         }
 
-        this._create(filePath, geomType, options);
+        this._create(filePath, recordType, options);
     }
 
     intersections(rect: IEnvelope) {
@@ -191,9 +191,9 @@ export class RTIndex {
     }
 
     //#region create private methods
-    private static _create(filePath: string, geomType: RTRecordType, options: RTIndexCreateOption) {
+    private static _create(filePath: string, recordType: RTRecordType, options: RTIndexCreateOption) {
         const index = new RTIndex();
-        index._rtFile.create(filePath, geomType, options.float!, options.pageSize!);
+        index._rtFile.create(filePath, recordType, options.float!, options.pageSize!);
 
         const idsFilePath = this._idsFilePath(filePath);
         RTIds.createEmpty(idsFilePath);

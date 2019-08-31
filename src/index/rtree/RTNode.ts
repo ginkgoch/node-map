@@ -19,18 +19,18 @@ export class RTNode {
         const level = dataPage.level;
         let node: RTNode;
         if (level === 1) {
-            const leafPage = new RTLeafPage(dataPage.rtFile, dataPage.geomType, dataPage.pageNo);
+            const leafPage = new RTLeafPage(dataPage.rtFile, dataPage.recordType, dataPage.pageNo);
             node = new RTLeaf(leafPage);
         }
         else {
-            const childPage = new RTChildPage(dataPage.rtFile, dataPage.geomType, dataPage.pageNo);
+            const childPage = new RTChildPage(dataPage.rtFile, dataPage.recordType, dataPage.pageNo);
             node = new RTChild(childPage);
         }
         return node;
     }
 
-    get geomType(): RTRecordType {
-        return this.dataPage.geomType;
+    get recordType(): RTRecordType {
+        return this.dataPage.recordType;
     }
 
     get recordCount(): number {
@@ -77,8 +77,8 @@ export class RTNode {
         }
 
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const dataPage = new RTDataPage(rtFile, geomType, child);
+        const recordType = this.dataPage.recordType;
+        const dataPage = new RTDataPage(rtFile, recordType, child);
         const childNode = RTNode.create(dataPage);
         return childNode;
     }
@@ -483,13 +483,13 @@ export class RTNode {
         this._moveNodeToEnd(l);
 
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const rootPage = new RTChildPage(rtFile, geomType);
+        const recordType = this.dataPage.recordType;
+        const rootPage = new RTChildPage(rtFile, recordType);
         rootPage.setPageNo(1);
         rootPage.level = l.level + 1;
         
-        const entry1 = this._createEntry(geomType, rtFile.isFloat, l);
-        const entry2 = this._createEntry(geomType, rtFile.isFloat, ll);
+        const entry1 = this._createEntry(recordType, rtFile.isFloat, l);
+        const entry2 = this._createEntry(recordType, rtFile.isFloat, ll);
 
         const root = new RTChild(rootPage);
         root.dataPage.insertRecord(entry1);
@@ -497,9 +497,9 @@ export class RTNode {
         root.dataPage.flush();
     }
 
-    private _createEntry(geomType: RTRecordType, float: boolean, node: RTNode) {
+    private _createEntry(recordType: RTRecordType, float: boolean, node: RTNode) {
         let recordHeader = new RTRecordHeader();
-        recordHeader.keyLength = RTUtils.sizeOfGeom(geomType, float);
+        recordHeader.keyLength = RTUtils.sizeOfRecordType(recordType, float);
         recordHeader.elementLength = 0;
         recordHeader.childNodeId = node.dataPage.pageNo;
         const rect = node.dataPage.envelope();
@@ -528,14 +528,14 @@ export class RTNode {
     private _findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
         let result = false;
         const count = this.recordCount;
-        const geomType = this.geomType;
+        const recordType = this.recordType;
         for (let i = 0; i < count; i++) {
             const subNode = this.subNode(i);
             if (subNode === null) {
                 continue;
             }
 
-            if (geomType === RTRecordType.point) {
+            if (recordType === RTRecordType.point) {
                 result = this._findLeafPointRecord(record, leafInfo, subNode);
             }
             else {
@@ -581,16 +581,16 @@ export class RTChild extends RTNode {
 
     protected splitNode(record: RTRecord, nodeList: RTNode[]) {
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
+        const recordType = this.dataPage.recordType;
 
-        const childLeft = this._createChildNode(rtFile, geomType);
-        const childRight = this._createChildNode(rtFile, geomType);
+        const childLeft = this._createChildNode(rtFile, recordType);
+        const childRight = this._createChildNode(rtFile, recordType);
         const childList = [childLeft, childRight];
         this._splitNode(record, childList, nodeList);
     }
 
-    private _createChildNode(rtFile: RTFile, geomType: RTRecordType) {
-        const childPage = new RTChildPage(rtFile, geomType);
+    private _createChildNode(rtFile: RTFile, recordType: RTRecordType) {
+        const childPage = new RTChildPage(rtFile, recordType);
         const childNode = new RTChild(childPage);
         return childNode;
     }
@@ -649,16 +649,15 @@ export class RTLeaf extends RTNode {
 
     protected splitNode(record: RTRecord, nodeList: RTNode[]) {
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-
-        const leafLeft = this._createLeafNode(rtFile, geomType);
-        const leafRight = this._createLeafNode(rtFile, geomType);
+        const recordType = this.dataPage.recordType;
+        const leafLeft = this._createLeafNode(rtFile, recordType);
+        const leafRight = this._createLeafNode(rtFile, recordType);
         const leafList = [leafLeft, leafRight];
         this._splitNode(record, leafList, nodeList);
     }
 
-    private _createLeafNode(rtFile: RTFile, geomType: RTRecordType) {
-        const leafPage = new RTLeafPage(rtFile, geomType);
+    private _createLeafNode(rtFile: RTFile, recordType: RTRecordType) {
+        const leafPage = new RTLeafPage(rtFile, recordType);
         const leafNode = new RTLeaf(leafPage);
         return leafNode;
     }

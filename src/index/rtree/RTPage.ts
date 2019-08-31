@@ -10,7 +10,7 @@ export abstract class RTPage {
     public fileStream?: FileStream;
     public rtFile: RTFile;
     public pageNo: number = 0;
-    public geomType: RTRecordType;
+    public recordType: RTRecordType;
     public pageSize: number = 0;
     public isFloat: boolean;
 
@@ -19,9 +19,9 @@ export abstract class RTPage {
     protected reader?: BufferReader;
     protected writer?: BufferWriter;
 
-    constructor(rtFile: RTFile, geomType: RTRecordType = RTRecordType.point, pageNo?: number) {
+    constructor(rtFile: RTFile, recordType: RTRecordType = RTRecordType.point, pageNo?: number) {
         this.rtFile = rtFile;
-        this.geomType = geomType;
+        this.recordType = recordType;
         this.fileStream = rtFile.fileStream;
         this.isFloat = rtFile.isFloat;
 
@@ -70,8 +70,8 @@ export class RTDataPage extends RTPage {
     recordSetHeader = new RTRecordSetHeader();
     cursor = 1;
 
-    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
 
         if (pageNo === undefined) {
             this.initEmptyPage();
@@ -210,12 +210,12 @@ export class RTDataPage extends RTPage {
 }
 
 export class RTLeafPage extends RTDataPage {
-    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     public createRecord(): RTRecord {
-        const record = RTRecord.create(this.geomType);
+        const record = RTRecord.create(this.recordType);
         return record;
     }
 
@@ -366,8 +366,8 @@ export class RTLeafPage extends RTDataPage {
 }
 
 export class RTChildPage extends RTLeafPage {
-    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     createRecord(): RTRecord {
@@ -409,8 +409,8 @@ export class RTChildPage extends RTLeafPage {
 export class RTHeaderPage extends RTPage {
     public header: RTFileHeader = new RTFileHeader();
 
-    constructor(rtFile: RTFile, geomType: RTRecordType = RTRecordType.point, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType = RTRecordType.point, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     public read() {
@@ -488,7 +488,7 @@ export class RTRecordSetHeader {
 
 export class RTFileHeader {
     description: string = '';
-    extId: number = 0;
+    recordType: number = 0;
     freePageId: number = 0;
     extName: string = '';
     pageSize: number = 0;
@@ -497,9 +497,9 @@ export class RTFileHeader {
     public read(stream: FileStream) {
         const descBuff = stream.read(RTConstants.MAGIC_CHAR_LENGTH);
         this.description = descBuff.toString(RTConstants.DEFAULT_ENCODING);
-        this.extId = StreamUtils.readUInt32(stream);
+        this.recordType = StreamUtils.readUInt32(stream);
         this.freePageId = StreamUtils.readUInt32(stream);
-        if (this.extId === 0) {
+        if (this.recordType === 0) {
             this.extName = stream.read(RTConstants.POINT_EXT_LENGTH).toString(RTConstants.DEFAULT_ENCODING);
         }
         else {
@@ -514,7 +514,7 @@ export class RTFileHeader {
         const descBuff = Buffer.alloc(RTConstants.MAGIC_CHAR_LENGTH);
         descBuff.write(this.description, RTConstants.DEFAULT_ENCODING);
         writer.writeBuffer(descBuff);
-        writer.writeUInt32(this.extId);
+        writer.writeUInt32(this.recordType);
         writer.writeUInt32(this.freePageId);
         writer.writeString(this.extName);
         writer.writeUInt32(this.pageSize);

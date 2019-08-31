@@ -27,8 +27,8 @@ export let RTConstants = Object.freeze({
 });
 
 export class RTUtils {
-    static sizeOfGeom(geomType: RTRecordType, float: boolean) {
-        if (geomType === RTRecordType.point) {
+    static sizeOfRecordType(recordType: RTRecordType, float: boolean) {
+        if (recordType === RTRecordType.point) {
             return this.sizeOfPoint(float);
         }
         else {

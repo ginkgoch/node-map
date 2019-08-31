@@ -43,8 +43,8 @@ export abstract class RTRecord {
     abstract size(float: boolean): number;
     abstract area(): number;
 
-    static create(geomType: RTRecordType): RTRecord {
-        switch (geomType) {
+    static create(recordType: RTRecordType): RTRecord {
+        switch (recordType) {
             case RTRecordType.point:
                 return new RTPointRecord();
             case RTRecordType.rectangle:
