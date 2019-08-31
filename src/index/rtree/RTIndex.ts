@@ -156,12 +156,12 @@ export class RTIndex {
     }
 
     private _insertPoint(x: number, y: number, id: string) {
-        const blockId = this._idsEngine.write(id);
         const recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfPoint(this._rtFile.isFloat);
         recordHeader.elementLength = 4;
         recordHeader.childNodeId = 0;
-
+        
+        const blockId = this._idsEngine.write(id);
         const point = new RTPoint(x, y);
         const pointRecord = new RTPointRecord(recordHeader, point, blockId);
         const nodeList = new Array<RTNode>();
@@ -169,8 +169,7 @@ export class RTIndex {
     }
 
     private _deletePoint(x: number, y: number) {
-        const pointRecord = new RTPointRecord();
-        pointRecord.setPoint(new RTPoint(x, y));
+        const pointRecord = new RTPointRecord(undefined, new RTPoint(x, y), undefined);
         this.root!.delete(pointRecord);
     }
 
