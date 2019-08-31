@@ -2,8 +2,7 @@ import assert from 'assert';
 import fs from 'fs';
 import { FileStream } from "ginkgoch-filestream";
 import { RTGeomType } from "./RTGeomType";
-import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
-import { RTFileHeader } from './RTFileHeader';
+import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage, RTFileHeader } from "./RTPage";
 import { RTConstants, RTUtils } from './RTUtils';
 
 const DESCRIPTION = 'Gist data file ';

@@ -7,7 +7,7 @@ import { IEnvelope, Point } from "ginkgoch-geom";
 import { RTNode, RTLeaf, RTChild } from "./RTNode";
 import { RTLeafPage, RTChildPage } from "./RTPage";
 import { RTGeomType } from "./RTGeomType";
-import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangle, RTRectangleRecord } from "./RTRecord";
+import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangleRecord } from "./RTRecord";
 import { RTUtils } from "./RTUtils";
 
 const FILE_NOT_OPENED = 'Index file not opened.';
