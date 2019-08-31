@@ -1,10 +1,11 @@
 import _ from "lodash";
 import { RTDataPage, RTLeafPage, RTChildPage } from "./RTPage";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { RTConstants, RTUtils } from "./RTUtils";
 import { RTRecord, RTRectangle, RTEntryRecord, RTRecordHeader } from "./RTRecord";
 import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { RTIds } from "./RTIds";
+import { RTFile } from "./RTFile";
 
 export class RTNode {
     dataPage: RTDataPage;
@@ -18,18 +19,18 @@ export class RTNode {
         const level = dataPage.level;
         let node: RTNode;
         if (level === 1) {
-            const leafPage = new RTLeafPage(dataPage.rtFile, dataPage.geomType, dataPage.pageNo);
+            const leafPage = new RTLeafPage(dataPage.rtFile, dataPage.recordType, dataPage.pageNo);
             node = new RTLeaf(leafPage);
         }
         else {
-            const childPage = new RTChildPage(dataPage.rtFile, dataPage.geomType, dataPage.pageNo);
+            const childPage = new RTChildPage(dataPage.rtFile, dataPage.recordType, dataPage.pageNo);
             node = new RTChild(childPage);
         }
         return node;
     }
 
-    get geomType(): RTGeomType {
-        return this.dataPage.geomType;
+    get recordType(): RTRecordType {
+        return this.dataPage.recordType;
     }
 
     get recordCount(): number {
@@ -76,8 +77,8 @@ export class RTNode {
         }
 
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const dataPage = new RTDataPage(rtFile, geomType, child);
+        const recordType = this.dataPage.recordType;
+        const dataPage = new RTDataPage(rtFile, recordType, child);
         const childNode = RTNode.create(dataPage);
         return childNode;
     }
@@ -134,8 +135,8 @@ export class RTNode {
         return count;
     }
 
-    get envelope(): RTRectangle {
-        return this.dataPage.envelope;
+    envelope(): RTRectangle {
+        return this.dataPage.envelope();
     }
 
     record(id: number): RTRecord | null {
@@ -143,17 +144,17 @@ export class RTNode {
     }
 
     contains(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.contains(currentRect, rect);
     }
 
     isContained(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.contains(rect, currentRect);
     }
 
     overlaps(rect: IEnvelope) {
-        const currentRect = this.envelope;
+        const currentRect = this.envelope();
         return Envelope.overlaps(currentRect, rect);
     }
 
@@ -209,26 +210,24 @@ export class RTNode {
     }
 
     get isRoot(): boolean {
-        const pageNo = this.pageNo;
-        return pageNo === 1;
+        return this.pageNo === 1;
     }
 
     get isLeaf(): boolean {
-        const level = this.level;
-        return level === 1;
+        return this.level === 1;
     }
 
     get isChild(): boolean {
         return !this.isLeaf;
     }
 
-    quadSplit(rectList: RTRectangle[]): number[][] {
+    protected quadSplit(rectList: RTRectangle[]): number[][] {
         const spRectList = new Array<number>();
         for (let i = 0; i < rectList.length; i++) {
             spRectList.push(i);
         }
 
-        let min = Math.round(this.dataPage.maxRecordCount() * RTConstants.FILL_FACTOR);
+        let min = Math.round(this.dataPage.capacity() * RTConstants.FILL_FACTOR);
         if (min < 2) {
             min = 2;
         }
@@ -264,7 +263,7 @@ export class RTNode {
         return result; 
     }
 
-    pickNext(rectArr: RTRectangle[], spRectList: number[], leftRectList: number[], rightRectList: number[], mbr1: RTRectangle, mbr2: RTRectangle) {
+    private pickNext(rectArr: RTRectangle[], spRectList: number[], leftRectList: number[], rightRectList: number[], mbr1: RTRectangle, mbr2: RTRectangle) {
         let diff = Number.MIN_VALUE;
         let d1 = 0, d2 = 0, md1 = 0, md2 = 0, sel = -1;
         const mbr1Area = mbr1.area();
@@ -319,7 +318,7 @@ export class RTNode {
         }
     }
 
-    addRest(spRectList: number[], rectList: number[]) {
+    private addRest(spRectList: number[], rectList: number[]) {
         for (let i = 0; i < spRectList.length; i++) {
             const id = spRectList[i];
             rectList.push(id);
@@ -327,7 +326,7 @@ export class RTNode {
         }
     }
 
-    pickSeeds(rectArr: RTRectangle[]): number[] {
+    private pickSeeds(rectArr: RTRectangle[]): number[] {
         const ids = [0, 0];
         const count = rectArr.length;
         let tmp = Number.MIN_VALUE;
@@ -346,7 +345,7 @@ export class RTNode {
         return ids;
     }
 
-    static adjustTree(node: RTNode, id: number, splitted: boolean) {
+    private static adjustTree(node: RTNode, id: number, split: boolean) {
         const childNode = node.subNode(id);
         if (childNode === null) {
             return;
@@ -357,13 +356,13 @@ export class RTNode {
             return;
         }
 
-        if (splitted) {
-            entry.rectangle = childNode.envelope;
+        if (split) {
+            entry.rectangle = childNode.envelope();
             this.updateEntry(node, entry, id);
         }
         else {
             const entryRect = entry.envelope();
-            const childRect = childNode.envelope;
+            const childRect = childNode.envelope();
             if (!Envelope.contains(entryRect, childRect)) {
                 entry.rectangle = childRect;
                 this.updateEntry(node, entry, id);
@@ -371,12 +370,34 @@ export class RTNode {
         }
     }
 
-    static updateEntry(node: RTNode, entry: RTEntryRecord, id: number) {
+    private static updateEntry(node: RTNode, entry: RTEntryRecord, id: number) {
         node.dataPage.updateEntry(entry, id);
         node.dataPage.flush();
     }
 
-    findLeastEnlargement(rect: RTRectangle): number {
+    insertRecord(record: RTRecord, nodeList: RTNode[]) {
+        const subNodeList = new Array<RTNode>();
+        const rect = record.envelope();
+        const index = this.findSmallestExpansion(rect);
+        const subNode = this.subNode(index);
+        if (subNode === null) {
+            return;
+        }
+
+        subNode.insertRecord(record, subNodeList);
+        const split = subNodeList.length === 2;
+        RTNode.adjustTree(this, index, split);
+
+        if (split) {
+            const entry = <RTEntryRecord>this.firstRecord;
+            const entryHeader = entry.header;
+            entryHeader.childNodeId = subNodeList[1].pageNo;
+            entry.rectangle = subNodeList[1].envelope();
+            this._insertRecord(entry, nodeList);
+        }
+    }
+
+    private findSmallestExpansion(rect: RTRectangle): number {
         let area = Number.MAX_VALUE;
         let id = 0;
         let recordCount = this.recordCount;
@@ -401,30 +422,8 @@ export class RTNode {
         return id;
     }
 
-    insertRecord(record: RTRecord, nodeList: RTNode[]) {
-        const subNodeList = new Array<RTNode>();
-        const rect = record.envelope();
-        const index = this.findLeastEnlargement(rect);
-        const subNode = this.subNode(index);
-        if (subNode === null) {
-            return;
-        }
-
-        subNode.insertRecord(record, subNodeList);
-        const splitted = subNodeList.length === 2;
-        RTNode.adjustTree(this, index, splitted);
-
-        if (splitted) {
-            const entry = <RTEntryRecord>this.firstRecord;
-            const entryHeader = entry.header;
-            entryHeader.childNodeId = subNodeList[1].pageNo;
-            entry.rectangle = subNodeList[1].envelope;
-            this.insertRecordInThisNode(entry, nodeList);
-        }
-    }
-
-    insertRecordInThisNode(record: RTRecord, nodeList: RTNode[]) {
-        const capacity = this.dataPage.maxRecordCount();
+    protected _insertRecord(record: RTRecord, nodeList: RTNode[]) {
+        const capacity = this.dataPage.capacity();
         const recordCount = this.recordCount;
         if (recordCount < capacity) {
             this.dataPage.insertRecord(record);
@@ -438,132 +437,109 @@ export class RTNode {
         }
     }
 
-    splitNodeByType(record: RTRecord, nodeListIn: RTNode[], nodeListOut: RTNode[]) {
+    protected _splitNode(record: RTRecord, nodeListIn: RTNode[], nodeListOut: RTNode[]) {
         nodeListOut.length = 0;
         const recordCount = this.recordCount;
-        const recArr = new Array<RTRecord>();
+        const recList = new Array<RTRecord>();
         const rectList = new Array<RTRectangle>();
-        const rtArr = new Array<RTRectangle>();
 
         for (let i = 0; i < recordCount; i++) {
             const currentRecord = this.record(i)!;
             const currentRecordRect = currentRecord.envelope();
-            recArr.push(currentRecord);
-            rtArr.push(currentRecordRect);
+            recList.push(currentRecord);
             rectList.push(currentRecordRect);
         }
 
         const recordRect = record.envelope();
-        recArr.push(record);
-        rtArr.push(recordRect);
+        recList.push(record);
         rectList.push(recordRect);
 
-        const spList = this.quadSplit(rectList);
-        const curPageNo = this.pageNo;
+        const quadList = this.quadSplit(rectList);
         const level = this.level;
 
-        nodeListIn[0].pageNo = curPageNo;
-        nodeListIn[0].level = level;
-        for (let i = 0; i < spList[0].length; i++) {
-            const id = spList[0][i];
-            nodeListIn[0].dataPage.insertRecord(recArr[id]);
-        }
+        this._fillSplitNode(nodeListIn[0], this.pageNo, level, quadList[0], recList);
+        this._fillSplitNode(nodeListIn[1], this.dataPage.freePageNo, level, quadList[1], recList);
 
-        nodeListIn[0].dataPage.flush();
-        const newPageNo = this.freePageNo;
-        nodeListIn[1].pageNo = newPageNo;
-        nodeListIn[1].level = level;
-
-        for (let i = 0; i < spList[1].length; i++) {
-            const id = spList[1][i];
-            nodeListIn[1].dataPage.insertRecord(recArr[id]);
-        }
-
-        nodeListIn[1].dataPage.flush();
         nodeListIn.forEach(n => nodeListOut.push(n));
     }
 
-    private get freePageNo() {
-        return this.dataPage.freePageNo;
+    private _fillSplitNode(node: RTNode, pageNo: number, level: number, quadList: number[], records: RTRecord[]) {
+        node.pageNo = pageNo;
+        node.level = level;
+        for (let i = 0; i < quadList.length; i++) {
+            const id = quadList[i];
+            node.dataPage.insertRecord(records[id]);
+        }
+        node.dataPage.flush();
     }
 
-    splitNode(record: RTRecord, nodeList: RTNode[]) {
+    protected splitNode(record: RTRecord, nodeList: RTNode[]) {
         nodeList.length = 0;
     }
 
-    splitRoot(nodes: RTNode[]) {
+    private splitRoot(nodes: RTNode[]) {
         const l = nodes[0];
         const ll = nodes[1];
-        this.moveNodeToLast(l);
+        this._moveNodeToEnd(l);
 
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const rootPage = new RTChildPage(rtFile, geomType);
+        const recordType = this.dataPage.recordType;
+        const rootPage = new RTChildPage(rtFile, recordType);
         rootPage.setPageNo(1);
         rootPage.level = l.level + 1;
+        
+        const entry1 = this._createEntry(recordType, rtFile.isFloat, l);
+        const entry2 = this._createEntry(recordType, rtFile.isFloat, ll);
 
         const root = new RTChild(rootPage);
-
-        let recordHeader = new RTRecordHeader();
-        recordHeader.keyLength = RTUtils.sizeOfGeom(geomType, rtFile.isFloat);
-        recordHeader.elementLength = 0;
-        recordHeader.childNodeId = l.dataPage.pageNo;
-        const rt1 = l.dataPage.envelope;
-        const rt2 = ll.dataPage.envelope;
-        const entry1 = new RTEntryRecord(recordHeader, rt1);
-
-        recordHeader = _.clone(recordHeader);
-        recordHeader.childNodeId = ll.dataPage.pageNo;
-        const entry2 = new RTEntryRecord(recordHeader, rt2);
-
         root.dataPage.insertRecord(entry1);
         root.dataPage.insertRecord(entry2);
         root.dataPage.flush();
     }
 
-    moveNodeToLast(node: RTNode) {
+    private _createEntry(recordType: RTRecordType, float: boolean, node: RTNode) {
+        let recordHeader = new RTRecordHeader();
+        recordHeader.keyLength = RTUtils.sizeOfRecordType(recordType, float);
+        recordHeader.elementLength = 0;
+        recordHeader.childNodeId = node.dataPage.pageNo;
+        const rect = node.dataPage.envelope();
+        const entry = new RTEntryRecord(recordHeader, rect);
+        return entry;
+    }
+
+    private _moveNodeToEnd(node: RTNode) {
         node.pageNo = this.dataPage.freePageNo;
         node.dataPage.flush();
     }
 
     delete(record: RTRecord) {
         const leafInfo = new RTLeafInfo(-1, null);
-        this.findLeaf(record, leafInfo);
+        this._findLeaf(record, leafInfo);
         if (leafInfo.leaf !== null) {
-            leafInfo.leaf.deleteRecord(leafInfo.id);
+            leafInfo.leaf._delete(leafInfo.id);
         }
     }
 
-    deleteByIds(record: RTRecord, ids: string[], idsEngine: RTIds) {
-        const leaves = new Array<RTLeafRecordInfo>();
-        this.findLeaves(record, leaves, idsEngine);
-        leaves.filter(leaf => ids.indexOf(leaf.featureId) >= 0).forEach(leaf => {
-            if (leaf.recordId !== -1 && leaf.leaf !== null) {
-                leaf.leaf.deleteRecord(leaf.recordId);
-            }
-        });
-    }
-
-    deleteRecord(id: number) {
+    private _delete(id: number) {
         this.dataPage.deleteRecord(id);
         this.dataPage.flush();
     }
 
-    findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
+    private _findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
         let result = false;
         const count = this.recordCount;
-        const geomType = this.geomType;
+        const recordType = this.recordType;
         for (let i = 0; i < count; i++) {
             const subNode = this.subNode(i);
             if (subNode === null) {
                 continue;
             }
 
-            if (geomType === RTGeomType.point) {
-                result = this.findLeafPointRecord(record, leafInfo, subNode);
+            if (recordType === RTRecordType.point) {
+                result = this._findLeafPointRecord(record, leafInfo, subNode);
             }
             else {
-                result = this.findLeafRectangleRecord(record, leafInfo, subNode);
+                result = this._findLeafRectangleRecord(record, leafInfo, subNode);
             }
 
             if (result) {
@@ -574,70 +550,27 @@ export class RTNode {
         return result;
     }
 
-    findLeafRectangleRecord(record: RTRecord, leafInfo: RTLeafInfo, subNode: RTNode): boolean {
+    private _findLeafRectangleRecord(record: RTRecord, leafInfo: RTLeafInfo, subNode: RTNode): boolean {
         let success = false;
         leafInfo.leaf = null;
         const recordRect = record.envelope();
         if (subNode.contains(recordRect)) {
-            success = subNode.findLeaf(record, leafInfo);
+            success = subNode._findLeaf(record, leafInfo);
         }
 
         return success;
     }
 
-    findLeafPointRecord(record: RTRecord, leafInfo: RTLeafInfo, subNode: RTNode): boolean {
+    private _findLeafPointRecord(record: RTRecord, leafInfo: RTLeafInfo, subNode: RTNode): boolean {
         let success = false;
         leafInfo.leaf = null;
-        const nodeRect = subNode.envelope;
+        const nodeRect = subNode.envelope();
         const point = record.point();
         if (nodeRect.contains(point)) {
-            success = subNode.findLeaf(record, leafInfo);
+            success = subNode._findLeaf(record, leafInfo);
         }
 
         return success;
-    }
-
-    findLeaves(record: RTRecord, leaves: RTLeafRecordInfo[], idsEngine: RTIds) {
-        const count = this.recordCount;
-        const geomType = this.geomType;
-        for (let i = 0; i < count; i++) {
-            const subNode = this.subNode(i);
-            if (subNode === null) {
-                continue;
-            }
-
-            if (geomType === RTGeomType.point) {
-                this.findLeafPointRecords(record, subNode, leaves, idsEngine);
-            }
-            else {
-                this.findLeafRectangleRecords(record, subNode, leaves, idsEngine);
-            }
-        }
-    }
-
-    findLeafRectangleRecords(record: RTRecord, subNode: RTNode, leaves: RTLeafRecordInfo[], idsEngine: RTIds) {
-        const rect = record.envelope();
-        if (subNode.contains(rect)) {
-            const leafInfo = new RTLeafInfo(-1, null);
-            const success = subNode.findLeaf(record, leafInfo);
-            if (success) {
-                const id = idsEngine.id(leafInfo.id);
-                leaves.push(new RTLeafRecordInfo(leafInfo.leaf!, leafInfo.id, id));
-            }
-        }
-    }
-
-    findLeafPointRecords(record: RTRecord, subNode: RTNode, leaves: RTLeafRecordInfo[], idsEngine: RTIds) {
-        const nodeRect = subNode.envelope;
-        const point = record.point();
-        if (nodeRect.contains(point)) {
-            const leafInfo = new RTLeafInfo(-1, null);
-            const success = subNode.findLeaf(record, leafInfo);
-            if (success) {
-                const id = idsEngine.id(leafInfo.id);
-                leaves.push(new RTLeafRecordInfo(leafInfo.leaf!, leafInfo.id, id));
-            }
-        }
     }
 }
 
@@ -646,17 +579,20 @@ export class RTChild extends RTNode {
         super(dataPage);
     }
 
-    splitNode(record: RTRecord, nodeList: RTNode[]) {
+    protected splitNode(record: RTRecord, nodeList: RTNode[]) {
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const childPageLeft = new RTChildPage(rtFile, geomType);
-        const childLeft = new RTChild(childPageLeft);
+        const recordType = this.dataPage.recordType;
 
-        const childPageRight = new RTChildPage(rtFile, geomType);
-        const childRight = new RTChild(childPageRight);
-
+        const childLeft = this._createChildNode(rtFile, recordType);
+        const childRight = this._createChildNode(rtFile, recordType);
         const childList = [childLeft, childRight];
-        this.splitNodeByType(record, childList, nodeList);
+        this._splitNode(record, childList, nodeList);
+    }
+
+    private _createChildNode(rtFile: RTFile, recordType: RTRecordType) {
+        const childPage = new RTChildPage(rtFile, recordType);
+        const childNode = new RTChild(childPage);
+        return childNode;
     }
 }
 
@@ -708,20 +644,22 @@ export class RTLeaf extends RTNode {
     }
 
     insertRecord(record: RTRecord, nodeList: RTNode[]) {
-        this.insertRecordInThisNode(record, nodeList);
+        this._insertRecord(record, nodeList);
     }
 
-    splitNode(record: RTRecord, nodeList: RTNode[]) {
+    protected splitNode(record: RTRecord, nodeList: RTNode[]) {
         const rtFile = this.dataPage.rtFile;
-        const geomType = this.dataPage.geomType;
-        const leafPageLeft = new RTLeafPage(rtFile, geomType);
-        const leafLeft = new RTLeaf(leafPageLeft);
-
-        const leafPageRight = new RTLeafPage(rtFile, geomType);
-        const leafRight = new RTLeaf(leafPageRight);
-
+        const recordType = this.dataPage.recordType;
+        const leafLeft = this._createLeafNode(rtFile, recordType);
+        const leafRight = this._createLeafNode(rtFile, recordType);
         const leafList = [leafLeft, leafRight];
-        this.splitNodeByType(record, leafList, nodeList);
+        this._splitNode(record, leafList, nodeList);
+    }
+
+    private _createLeafNode(rtFile: RTFile, recordType: RTRecordType) {
+        const leafPage = new RTLeafPage(rtFile, recordType);
+        const leafNode = new RTLeaf(leafPage);
+        return leafNode;
     }
 }
 

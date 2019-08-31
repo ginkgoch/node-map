@@ -3,7 +3,7 @@ import path from 'path';
 import _ from 'lodash';
 
 import { RTIndex } from "../../../src/index/rtree/RTIndex";
-import { RTGeomType } from '../../../src/index/rtree/RTGeomType';
+import { RTRecordType } from '../../../src/index/rtree/RTRecordType';
 import { ShapefileFeatureSource } from "../../.";
 import { Point } from 'ginkgoch-geom';
 
@@ -15,7 +15,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             expect(fs.existsSync(idxFilePath)).toBeTruthy();
         }
         finally {
@@ -36,7 +36,7 @@ describe('RTIndex', () => {
         cleanIndexFiles(idxFilePath);
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point, true);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             index.open();
 
@@ -58,7 +58,7 @@ describe('RTIndex', () => {
     });
 
     function checkIndexBasicQueryResult(index: RTIndex, expectedCount: number) {
-        const ids = index.idsIntersects({ minx: -1e10, miny: -1e10, maxx: 1e10, maxy: 1e10 }).map(i => parseInt(i));
+        const ids = index.intersections({ minx: -1e10, miny: -1e10, maxx: 1e10, maxy: 1e10 }).map(i => parseInt(i));
         expect(ids.length).toBe(expectedCount);
         expect(_.max(ids)).toBe(expectedCount);
         expect(_.min(ids)).toBe(1);
@@ -78,7 +78,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-rect-simple-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point, true);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             index.open();
             index.push({ minx: -180, miny: -90, maxx: -160, maxy: -70 }, '1');
@@ -101,7 +101,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-point-simple-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point, true);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             expect(index.flag).toEqual('rs+')
             index.open();
@@ -128,7 +128,7 @@ describe('RTIndex', () => {
         cleanIndexFiles(idxFilePath);
 
         const features = await fetchPointFeatures(shpFilePath);
-        RTIndex.create(idxFilePath, RTGeomType.rectangle);
+        RTIndex.create(idxFilePath, RTRecordType.rectangle);
         let idx = new RTIndex(idxFilePath, 'rs+');
 
         try {
@@ -159,6 +159,34 @@ describe('RTIndex', () => {
         finally {
             idx.close();
         }
+    });
+
+    it('default create option', () => {
+        const rtIndex = <any>RTIndex;
+        let option = rtIndex._defaultCreateOptions();
+        expect(option.pageSize).toBe(8192);
+        expect(option.overwrite).toBeFalsy();
+        expect(option.float).toBeTruthy();
+
+        option = rtIndex._defaultCreateOptions({});
+        expect(option.pageSize).toBe(8192);
+        expect(option.overwrite).toBeFalsy();
+        expect(option.float).toBeTruthy();
+
+        option = rtIndex._defaultCreateOptions({pageSize: 4096});
+        expect(option.pageSize).toBe(4096);
+        expect(option.overwrite).toBeFalsy();
+        expect(option.float).toBeTruthy();
+
+        option = rtIndex._defaultCreateOptions({overwrite: true, float: false});
+        expect(option.pageSize).toBe(8192);
+        expect(option.overwrite).toBeTruthy();
+        expect(option.float).toBeFalsy();
+
+        option = rtIndex._defaultCreateOptions({overwrite: true, pageSize: 4096, float: false});
+        expect(option.pageSize).toBe(4096);
+        expect(option.overwrite).toBeTruthy();
+        expect(option.float).toBeFalsy();
     });
 });
 

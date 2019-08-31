@@ -1,10 +1,9 @@
 import assert from 'assert';
 import fs from 'fs';
 import { FileStream } from "ginkgoch-filestream";
-import { RTGeomType } from "./RTGeomType";
-import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
-import { RTFileHeader } from './RTFileHeader';
-import { RTConstants } from './RTUtils';
+import { RTRecordType } from "./RTRecordType";
+import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage, RTFileHeader } from "./RTPage";
+import { RTConstants, RTUtils } from './RTUtils';
 
 const DESCRIPTION = 'Gist data file ';
 
@@ -16,14 +15,16 @@ export class RTFile {
     fileStream?: FileStream;
     headerPage?: RTHeaderPage;
 
-    create(filePath: string, geomType: RTGeomType, float: boolean) {
+    create(filePath: string, recordType: RTRecordType, float: boolean, pageSize: number) {
+        this.pageSize = pageSize;
+
         const fd = fs.openSync(filePath, 'w+');
         this.fileStream = new FileStream(fd);
-        this._initFileHeader(geomType, float);
+        this._initFileHeader(recordType, float);
         this._writeFileHeader();
         this.opened = true;
 
-        const leafPage = new RTLeafPage(this, geomType, 1);
+        const leafPage = new RTLeafPage(this, recordType, 1);
         leafPage.initEmptyPage();
         leafPage.flush();
 
@@ -33,8 +34,8 @@ export class RTFile {
         this.open(filePath, 'rs+');
     }
 
-    get geomType(): RTGeomType {
-        return this.headerPage!.header.extId;
+    get recordType(): RTRecordType {
+        return this.headerPage!.header.recordType;
     }
 
     get pageCount(): number {
@@ -50,10 +51,10 @@ export class RTFile {
         let rootPage: RTDataPage;
         const pageCount = this.pageCount;
         if (pageCount === 2) {
-            rootPage = new RTLeafPage(this, this.geomType, 1);
+            rootPage = new RTLeafPage(this, this.recordType, 1);
         }
         else {
-            rootPage = new RTChildPage(this, this.geomType, 1);
+            rootPage = new RTChildPage(this, this.recordType, 1);
         }
 
         return rootPage;
@@ -75,7 +76,7 @@ export class RTFile {
             this.pageSize = this.headerPage.header.pageSize;
         }
         else {
-            this.pageSize = 8 * 1024;
+            this.pageSize = RTUtils.kilobytes(8);
         }
 
         this.isFloat = this.headerPage.header.isFloat;
@@ -102,18 +103,18 @@ export class RTFile {
         this.headerPage!.write();
     }
 
-    private _initFileHeader(geomType: RTGeomType, isFloat: boolean) {
-        this.pageSize = this.pageSize || 8 * 1024;
-        this.headerPage = new RTHeaderPage(this, geomType, 0);
+    private _initFileHeader(recordType: RTRecordType, float: boolean) {
+        this.pageSize = this.pageSize || RTUtils.kilobytes(8);
+        this.headerPage = new RTHeaderPage(this, recordType, 0);
 
         const fileHeader = new RTFileHeader();
         fileHeader.description = DESCRIPTION;
-        fileHeader.extId = geomType;
+        fileHeader.recordType = recordType;
         fileHeader.freePageId = 0;
         fileHeader.pageSize = this.pageSize;
-        fileHeader.isFloat = isFloat;
+        fileHeader.isFloat = float;
 
-        if (geomType === RTGeomType.point) {
+        if (recordType === RTRecordType.point) {
             fileHeader.extName = RTConstants.RECORD_POINT_TYPE;
         }
         else {

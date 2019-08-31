@@ -1,19 +1,16 @@
 import { FileStream } from "ginkgoch-filestream";
 import { RTFile } from "./RTFile";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
-import { RTRecordSetHeader } from "./RTRecordSetHeader";
 import { Envelope } from "ginkgoch-geom";
 import { RTRecord, RTEntryRecord, RTRectangle } from "./RTRecord";
-import { RTConstants } from "./RTUtils";
-import { RTSlot } from "./RTSlot";
-import { RTFileHeader } from "./RTFileHeader";
+import { RTConstants, StreamUtils } from "./RTUtils";
 
 export abstract class RTPage {
     public fileStream?: FileStream;
     public rtFile: RTFile;
     public pageNo: number = 0;
-    public geomType: RTGeomType;
+    public recordType: RTRecordType;
     public pageSize: number = 0;
     public isFloat: boolean;
 
@@ -22,9 +19,9 @@ export abstract class RTPage {
     protected reader?: BufferReader;
     protected writer?: BufferWriter;
 
-    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
+    constructor(rtFile: RTFile, recordType: RTRecordType = RTRecordType.point, pageNo?: number) {
         this.rtFile = rtFile;
-        this.geomType = geomType;
+        this.recordType = recordType;
         this.fileStream = rtFile.fileStream;
         this.isFloat = rtFile.isFloat;
 
@@ -73,8 +70,8 @@ export class RTDataPage extends RTPage {
     recordSetHeader = new RTRecordSetHeader();
     cursor = 1;
 
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
 
         if (pageNo === undefined) {
             this.initEmptyPage();
@@ -126,7 +123,7 @@ export class RTDataPage extends RTPage {
         }
     }
 
-    public get envelope(): RTRectangle {
+    public envelope(): RTRectangle {
         return new RTRectangle(0, 0, 0, 0);
     }
 
@@ -139,7 +136,7 @@ export class RTDataPage extends RTPage {
         return null;
     }
 
-    public maxRecordCount() {
+    public capacity() {
         return 0;
     }
 
@@ -213,12 +210,12 @@ export class RTDataPage extends RTPage {
 }
 
 export class RTLeafPage extends RTDataPage {
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     public createRecord(): RTRecord {
-        const record = RTRecord.create(this.geomType);
+        const record = RTRecord.create(this.recordType);
         return record;
     }
 
@@ -344,14 +341,14 @@ export class RTLeafPage extends RTDataPage {
         this.isDirty = true;
     }
 
-    public maxRecordCount() {
+    public capacity() {
         const record = this.createRecord();
         let capacity = (this.pageSize - RTConstants.PAGE_HEADER_SIZE - RTConstants.RECORDSET_HEADER_SIZE - RTConstants.PAGE_SLOT_SIZE * 2) / (record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
         capacity = Math.floor(capacity);
         return capacity;
     }
     
-    public get envelope(): RTRectangle {
+    public envelope(): RTRectangle {
         let rect = new Envelope(0, 0, 0, 0);
         const recordCount = this.recordCount;
         if (recordCount > 0) {
@@ -369,8 +366,8 @@ export class RTLeafPage extends RTDataPage {
 }
 
 export class RTChildPage extends RTLeafPage {
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     createRecord(): RTRecord {
@@ -378,7 +375,7 @@ export class RTChildPage extends RTLeafPage {
         return record;
     }
 
-    maxRecordCount() {
+    capacity() {
         const entry = new RTEntryRecord();
         let count = (this.pageSize - 
             RTConstants.PAGE_HEADER_SIZE - 
@@ -412,8 +409,8 @@ export class RTChildPage extends RTLeafPage {
 export class RTHeaderPage extends RTPage {
     public header: RTFileHeader = new RTFileHeader();
 
-    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
-        super(rtFile, geomType, pageNo);
+    constructor(rtFile: RTFile, recordType: RTRecordType = RTRecordType.point, pageNo?: number) {
+        super(rtFile, recordType, pageNo);
     }
 
     public read() {
@@ -437,18 +434,7 @@ export class RTPageHeader {
     vacantRecordCount = 0;
     placeholder = 0x0F0F0F0F;
 
-    public init() {
-        this.pageId = 0;
-        this.pageFreeSpace = 0;
-        this.endDataOffset = 0;
-        this.recordCount = 0;
-        this.vacantRecordCount = 0;
-        this.placeholder = 0x0F0F0F0F;
-    }
-
     public read(reader: BufferReader) {
-        this.init();
-
         this.pageId = reader.nextUInt32();
         this.pageFreeSpace = reader.nextUInt16();
         this.endDataOffset = reader.nextUInt16();
@@ -464,5 +450,74 @@ export class RTPageHeader {
         stream.writeUInt16(this.recordCount);
         stream.writeUInt16(this.vacantRecordCount);
         stream.writeUInt32(this.placeholder);
+    }
+}
+
+export class RTSlot {
+    offset: number = 0;
+    length: number = 0;
+
+    read(reader: BufferReader) {
+        this.offset = reader.nextUInt16();
+        this.length = reader.nextUInt16();
+    }
+
+    write(writer: BufferWriter) {
+        writer.writeUInt16(this.offset);
+        writer.writeUInt16(this.length);
+    }
+}
+
+export class RTRecordSetHeader {
+    root = 0;
+    level = 0;
+    placeholder = 0;
+
+    read(reader: BufferReader) {
+        this.root = reader.nextUInt32();
+        this.level = reader.nextUInt16();
+        this.placeholder = reader.nextUInt16();
+    }
+
+    write(writer: BufferWriter) {
+        writer.writeUInt32(this.root);
+        writer.writeUInt16(this.level);
+        writer.writeUInt16(this.placeholder);
+    }
+}
+
+export class RTFileHeader {
+    description: string = '';
+    recordType: number = 0;
+    freePageId: number = 0;
+    extName: string = '';
+    pageSize: number = 0;
+    isFloat: boolean = false;
+
+    public read(stream: FileStream) {
+        const descBuff = stream.read(RTConstants.MAGIC_CHAR_LENGTH);
+        this.description = descBuff.toString(RTConstants.DEFAULT_ENCODING);
+        this.recordType = StreamUtils.readUInt32(stream);
+        this.freePageId = StreamUtils.readUInt32(stream);
+        if (this.recordType === 0) {
+            this.extName = stream.read(RTConstants.POINT_EXT_LENGTH).toString(RTConstants.DEFAULT_ENCODING);
+        }
+        else {
+            this.extName = stream.read(RTConstants.RECT_EXT_LENGTH).toString(RTConstants.DEFAULT_ENCODING);
+        }
+
+        this.pageSize = StreamUtils.readUInt32(stream);
+        this.isFloat = StreamUtils.readByte(stream) !== 0;
+    }
+
+    public write(writer: BufferWriter) {
+        const descBuff = Buffer.alloc(RTConstants.MAGIC_CHAR_LENGTH);
+        descBuff.write(this.description, RTConstants.DEFAULT_ENCODING);
+        writer.writeBuffer(descBuff);
+        writer.writeUInt32(this.recordType);
+        writer.writeUInt32(this.freePageId);
+        writer.writeString(this.extName);
+        writer.writeUInt32(this.pageSize);
+        writer.writeUInt8(this.isFloat ? 1 : 0);
     }
 }

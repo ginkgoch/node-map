@@ -1,19 +1,21 @@
+import fs from 'fs';
 import assert from 'assert';
+import _ from 'lodash';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
 import { IEnvelope, Point } from "ginkgoch-geom";
 import { RTNode, RTLeaf, RTChild } from "./RTNode";
 import { RTLeafPage, RTChildPage } from "./RTPage";
-import { RTGeomType } from "./RTGeomType";
-import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangle, RTRectangleRecord } from "./RTRecord";
+import { RTRecordType } from "./RTRecordType";
+import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangleRecord } from "./RTRecord";
 import { RTUtils } from "./RTUtils";
 
 const FILE_NOT_OPENED = 'Index file not opened.';
+const FILE_EXTENSIONS = ['.idx', '.ids'];
 
 export class RTIndex {
     private _rtFile: RTFile;
     private _idsEngine: RTIds;
-    private _hasIdx: boolean = false;
 
     flag: string;
     filePath: string;
@@ -41,10 +43,7 @@ export class RTIndex {
 
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
-        this._idsEngine.flag = this.flag;
-        this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
-        this._idsEngine.open();
-        this._hasIdx = true;
+        this._idsEngine.open(RTIndex._idsFilePath(this.filePath), this.flag);
         this.opened = true;
     }
 
@@ -60,10 +59,6 @@ export class RTIndex {
     protected _close() {
         this._rtFile.close();
         this._idsEngine.close();
-    }
-
-    invalidCache() {
-        this._idsEngine.invalidCache();
     }
 
     delete(point: Point): void;
@@ -90,16 +85,16 @@ export class RTIndex {
 
     static recommendPageSize(recordCount: number) {
         if (recordCount <= 4086) {
-            return 4 * 1024;
+            return RTUtils.kilobytes(4);
         }
         else if (recordCount <= 8192) {
-            return 8 * 1024;
+            return RTUtils.kilobytes(8);
         }
         else if (recordCount <= 16384) {
-            return 16 * 1024;
+            return RTUtils.kilobytes(16);
         }
         else {
-            return 32 * 1024;
+            return RTUtils.kilobytes(32);
         }
     }
 
@@ -134,19 +129,21 @@ export class RTIndex {
         return this.root!.allRecordCount;
     }
 
-    static create(filePath: string, geomType: RTGeomType, float: boolean = true, pageSize = 8 * 1024) {
-        const index = new RTIndex();
-        index._createIndexFile(filePath, geomType, float, pageSize);
-        const idsFilePath = this._idsFilePath(filePath);
-        RTIds.createEmpty(idsFilePath);
-        index.close();
+    static create(filePath: string, recordType: RTRecordType, options?: RTIndexCreateOption) {
+        options = this._defaultCreateOptions(options);
+        this._cleanForOverwrite(filePath, options);
+        if (this._skipCreate(filePath, options)) {
+            return;
+        }
+
+        this._create(filePath, recordType, options);
     }
 
-    idsIntersects(rect: IEnvelope) {
-        return this.idsInsides(rect);
+    intersections(rect: IEnvelope) {
+        return this.insiders(rect);
     }
 
-    idsInsides(rect: IEnvelope) {
+    insiders(rect: IEnvelope) {
         assert(this.opened, FILE_NOT_OPENED);
 
         const root = this.root!;
@@ -154,30 +151,17 @@ export class RTIndex {
         root.fillOverlaps(rect, idx);
         idx.sort();
         
-        const ids = new Array<string>();
-        idx.forEach(id => {
-            ids.push(this._idsEngine.id(id));
-        });
-
+        const ids = idx.map(id => this._idsEngine.id(id)).sort();
         return ids;
     }
 
-    private _createIndexFile(filePath: string, geomType: RTGeomType, float: boolean, pageSize: number) {
-        this.pageSize = pageSize;
-        this._rtFile.create(filePath, geomType, float);
-    }
-
-    private static _idsFilePath(idxFilePath: string) {
-        return idxFilePath.replace(/\.idx$/i, '.ids');
-    }
-
     private _insertPoint(x: number, y: number, id: string) {
-        const blockId = this._idsEngine.write(id);
         const recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfPoint(this._rtFile.isFloat);
         recordHeader.elementLength = 4;
         recordHeader.childNodeId = 0;
-
+        
+        const blockId = this._idsEngine.write(id);
         const point = new RTPoint(x, y);
         const pointRecord = new RTPointRecord(recordHeader, point, blockId);
         const nodeList = new Array<RTNode>();
@@ -185,33 +169,72 @@ export class RTIndex {
     }
 
     private _deletePoint(x: number, y: number) {
-        const pointRecord = new RTPointRecord();
-        pointRecord.setPoint(new RTPoint(x, y));
+        const pointRecord = new RTPointRecord(undefined, new RTPoint(x, y), undefined);
         this.root!.delete(pointRecord);
     }
 
     private _insertRect(rect: IEnvelope, id: string) {
-        const blockId = this._idsEngine.write(id);
         const recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfRectangle(this._rtFile.isFloat);
         recordHeader.elementLength = 4;
         recordHeader.childNodeId = 0;
-
-        const rectangle = this._parseRect(rect);
-        const rectRecord = new RTRectangleRecord(recordHeader, rectangle, blockId);
+        
+        const blockId = this._idsEngine.write(id);
+        const rectRecord = new RTRectangleRecord(recordHeader, rect, blockId);
         const nodeList = new Array<RTNode>();
         this.root!.insertRecord(rectRecord, nodeList);
     }
 
     private _deleteRect(rect: IEnvelope) {
-        const rectangle = this._parseRect(rect);
-        const rectRecord = new RTRectangleRecord();
-        rectRecord.rectangle = rectangle;
+        const rectRecord = new RTRectangleRecord(undefined, rect, undefined);
         this.root!.delete(rectRecord);
     }
 
-    private _parseRect(rect: IEnvelope) {
-        const rectangle = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
-        return rectangle;
+    //#region create private methods
+    private static _create(filePath: string, recordType: RTRecordType, options: RTIndexCreateOption) {
+        const index = new RTIndex();
+        index._rtFile.create(filePath, recordType, options.float!, options.pageSize!);
+
+        const idsFilePath = this._idsFilePath(filePath);
+        RTIds.createEmpty(idsFilePath);
+        index.close();
     }
+
+    private static _defaultCreateOptions(options?: RTIndexCreateOption): RTIndexCreateOption {
+        options = options || {};
+        options = _.defaults(options, { pageSize: RTUtils.kilobytes(8), overwrite: false, float: true });
+        return options;
+    }
+
+    private static _cleanForOverwrite(filePath: string, options: RTIndexCreateOption) {
+        if (options.overwrite! === false) return;
+
+        FILE_EXTENSIONS.forEach(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            if (fs.existsSync(tmpPath)) {
+                fs.unlinkSync(tmpPath);
+            }
+        });
+    }
+
+    private static _skipCreate(filePath: string, options: RTIndexCreateOption): boolean {
+        const count = FILE_EXTENSIONS.filter(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            return fs.existsSync(tmpPath);
+        }).length;
+
+        return count === FILE_EXTENSIONS.length && !(options.overwrite!);
+    }
+
+    private static _idsFilePath(idxFilePath: string) {
+        return idxFilePath.replace(/\.idx$/i, '.ids');
+    }
+    //#endregion
+
+}
+
+export interface RTIndexCreateOption {
+    float?: boolean;
+    pageSize?: number;
+    overwrite?: boolean;
 }

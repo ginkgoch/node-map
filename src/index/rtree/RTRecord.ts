@@ -1,7 +1,7 @@
 import { RTConstants, RTUtils } from "./RTUtils";
 import { Envelope, IEnvelope, Point } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 
 export class RTRecordHeader {
     keyLength = 0;
@@ -43,11 +43,11 @@ export abstract class RTRecord {
     abstract size(float: boolean): number;
     abstract area(): number;
 
-    static create(geomType: RTGeomType): RTRecord {
-        switch (geomType) {
-            case RTGeomType.point:
+    static create(recordType: RTRecordType): RTRecord {
+        switch (recordType) {
+            case RTRecordType.point:
                 return new RTPointRecord();
-            case RTGeomType.rectangle:
+            case RTRecordType.rectangle:
                 return new RTRectangleRecord();
         }
 
@@ -70,10 +70,6 @@ export class RTPointRecord extends RTRecord {
 
     point() {
         return this._point;
-    }
-
-    setPoint(point: RTPoint) {
-        this._point = point;
     }
 
     read(reader: BufferReader, float: boolean) {
@@ -124,12 +120,14 @@ export class RTRectangleRecord extends RTRecord {
     header = new RTRecordHeader();
     rect = new RTRectangle(0, 0, 0, 0);
 
-    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle, id?: number) {
+    constructor(recordHeader?: RTRecordHeader, rect?: IEnvelope, id?: number) {
         super();
 
-        this.header = recordHeader || this.header;
-        this.rect = rect || this.rect;
         this.data = id || 0;
+        this.header = recordHeader || this.header;
+        if (rect !== undefined) {
+            this.rect = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
+        }
     }
 
     envelope(): RTRectangle {
@@ -188,9 +186,8 @@ export class RTRectangleRecord extends RTRecord {
 }
 
 export class RTEntryRecord extends RTRectangleRecord {
-    constructor(recordHeader?: RTRecordHeader, rect?: RTRectangle) {
+    constructor(recordHeader?: RTRecordHeader, rect?: IEnvelope) {
         recordHeader = recordHeader || new RTRecordHeader();
-        rect = rect || new RTRectangle(0, 0, 0, 0);
         super(recordHeader, rect, 0);
     }
 
