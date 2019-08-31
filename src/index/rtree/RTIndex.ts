@@ -61,10 +61,6 @@ export class RTIndex {
         this._idsEngine.close();
     }
 
-    invalidCache() {
-        this._idsEngine.invalidCache();
-    }
-
     delete(point: Point): void;
     delete(rect: IEnvelope): void;
     delete(geom: Point | IEnvelope): void {
@@ -89,16 +85,16 @@ export class RTIndex {
 
     static recommendPageSize(recordCount: number) {
         if (recordCount <= 4086) {
-            return 4 * 1024;
+            return RTUtils.kilobytes(4);
         }
         else if (recordCount <= 8192) {
-            return 8 * 1024;
+            return RTUtils.kilobytes(8);
         }
         else if (recordCount <= 16384) {
-            return 16 * 1024;
+            return RTUtils.kilobytes(16);
         }
         else {
-            return 32 * 1024;
+            return RTUtils.kilobytes(32);
         }
     }
 
@@ -153,7 +149,7 @@ export class RTIndex {
 
     private static _defaultCreateOptions(options?: RTIndexCreateOption): RTIndexCreateOption {
         options = options || {};
-        options = _.defaults(options, { pageSize: 8 * 1024, overwrite: false, float: true });
+        options = _.defaults(options, { pageSize: RTUtils.kilobytes(8), overwrite: false, float: true });
         return options;
     }
 

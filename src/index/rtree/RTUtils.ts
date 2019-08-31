@@ -22,7 +22,8 @@ export let RTConstants = Object.freeze({
     RECORDSET_HEADER_SIZE: 8,
     FILL_FACTOR: 0.5,
     RECORD_POINT_TYPE: 'RT_POINT_EXT\0',
-    RECORD_RECT_TYPE: 'RT_RECT_EXT\0'
+    RECORD_RECT_TYPE: 'RT_RECT_EXT\0',
+    KILOBYTES: 1024
 });
 
 export class RTUtils {
@@ -53,6 +54,10 @@ export class RTUtils {
     static unionArea(rect1: RTRectangle, rect2: RTRectangle): number {
         const unionRect = Envelope.union(rect1, rect2);
         return unionRect.area();
+    }
+
+    static kilobytes(k: number) {
+        return k * RTConstants.KILOBYTES;
     }
 }
 

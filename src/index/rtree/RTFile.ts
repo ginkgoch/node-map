@@ -4,7 +4,7 @@ import { FileStream } from "ginkgoch-filestream";
 import { RTGeomType } from "./RTGeomType";
 import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage } from "./RTPage";
 import { RTFileHeader } from './RTFileHeader';
-import { RTConstants } from './RTUtils';
+import { RTConstants, RTUtils } from './RTUtils';
 
 const DESCRIPTION = 'Gist data file ';
 
@@ -75,7 +75,7 @@ export class RTFile {
             this.pageSize = this.headerPage.header.pageSize;
         }
         else {
-            this.pageSize = 8 * 1024;
+            this.pageSize = RTUtils.kilobytes(8);
         }
 
         this.isFloat = this.headerPage.header.isFloat;
@@ -102,8 +102,8 @@ export class RTFile {
         this.headerPage!.write();
     }
 
-    private _initFileHeader(geomType: RTGeomType, isFloat: boolean) {
-        this.pageSize = this.pageSize || 8 * 1024;
+    private _initFileHeader(geomType: RTGeomType, float: boolean) {
+        this.pageSize = this.pageSize || RTUtils.kilobytes(8);
         this.headerPage = new RTHeaderPage(this, geomType, 0);
 
         const fileHeader = new RTFileHeader();
@@ -111,7 +111,7 @@ export class RTFile {
         fileHeader.extId = geomType;
         fileHeader.freePageId = 0;
         fileHeader.pageSize = this.pageSize;
-        fileHeader.isFloat = isFloat;
+        fileHeader.isFloat = float;
 
         if (geomType === RTGeomType.point) {
             fileHeader.extName = RTConstants.RECORD_POINT_TYPE;
