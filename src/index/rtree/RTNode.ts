@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { RTDataPage, RTLeafPage, RTChildPage } from "./RTPage";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { RTConstants, RTUtils } from "./RTUtils";
 import { RTRecord, RTRectangle, RTEntryRecord, RTRecordHeader } from "./RTRecord";
 import { Envelope, IEnvelope } from "ginkgoch-geom";
@@ -29,7 +29,7 @@ export class RTNode {
         return node;
     }
 
-    get geomType(): RTGeomType {
+    get geomType(): RTRecordType {
         return this.dataPage.geomType;
     }
 
@@ -497,7 +497,7 @@ export class RTNode {
         root.dataPage.flush();
     }
 
-    private _createEntry(geomType: RTGeomType, float: boolean, node: RTNode) {
+    private _createEntry(geomType: RTRecordType, float: boolean, node: RTNode) {
         let recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfGeom(geomType, float);
         recordHeader.elementLength = 0;
@@ -545,7 +545,7 @@ export class RTNode {
                 continue;
             }
 
-            if (geomType === RTGeomType.point) {
+            if (geomType === RTRecordType.point) {
                 result = this.findLeafPointRecord(record, leafInfo, subNode);
             }
             else {
@@ -592,7 +592,7 @@ export class RTNode {
                 continue;
             }
 
-            if (geomType === RTGeomType.point) {
+            if (geomType === RTRecordType.point) {
                 this.findLeafPointRecords(record, subNode, leaves, idsEngine);
             }
             else {
@@ -642,7 +642,7 @@ export class RTChild extends RTNode {
         this._splitNode(record, childList, nodeList);
     }
 
-    private _createChildNode(rtFile: RTFile, geomType: RTGeomType) {
+    private _createChildNode(rtFile: RTFile, geomType: RTRecordType) {
         const childPage = new RTChildPage(rtFile, geomType);
         const childNode = new RTChild(childPage);
         return childNode;
@@ -710,7 +710,7 @@ export class RTLeaf extends RTNode {
         this._splitNode(record, leafList, nodeList);
     }
 
-    private _createLeafNode(rtFile: RTFile, geomType: RTGeomType) {
+    private _createLeafNode(rtFile: RTFile, geomType: RTRecordType) {
         const leafPage = new RTLeafPage(rtFile, geomType);
         const leafNode = new RTLeaf(leafPage);
         return leafNode;

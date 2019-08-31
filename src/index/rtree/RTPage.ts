@@ -1,6 +1,6 @@
 import { FileStream } from "ginkgoch-filestream";
 import { RTFile } from "./RTFile";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { Envelope } from "ginkgoch-geom";
 import { RTRecord, RTEntryRecord, RTRectangle } from "./RTRecord";
@@ -10,7 +10,7 @@ export abstract class RTPage {
     public fileStream?: FileStream;
     public rtFile: RTFile;
     public pageNo: number = 0;
-    public geomType: RTGeomType;
+    public geomType: RTRecordType;
     public pageSize: number = 0;
     public isFloat: boolean;
 
@@ -19,7 +19,7 @@ export abstract class RTPage {
     protected reader?: BufferReader;
     protected writer?: BufferWriter;
 
-    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTRecordType = RTRecordType.point, pageNo?: number) {
         this.rtFile = rtFile;
         this.geomType = geomType;
         this.fileStream = rtFile.fileStream;
@@ -70,7 +70,7 @@ export class RTDataPage extends RTPage {
     recordSetHeader = new RTRecordSetHeader();
     cursor = 1;
 
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
         super(rtFile, geomType, pageNo);
 
         if (pageNo === undefined) {
@@ -210,7 +210,7 @@ export class RTDataPage extends RTPage {
 }
 
 export class RTLeafPage extends RTDataPage {
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
         super(rtFile, geomType, pageNo);
     }
 
@@ -366,7 +366,7 @@ export class RTLeafPage extends RTDataPage {
 }
 
 export class RTChildPage extends RTLeafPage {
-    constructor(rtFile: RTFile, geomType: RTGeomType, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTRecordType, pageNo?: number) {
         super(rtFile, geomType, pageNo);
     }
 
@@ -409,7 +409,7 @@ export class RTChildPage extends RTLeafPage {
 export class RTHeaderPage extends RTPage {
     public header: RTFileHeader = new RTFileHeader();
 
-    constructor(rtFile: RTFile, geomType: RTGeomType = RTGeomType.point, pageNo?: number) {
+    constructor(rtFile: RTFile, geomType: RTRecordType = RTRecordType.point, pageNo?: number) {
         super(rtFile, geomType, pageNo);
     }
 

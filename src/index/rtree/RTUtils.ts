@@ -1,7 +1,7 @@
 import { FileStream } from "ginkgoch-filestream";
 import { RTRectangle } from "./RTRecord";
 import { Envelope } from "ginkgoch-geom";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 
 const defaultEncoding: 'utf-8' = 'utf-8';
 
@@ -27,8 +27,8 @@ export let RTConstants = Object.freeze({
 });
 
 export class RTUtils {
-    static sizeOfGeom(geomType: RTGeomType, float: boolean) {
-        if (geomType === RTGeomType.point) {
+    static sizeOfGeom(geomType: RTRecordType, float: boolean) {
+        if (geomType === RTRecordType.point) {
             return this.sizeOfPoint(float);
         }
         else {

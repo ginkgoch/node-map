@@ -3,7 +3,7 @@ import path from 'path';
 import _ from 'lodash';
 
 import { RTIndex } from "../../../src/index/rtree/RTIndex";
-import { RTGeomType } from '../../../src/index/rtree/RTGeomType';
+import { RTRecordType } from '../../../src/index/rtree/RTRecordType';
 import { ShapefileFeatureSource } from "../../.";
 import { Point } from 'ginkgoch-geom';
 
@@ -15,7 +15,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             expect(fs.existsSync(idxFilePath)).toBeTruthy();
         }
         finally {
@@ -36,7 +36,7 @@ describe('RTIndex', () => {
         cleanIndexFiles(idxFilePath);
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             index.open();
 
@@ -78,7 +78,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-rect-simple-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             index.open();
             index.push({ minx: -180, miny: -90, maxx: -160, maxy: -70 }, '1');
@@ -101,7 +101,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'index-create-point-simple-tmp.idx');
 
         try {
-            RTIndex.create(idxFilePath, RTGeomType.point);
+            RTIndex.create(idxFilePath, RTRecordType.point);
             const index = new RTIndex(idxFilePath, 'rs+');
             expect(index.flag).toEqual('rs+')
             index.open();
@@ -128,7 +128,7 @@ describe('RTIndex', () => {
         cleanIndexFiles(idxFilePath);
 
         const features = await fetchPointFeatures(shpFilePath);
-        RTIndex.create(idxFilePath, RTGeomType.rectangle);
+        RTIndex.create(idxFilePath, RTRecordType.rectangle);
         let idx = new RTIndex(idxFilePath, 'rs+');
 
         try {

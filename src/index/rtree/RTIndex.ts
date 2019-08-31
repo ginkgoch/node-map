@@ -6,7 +6,7 @@ import { RTIds } from "./RTIds";
 import { IEnvelope, Point } from "ginkgoch-geom";
 import { RTNode, RTLeaf, RTChild } from "./RTNode";
 import { RTLeafPage, RTChildPage } from "./RTPage";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangleRecord } from "./RTRecord";
 import { RTUtils } from "./RTUtils";
 
@@ -129,7 +129,7 @@ export class RTIndex {
         return this.root!.allRecordCount;
     }
 
-    static create(filePath: string, geomType: RTGeomType, options?: RTIndexCreateOption) {
+    static create(filePath: string, geomType: RTRecordType, options?: RTIndexCreateOption) {
         options = this._defaultCreateOptions(options);
         this._cleanForOverwrite(filePath, options);
         if (this._skipCreate(filePath, options)) {
@@ -191,7 +191,7 @@ export class RTIndex {
     }
 
     //#region create private methods
-    private static _create(filePath: string, geomType: RTGeomType, options: RTIndexCreateOption) {
+    private static _create(filePath: string, geomType: RTRecordType, options: RTIndexCreateOption) {
         const index = new RTIndex();
         index._rtFile.create(filePath, geomType, options.float!, options.pageSize!);
 

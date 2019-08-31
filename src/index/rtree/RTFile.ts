@@ -1,7 +1,7 @@
 import assert from 'assert';
 import fs from 'fs';
 import { FileStream } from "ginkgoch-filestream";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 import { RTLeafPage, RTHeaderPage, RTDataPage, RTChildPage, RTFileHeader } from "./RTPage";
 import { RTConstants, RTUtils } from './RTUtils';
 
@@ -15,7 +15,7 @@ export class RTFile {
     fileStream?: FileStream;
     headerPage?: RTHeaderPage;
 
-    create(filePath: string, geomType: RTGeomType, float: boolean, pageSize: number) {
+    create(filePath: string, geomType: RTRecordType, float: boolean, pageSize: number) {
         this.pageSize = pageSize;
 
         const fd = fs.openSync(filePath, 'w+');
@@ -34,7 +34,7 @@ export class RTFile {
         this.open(filePath, 'rs+');
     }
 
-    get geomType(): RTGeomType {
+    get geomType(): RTRecordType {
         return this.headerPage!.header.extId;
     }
 
@@ -103,7 +103,7 @@ export class RTFile {
         this.headerPage!.write();
     }
 
-    private _initFileHeader(geomType: RTGeomType, float: boolean) {
+    private _initFileHeader(geomType: RTRecordType, float: boolean) {
         this.pageSize = this.pageSize || RTUtils.kilobytes(8);
         this.headerPage = new RTHeaderPage(this, geomType, 0);
 
@@ -114,7 +114,7 @@ export class RTFile {
         fileHeader.pageSize = this.pageSize;
         fileHeader.isFloat = float;
 
-        if (geomType === RTGeomType.point) {
+        if (geomType === RTRecordType.point) {
             fileHeader.extName = RTConstants.RECORD_POINT_TYPE;
         }
         else {

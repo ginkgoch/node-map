@@ -1,7 +1,7 @@
 import { RTConstants, RTUtils } from "./RTUtils";
 import { Envelope, IEnvelope, Point } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
-import { RTGeomType } from "./RTGeomType";
+import { RTRecordType } from "./RTRecordType";
 
 export class RTRecordHeader {
     keyLength = 0;
@@ -43,11 +43,11 @@ export abstract class RTRecord {
     abstract size(float: boolean): number;
     abstract area(): number;
 
-    static create(geomType: RTGeomType): RTRecord {
+    static create(geomType: RTRecordType): RTRecord {
         switch (geomType) {
-            case RTGeomType.point:
+            case RTRecordType.point:
                 return new RTPointRecord();
-            case RTGeomType.rectangle:
+            case RTRecordType.rectangle:
                 return new RTRectangleRecord();
         }
 
