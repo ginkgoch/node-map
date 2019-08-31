@@ -85,10 +85,6 @@ export class RTIds {
         return id;
     }
 
-    invalidCache() {
-        this._stream!.invalidCache();
-    }
-
     write(id: string) {
         this._stream!.seek(0);
         this.header.read(this._stream!);
