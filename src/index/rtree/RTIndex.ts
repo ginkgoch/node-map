@@ -16,7 +16,6 @@ const FILE_EXTENSIONS = ['.idx', '.ids'];
 export class RTIndex {
     private _rtFile: RTFile;
     private _idsEngine: RTIds;
-    private _hasIdx: boolean = false;
 
     flag: string;
     filePath: string;
@@ -44,10 +43,7 @@ export class RTIndex {
 
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
-        this._idsEngine.flag = this.flag;
-        this._idsEngine.filePath = RTIndex._idsFilePath(this.filePath);
-        this._idsEngine.open();
-        this._hasIdx = true;
+        this._idsEngine.open(RTIndex._idsFilePath(this.filePath), this.flag);
         this.opened = true;
     }
 

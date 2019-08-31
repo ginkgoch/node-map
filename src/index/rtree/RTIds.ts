@@ -49,19 +49,19 @@ export class RTIdsRecord {
 }
 
 export class RTIds {
+    filePath?: string;
+    flag: string = 'rs';
+
     record = new RTIdsRecord();
     header = new RTIdsHeader();
 
     private _fd?: number;
     private _stream?: FileStream;
 
+    open(filePath?: string, flag?: string) {
+        this.filePath = filePath || this.filePath;
+        this.flag = flag || this.flag;
 
-    constructor(public filePath?: string, public flag: string = 'rs') {
-        this.flag = flag;
-        this.filePath = filePath;
-    }
-
-    open() {
         this._fd = fs.openSync(this.filePath!, this.flag);
         this._stream = new FileStream(this._fd);
     }
