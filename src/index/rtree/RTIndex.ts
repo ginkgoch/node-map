@@ -1,4 +1,6 @@
+import fs from 'fs';
 import assert from 'assert';
+import _ from 'lodash';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
 import { IEnvelope, Point } from "ginkgoch-geom";
@@ -9,6 +11,7 @@ import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangle, RTRectangleRecord 
 import { RTUtils } from "./RTUtils";
 
 const FILE_NOT_OPENED = 'Index file not opened.';
+const FILE_EXTENSIONS = ['.idx', '.ids'];
 
 export class RTIndex {
     private _rtFile: RTFile;
@@ -134,12 +137,48 @@ export class RTIndex {
         return this.root!.allRecordCount;
     }
 
-    static create(filePath: string, geomType: RTGeomType, float: boolean = true, pageSize = 8 * 1024) {
+    static create(filePath: string, geomType: RTGeomType, options?: RTIndexCreateOption) {
+        options = this._defaultCreateOptions(options);
+        this._cleanForOverwrite(filePath, options);
+        if (this._skipCreate(filePath, options)) {
+            return;
+        }
+
+        this._create(filePath, geomType, options);
+    }
+
+    private static _create(filePath: string, geomType: RTGeomType, options: RTIndexCreateOption) {
         const index = new RTIndex();
-        index._createIndexFile(filePath, geomType, float, pageSize);
+        index._createIndexFile(filePath, geomType, options.float!, options.pageSize!);
         const idsFilePath = this._idsFilePath(filePath);
         RTIds.createEmpty(idsFilePath);
         index.close();
+    }
+
+    private static _defaultCreateOptions(options?: RTIndexCreateOption): RTIndexCreateOption {
+        options = options || {};
+        options = _.defaults(options, { pageSize: 8 * 1024, overwrite: false, float: true });
+        return options;
+    }
+
+    private static _cleanForOverwrite(filePath: string, options: RTIndexCreateOption) {
+        if (options.overwrite! === false) return;
+
+        FILE_EXTENSIONS.forEach(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            if (fs.existsSync(tmpPath)) {
+                fs.unlinkSync(tmpPath);
+            }
+        });
+    }
+
+    private static _skipCreate(filePath: string, options: RTIndexCreateOption): boolean {
+        const count = FILE_EXTENSIONS.filter(ext => {
+            const tmpPath = filePath.replace(/\.idx$/i, ext);
+            return fs.existsSync(tmpPath);
+        }).length;
+
+        return count === FILE_EXTENSIONS.length && !(options.overwrite!);
     }
 
     idsIntersects(rect: IEnvelope) {
@@ -214,4 +253,10 @@ export class RTIndex {
         const rectangle = new RTRectangle(rect.minx, rect.miny, rect.maxx, rect.maxy);
         return rectangle;
     }
+}
+
+export interface RTIndexCreateOption {
+    float?: boolean;
+    pageSize?: number;
+    overwrite?: boolean;
 }
