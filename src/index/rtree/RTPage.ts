@@ -139,7 +139,7 @@ export class RTDataPage extends RTPage {
         return null;
     }
 
-    public maxRecordCount() {
+    public capacity() {
         return 0;
     }
 
@@ -344,7 +344,7 @@ export class RTLeafPage extends RTDataPage {
         this.isDirty = true;
     }
 
-    public maxRecordCount() {
+    public capacity() {
         const record = this.createRecord();
         let capacity = (this.pageSize - RTConstants.PAGE_HEADER_SIZE - RTConstants.RECORDSET_HEADER_SIZE - RTConstants.PAGE_SLOT_SIZE * 2) / (record.size(this.isFloat) + RTConstants.PAGE_SLOT_SIZE);
         capacity = Math.floor(capacity);
@@ -378,7 +378,7 @@ export class RTChildPage extends RTLeafPage {
         return record;
     }
 
-    maxRecordCount() {
+    capacity() {
         const entry = new RTEntryRecord();
         let count = (this.pageSize - 
             RTConstants.PAGE_HEADER_SIZE - 

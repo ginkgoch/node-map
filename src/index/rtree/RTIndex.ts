@@ -174,12 +174,12 @@ export class RTIndex {
     }
 
     private _insertRect(rect: IEnvelope, id: string) {
-        const blockId = this._idsEngine.write(id);
         const recordHeader = new RTRecordHeader();
         recordHeader.keyLength = RTUtils.sizeOfRectangle(this._rtFile.isFloat);
         recordHeader.elementLength = 4;
         recordHeader.childNodeId = 0;
-
+        
+        const blockId = this._idsEngine.write(id);
         const rectRecord = new RTRectangleRecord(recordHeader, rect, blockId);
         const nodeList = new Array<RTNode>();
         this.root!.insertRecord(rectRecord, nodeList);
