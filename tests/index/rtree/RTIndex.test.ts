@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 
-import { RTIndex } from "../../../src/index/rtree/RTIndex";
-import { RTRecordType } from '../../../src/index/rtree/RTRecordType';
+import { RTIndex, RTRecordType } from "../../../src/indices";
 import { ShapefileFeatureSource } from "../../.";
 import { Point } from 'ginkgoch-geom';
 
