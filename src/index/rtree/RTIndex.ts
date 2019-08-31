@@ -1,5 +1,4 @@
 import fs from 'fs';
-import assert from 'assert';
 import _ from 'lodash';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
@@ -9,11 +8,11 @@ import { RTLeafPage, RTChildPage } from "./RTPage";
 import { RTRecordType } from "./RTRecordType";
 import { RTRecordHeader, RTPoint, RTPointRecord, RTRectangleRecord } from "./RTRecord";
 import { RTUtils } from "./RTUtils";
+import { BaseIndex } from '../BaseIndex';
 
-const FILE_NOT_OPENED = 'Index file not opened.';
 const FILE_EXTENSIONS = ['.idx', '.ids'];
 
-export class RTIndex {
+export class RTIndex extends BaseIndex {
     private _rtFile: RTFile;
     private _idsEngine: RTIds;
 
@@ -22,6 +21,8 @@ export class RTIndex {
     opened = false;
 
     constructor(filePath: string = '', flag: string = 'rs') {
+        super();
+
         this.flag = flag;
         this.filePath = filePath;
         this._rtFile = new RTFile();
@@ -39,12 +40,12 @@ export class RTIndex {
         }
 
         this._open();
+        this.opened = true;
     }
 
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
         this._idsEngine.open(RTIndex._idsFilePath(this.filePath), this.flag);
-        this.opened = true;
     }
 
     close() {
@@ -123,9 +124,7 @@ export class RTIndex {
         return root;
     }
 
-    get count(): number {
-        assert(this.opened, FILE_NOT_OPENED);
-
+    protected _count(): number {
         return this.root!.allRecordCount;
     }
 
@@ -139,13 +138,7 @@ export class RTIndex {
         this._create(filePath, recordType, options);
     }
 
-    intersections(rect: IEnvelope) {
-        return this.insiders(rect);
-    }
-
-    insiders(rect: IEnvelope) {
-        assert(this.opened, FILE_NOT_OPENED);
-
+    protected _insiders(rect: IEnvelope) {
         const root = this.root!;
         const idx = new Array<number>();
         root.fillOverlaps(rect, idx);

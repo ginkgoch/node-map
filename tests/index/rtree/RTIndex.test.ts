@@ -50,7 +50,7 @@ describe('RTIndex', () => {
             index.close();
             index.flag = 'rs';
             index.open();
-            expect(index.count).toBe(478);
+            expect(index.count()).toBe(478);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -69,7 +69,7 @@ describe('RTIndex', () => {
         const idxFilePath = path.join(idxFileFolder, 'cities.idx');
         const index = new RTIndex(idxFilePath, 'rs');
         index.open();
-        expect(index.count).toBe(478);
+        expect(index.count()).toBe(478);
 
         checkIndexBasicQueryResult(index, 478);
     });
@@ -89,7 +89,7 @@ describe('RTIndex', () => {
 
             index.flag = 'rs';
             index.open();
-            expect(index.count).toBe(4);
+            expect(index.count()).toBe(4);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -114,7 +114,7 @@ describe('RTIndex', () => {
             index.close();
             index.open('rs');
             expect(index.flag).toEqual('rs');
-            expect(index.count).toBe(4);
+            expect(index.count()).toBe(4);
         }
         finally {
             cleanIndexFiles(idxFilePath);
@@ -137,7 +137,7 @@ describe('RTIndex', () => {
             idx.close();
 
             idx.open('rs');
-            const idxCount = idx.count;
+            const idxCount = idx.count();
             expect(idxCount).toBe(51);
         }
         finally {
