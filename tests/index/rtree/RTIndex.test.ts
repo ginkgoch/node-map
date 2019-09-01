@@ -172,17 +172,17 @@ describe('RTIndex', () => {
         expect(option.overwrite).toBeFalsy();
         expect(option.float).toBeTruthy();
 
-        option = rtIndex._defaultCreateOptions({pageSize: 4096});
+        option = rtIndex._defaultCreateOptions({ pageSize: 4096 });
         expect(option.pageSize).toBe(4096);
         expect(option.overwrite).toBeFalsy();
         expect(option.float).toBeTruthy();
 
-        option = rtIndex._defaultCreateOptions({overwrite: true, float: false});
+        option = rtIndex._defaultCreateOptions({ overwrite: true, float: false });
         expect(option.pageSize).toBe(8192);
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();
 
-        option = rtIndex._defaultCreateOptions({overwrite: true, pageSize: 4096, float: false});
+        option = rtIndex._defaultCreateOptions({ overwrite: true, pageSize: 4096, float: false });
         expect(option.pageSize).toBe(4096);
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();
@@ -200,6 +200,21 @@ describe('RTIndex', () => {
         filePath = './tests/data/index/cities1.dbf';
         result = RTIndex.exists(filePath);
         expect(result).toBeFalsy();
+    });
+
+    it('count - complex', async () => {
+        const shpFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.shp';
+        const idxFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.idx';
+        let idx = new RTIndex(idxFilePath);
+        idx.open();
+        console.log(idx.count());
+
+        // let shp = new ShapefileFeatureSource(shpFilePath);
+        // await shp.open()
+        // console.log(await shp.count());
+
+        // let features = await shp.features();
+        // console.log(features.length);
     });
 });
 
