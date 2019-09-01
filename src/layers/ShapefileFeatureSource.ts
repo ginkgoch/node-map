@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from 'path';
 import _ from "lodash";
-import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
+import { Shapefile, DbfField, DbfFieldType, ShapefileType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JSONKnownTypes } from '../shared';
@@ -38,6 +38,11 @@ export class ShapefileFeatureSource extends FeatureSource {
         if (this.name === '' || this.name.match(/^unknown/i)) {
             this.name = ShapefileFeatureSource._filename(filePath);
         }
+    }
+
+    public get shapeType(): ShapefileType {
+        Validator.checkOpened(this);
+        return this.__shapefile.shapeType();
     }
 
     protected _toJSON() {

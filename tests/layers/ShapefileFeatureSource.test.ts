@@ -1,4 +1,4 @@
-import { DbfField, DbfFieldType } from 'ginkgoch-shapefile';
+import { DbfField, DbfFieldType, ShapefileType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
 import TestUtils from '../shared/TestUtils';
 
@@ -74,5 +74,20 @@ describe('ShapefileFeatureSource', () => {
 
         source.filePath = './fileChanged.shp';
         expect(source.name).toEqual('fileNotExist');
+    });
+
+    it('shapeType', async () => {
+        let source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        await source.open();
+        let shapeType = source.shapeType;
+        expect(shapeType).toEqual(ShapefileType.polygon);
+        await source.close();
+
+        source = new ShapefileFeatureSource('./tests/data/index/cities.shp');
+        await source.open();
+        shapeType = source.shapeType;
+        expect(shapeType).toEqual(ShapefileType.point);
+        await source.close();
+
     });
 });
