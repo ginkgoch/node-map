@@ -264,7 +264,7 @@ export class RTNode {
     }
 
     private pickNext(rectArr: RTRectangle[], spRectList: number[], leftRectList: number[], rightRectList: number[], mbr1: RTRectangle, mbr2: RTRectangle) {
-        let diff = Number.MIN_VALUE;
+        let diff = Number.NEGATIVE_INFINITY;
         let d1 = 0, d2 = 0, md1 = 0, md2 = 0, sel = -1;
         const mbr1Area = mbr1.area();
         const mbr2Area = mbr2.area();
