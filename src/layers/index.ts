@@ -8,3 +8,4 @@ export * from './MemoryFeatureSource';
 export * from './ShapefileFeatureSource';
 export * from './FeatureSourceFactory';
 export * from './LayerFactory';
+export * from 'ginkgoch-shapefile';
