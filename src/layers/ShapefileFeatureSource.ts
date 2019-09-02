@@ -6,7 +6,7 @@ import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JSONKnownTypes } from '../shared';
 import { Projection, Srs } from "./Projection";
-import { RTIndex } from "../indices";
+import { RTIndex, RTRecordType } from "../indices";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 
@@ -66,6 +66,35 @@ export class ShapefileFeatureSource extends FeatureSource {
      */
     get editable() {
         return true;
+    }
+
+    buildIndex(overwrite = false) {
+        const indexFilePath = RTIndex.entry(this.filePath);
+        const indexFileExists = RTIndex.exists(indexFilePath);
+        if (!overwrite && indexFileExists) {
+            return;
+        }
+
+        const recordType = this.__shapefile.shapeType() === ShapefileType.point ? RTRecordType.point : RTRecordType.rectangle;
+        const recordCount = this.__shapefile.count();
+        const pageSize = RTIndex.recommendPageSize(recordCount);
+        const tempIndexFilePath = RTIndex.temp(indexFilePath);
+
+        RTIndex.clean(tempIndexFilePath);
+        RTIndex.create(tempIndexFilePath, recordType, { overwrite, pageSize });
+        const index = new RTIndex(tempIndexFilePath, 'rs+');
+        index.open();
+
+        const iterator = this.__shapefile.iterator();
+        while(!iterator.done) {
+            const record = iterator.next();
+            if (record.hasValue && record.value !== null) {
+                const feature = record.value!;
+                index.push(feature.geometry, feature.id.toString());
+            }
+        }
+        index.close();
+        RTIndex.move(tempIndexFilePath, indexFilePath, overwrite);
     }
 
     protected async _open() {

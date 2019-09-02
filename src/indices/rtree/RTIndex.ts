@@ -3,7 +3,7 @@ import path from "path";
 import _ from 'lodash';
 import { RTFile } from "./RTFile";
 import { RTIds } from "./RTIds";
-import { IEnvelope, Point } from "ginkgoch-geom";
+import { IEnvelope, Point, Geometry, Feature } from "ginkgoch-geom";
 import { RTNode, RTLeaf, RTChild } from "./RTNode";
 import { RTLeafPage, RTChildPage } from "./RTPage";
 import { RTRecordType } from "./RTRecordType";
@@ -63,22 +63,26 @@ export class RTIndex extends BaseIndex {
         this._idsEngine.close();
     }
 
-    delete(point: Point): void;
+    delete(geom: Geometry): void;
     delete(rect: IEnvelope): void;
-    delete(geom: Point | IEnvelope): void {
+    delete(geom: Geometry | IEnvelope): void {
         if (geom instanceof Point) {
             this._deletePoint(geom.x, geom.y);
+        }
+        else if (geom instanceof Geometry) {
+            this._deleteRect(geom.envelope());
         }
         else {
             this._deleteRect(geom);
         }
     }
 
-    push(point: Point, id: string): void;
-    push(rect: IEnvelope, id: string): void;
-    push(geom: Point | IEnvelope, id: string): void {
+    push(geom: Geometry | IEnvelope, id: string): void {
         if (geom instanceof Point) {
             this._insertPoint(geom.x, geom.y, id);
+        }
+        else if (geom instanceof Geometry) {
+            this._insertRect(geom.envelope(), id);
         }
         else {
             this._insertRect(geom, id);
@@ -114,6 +118,44 @@ export class RTIndex extends BaseIndex {
     static entry(filePath: string) {
         const ext = path.extname(filePath);
         return filePath.replace(ext, '.idx');
+    }
+
+    static temp(filePath: string) {
+        const ext = path.extname(filePath);
+        filePath = filePath.replace(ext, '.idx');
+
+        const dirname = path.dirname(filePath);
+        const basename = path.basename(filePath);
+        const tempFilePath = path.join(dirname, 'TMP_' + basename);
+        return tempFilePath;
+    }
+
+    static clean(filePath: string) {
+        const sourceExt = path.extname(filePath);
+        FILE_EXTENSIONS.forEach(ext => {
+            const indexFilePath = filePath.replace(sourceExt, ext);
+            if (fs.existsSync(indexFilePath)) {
+                fs.unlinkSync(indexFilePath);
+            }
+        })
+    }
+
+    static move(sourcePath: string, targetPath: string, overwrite = true) {
+        const exists = this.exists(targetPath);
+        if (exists && overwrite) {
+            this.clean(targetPath);
+        }
+        else if (exists) {
+            return;
+        }
+
+        const sourceExt = path.extname(sourcePath);
+        const targetExt = path.extname(targetPath);
+        FILE_EXTENSIONS.forEach(ext => {
+            const source = sourcePath.replace(sourceExt, ext);
+            const target = targetPath.replace(targetExt, ext);
+            fs.renameSync(source, target);
+        });
     }
 
     get pageSize() {

@@ -1,6 +1,7 @@
 import { DbfField, DbfFieldType, ShapefileType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
 import TestUtils from '../shared/TestUtils';
+import { RTIndex } from '../../src/indices';
 
 describe('ShapefileFeatureSource', () => {
     it('DbfField parsing', () => {
@@ -88,6 +89,21 @@ describe('ShapefileFeatureSource', () => {
         shapeType = source.shapeType;
         expect(shapeType).toEqual(ShapefileType.point);
         await source.close();
+    });
 
+    it('build index', async () => {
+        const filePath = './tests/data/layers/USStates-building-index.shp';
+
+        try {
+            let source = new ShapefileFeatureSource(filePath);
+            await source.open();
+            await source.buildIndex(true);
+            await source.close();
+    
+            expect(RTIndex.exists(filePath)).toBeTruthy();
+        }
+        finally {
+            RTIndex.clean(filePath);
+        }
     });
 });
