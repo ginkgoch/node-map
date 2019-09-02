@@ -201,6 +201,15 @@ describe('RTIndex', () => {
         result = RTIndex.exists(filePath);
         expect(result).toBeFalsy();
     });
+
+    it('tmp', () => {
+        const expected = 'tests/data/index/TMP_cities.idx';
+        let result = RTIndex.temp('./tests/data/index/cities.shp');
+        expect(result).toEqual(expected); 
+
+        result = RTIndex.temp('./tests/data/index/cities.idx');
+        expect(result).toEqual(expected); 
+    });
 });
 
 function cleanIndexFiles(basePath: string) {
