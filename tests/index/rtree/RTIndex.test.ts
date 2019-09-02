@@ -172,17 +172,17 @@ describe('RTIndex', () => {
         expect(option.overwrite).toBeFalsy();
         expect(option.float).toBeTruthy();
 
-        option = rtIndex._defaultCreateOptions({pageSize: 4096});
+        option = rtIndex._defaultCreateOptions({ pageSize: 4096 });
         expect(option.pageSize).toBe(4096);
         expect(option.overwrite).toBeFalsy();
         expect(option.float).toBeTruthy();
 
-        option = rtIndex._defaultCreateOptions({overwrite: true, float: false});
+        option = rtIndex._defaultCreateOptions({ overwrite: true, float: false });
         expect(option.pageSize).toBe(8192);
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();
 
-        option = rtIndex._defaultCreateOptions({overwrite: true, pageSize: 4096, float: false});
+        option = rtIndex._defaultCreateOptions({ overwrite: true, pageSize: 4096, float: false });
         expect(option.pageSize).toBe(4096);
         expect(option.overwrite).toBeTruthy();
         expect(option.float).toBeFalsy();

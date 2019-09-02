@@ -244,8 +244,8 @@ export class RTNode {
         RTUtils.remove(spRectList, seeds[0]);
         RTUtils.remove(spRectList, seeds[1]);
 
-        const mbr1 = rectArr[seeds[0]];
-        const mbr2 = rectArr[seeds[1]];
+        const mbr1 = _.clone(rectArr[seeds[0]]);
+        const mbr2 = _.clone(rectArr[seeds[1]]);
 
         while(spRectList.length > 0) {
             if (min - leftRectList.length === spRectList.length) {
@@ -525,7 +525,7 @@ export class RTNode {
         this.dataPage.flush();
     }
 
-    private _findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
+    protected _findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
         let result = false;
         const count = this.recordCount;
         const recordType = this.recordType;
@@ -647,7 +647,41 @@ export class RTLeaf extends RTNode {
         this._insertRecord(record, nodeList);
     }
 
+    protected _findLeaf(record: RTRecord, leafInfo: RTLeafInfo): boolean {
+        let success = false;
+        leafInfo.leaf = null;
+
+        const recordCount = this.recordCount;
+        for (let i = 0; i < recordCount; i++) {
+            const tmpRecord = this.record(i)!;
+            const recordType = this.recordType;
+            if (recordType === RTRecordType.point) {
+                const currentPoint = tmpRecord.point();
+                const deletingPoint = record.point();
+                if (currentPoint.equals(deletingPoint)) {
+                    leafInfo.id = i;
+                    leafInfo.leaf = this;
+                    success = true;
+                    return success;
+                }
+            }
+            else {
+                const currentRect = tmpRecord.envelope();
+                const deletingRect = record.envelope();
+                if (Envelope.equals(currentRect, deletingRect)) {
+                    leafInfo.id = i;
+                    leafInfo.leaf = this;
+                    success = true;
+                    return success;
+                }
+            }
+        }
+
+        return success;
+    }
+
     protected splitNode(record: RTRecord, nodeList: RTNode[]) {
+        nodeList.length = 0;
         const rtFile = this.dataPage.rtFile;
         const recordType = this.dataPage.recordType;
         const leafLeft = this._createLeafNode(rtFile, recordType);

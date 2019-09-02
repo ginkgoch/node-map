@@ -193,7 +193,7 @@ export class RTIndex extends BaseIndex {
         recordHeader.childNodeId = 0;
         
         const blockId = this._idsEngine.write(id);
-        const rectRecord = new RTRectangleRecord(recordHeader, rect, blockId);
+        const rectRecord = new RTRectangleRecord(recordHeader, _.clone(rect), blockId);
         const nodeList = new Array<RTNode>();
         this.root!.insertRecord(rectRecord, nodeList);
     }
