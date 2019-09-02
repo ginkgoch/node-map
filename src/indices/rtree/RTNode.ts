@@ -244,8 +244,8 @@ export class RTNode {
         RTUtils.remove(spRectList, seeds[0]);
         RTUtils.remove(spRectList, seeds[1]);
 
-        const mbr1 = rectArr[seeds[0]];
-        const mbr2 = rectArr[seeds[1]];
+        const mbr1 = _.clone(rectArr[seeds[0]]);
+        const mbr2 = _.clone(rectArr[seeds[1]]);
 
         while(spRectList.length > 0) {
             if (min - leftRectList.length === spRectList.length) {
@@ -681,6 +681,7 @@ export class RTLeaf extends RTNode {
     }
 
     protected splitNode(record: RTRecord, nodeList: RTNode[]) {
+        nodeList.length = 0;
         const rtFile = this.dataPage.rtFile;
         const recordType = this.dataPage.recordType;
         const leafLeft = this._createLeafNode(rtFile, recordType);

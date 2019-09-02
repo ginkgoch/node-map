@@ -1,17 +1,19 @@
-const { RTIndex, RTRecordType, ShapefileFeatureSource } = require('./dist/bundle');
-const { Point } = require('ginkgoch-geom');
-const fs = require('fs');
+import { RTIndex, RTRecordType, ShapefileFeatureSource } from '.';
+import fs from 'fs';
+import _ from 'lodash';
+
+const sourceFilePath = '/Users/howardchen/Desktop/TestData1/evergreen.shp'
 
 async function readCount() {
-    const idxFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.idx';
+    const idxFilePath = sourceFilePath;
     let idx = new RTIndex(idxFilePath, 'rs+');
     idx.open();
     console.log(idx.count());
 }
 
 async function main() {
-    const shpFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.shp';
-    const idxFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.idx';
+    const shpFilePath = sourceFilePath;
+    const idxFilePath = sourceFilePath.replace('.shp', '.idx');
     
     const features = await fetchPointFeatures(shpFilePath);
     const featureCount = features.length;
@@ -34,11 +36,6 @@ async function main() {
             const f = features[i];
             const envelope = f.geometry.envelope();
             idx.push(envelope, f.id.toString());
-            i++;
-
-            if (f.id !== i) {
-                console.log(f.id);
-            }
         }
         idx.close();
 
@@ -56,14 +53,18 @@ async function main() {
     }
 }
 
-async function fetchPointFeatures(filePath) {
+async function fetchPointFeatures(filePath: string) {
     const source = new ShapefileFeatureSource(filePath);
     source.indexEnabled = false;
 
     try {
         await source.open();
         const featureCount = await source.count();
-        const features = await source.features();
+        const features = await source.features(undefined, []);
+
+        const fff = _.take(features, 500);
+        console.log(fff.length);
+
         return features;
     }
     finally {

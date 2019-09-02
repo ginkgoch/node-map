@@ -201,21 +201,6 @@ describe('RTIndex', () => {
         result = RTIndex.exists(filePath);
         expect(result).toBeFalsy();
     });
-
-    it('count - complex', async () => {
-        const shpFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.shp';
-        const idxFilePath = '/Users/howardch/Downloads/test-data/test2/evergreen1.idx';
-        let idx = new RTIndex(idxFilePath);
-        idx.open();
-        console.log(idx.count());
-
-        // let shp = new ShapefileFeatureSource(shpFilePath);
-        // await shp.open()
-        // console.log(await shp.count());
-
-        // let features = await shp.features();
-        // console.log(features.length);
-    });
 });
 
 function cleanIndexFiles(basePath: string) {
