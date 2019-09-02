@@ -70,9 +70,13 @@ export abstract class FeatureSource extends Opener {
         }
     }
 
-    async count() {
+    async count(): Promise<number> {
         Validator.checkOpened(this, !this._openRequired);
+        const count = await this._count();
+        return count;
+    }
 
+    protected async _count(): Promise<number> {
         return (await this.features()).length;
     }
 

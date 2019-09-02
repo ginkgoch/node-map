@@ -103,6 +103,10 @@ export class ShapefileFeatureSource extends FeatureSource {
         }
     }
 
+    protected async _count(): Promise<number> {
+        return this.__shapefile.count();
+    }
+
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
         let features: Array<Feature>;
         if (this.indexEnabled && this.index !== undefined) {
