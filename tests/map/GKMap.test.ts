@@ -7,8 +7,12 @@ const compareImage = TestUtils.compareImageFunc(name => './tests/data/map/' + na
 
 describe('Map', () => {
     it('constructor', () => {
-        const map = new GKMap();
+        let map = new GKMap();
         expect(map.scales.length).toBe(20);
+        expect(map.srs.unit).toBe('m');
+
+        map = new GKMap(256, 256, 'WGS84');
+        expect(map.srs.unit).toEqual('degrees');
     });
 
     it('draw', async () => {
