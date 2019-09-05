@@ -1,6 +1,6 @@
 import { ShapefileFeatureSource, FeatureLayer } from "..";
 import { FillStyle } from "../../src/styles";
-import { XYZMap } from "../../src/map";
+import { MapEngine } from "../../src/map";
 import TestUtils from "../shared/TestUtils";
 import { Srs } from "../../src/layers";
 
@@ -19,7 +19,7 @@ function getMap() {
     const layer = new FeatureLayer(source);
     layer.pushStyles([new FillStyle('yellow', 'blue', 1)]);
 
-    const map = new XYZMap();
+    const map = new MapEngine();
     map.srs = new Srs('WGS84');
     map.pushLayers([layer]);
     return map;

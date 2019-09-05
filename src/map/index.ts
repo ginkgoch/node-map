@@ -1,3 +1,2 @@
-export * from './GKMap';
+export * from './MapEngine';
 export * from './TileSystem';
-export * from './XYZMap';
