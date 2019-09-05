@@ -3,9 +3,10 @@ import { IEnvelope, Envelope } from "ginkgoch-geom";
 import { Render } from "../render";
 import { LayerGroup, FeatureLayer, Srs } from "../layers";
 import { Constants } from "../shared";
+import { TileOrigin, TileSystem } from ".";
 
-export class GKMap {
-    name = 'GKMap';
+export class MapEngine {
+    name = 'Map';
     srs: Srs;
     width: number;
     height: number;
@@ -14,6 +15,7 @@ export class GKMap {
     minimumScale = 0;
     groups: Array<LayerGroup>;
     scales: Array<number>;
+    origin: TileOrigin = 'upperLeft';
 
     constructor(width?: number, height?: number, srs?: string, scales?: Array<number>) {
         this.width = width || 256;
@@ -35,6 +37,7 @@ export class GKMap {
             srs: this.srs.toJSON(),
             width: this.width,
             height: this.height,
+            origin: this.origin,
             maximumScale: this.maximumScale,
             minimumScale: this.minimumScale,
             scales: this.scales,
@@ -49,19 +52,19 @@ export class GKMap {
     }
 
     static parseJSON(json: any) {
-        const map = new GKMap();
-        map.name = json.name;
-        map.srs = Srs.parseJSON(json.srs);
-        map.width = json.width;
-        map.height = json.height;
-        map.maximumScale = json.maximumScale;
-        map.minimumScale = json.minimumScale;
-        map.scales = json.scales;
-        map.groups = (<any[]>json.groups).map(g => LayerGroup.parseJSON(g));
-        if (json.background !== undefined) {
-            map.background = json.background;
-        }
-
+        const map = new MapEngine();
+        map.name = this._default('name', json, map);
+        map.srs = this._default('srs', json, map, Srs.parseJSON);
+        map.width = this._default('width', json, map);
+        map.height = this._default('height', json, map);
+        map.origin = this._default('origin', json, map);
+        map.maximumScale = this._default('maximumScale', json, map);
+        map.minimumScale = this._default('minimumScale', json, map);
+        map.background = this._default('background', json, map);
+        map.scales = this._default('scales', json, map);
+        map.groups = this._default('groups', json, map, groupsJson => {
+            return (<any[]>groupsJson).map(g => LayerGroup.parseJSON(g));
+        });
         return map;
     }
 
@@ -99,7 +102,7 @@ export class GKMap {
     }
 
     /**
-     * This method is deprecated. Please call image(envelope?: IEnvelope) instead.
+     * @deprecated This method is deprecated. Please call image(envelope?: IEnvelope) instead.
      */
     async draw(envelope?: IEnvelope) {
         return await this.image(envelope);
@@ -115,11 +118,29 @@ export class GKMap {
             if (!group.visible) {
                 continue;
             }
-            
+
             await group.draw(render);
         }
 
         render.flush();
         return render.image;
+    }
+
+    async xyz(x: number = 0, y: number = 0, z: number = 0) {
+        const tileSystem = new TileSystem(this.width, this.height, this.srs.unit, this.scales, this.origin);
+        const envelope = tileSystem.envelope(z, x, y);
+        const image = await this.image(envelope);
+        return image;
+    }
+
+    private static _default(key: string, json: any, map: MapEngine, parser?: (param: any) => any) {
+        let v = (<any>map)[key];
+
+        let jsonValue = json[key];
+        if (jsonValue) {
+            v = parser ? parser(jsonValue) : jsonValue;
+        }
+
+        return v;
     }
 }
