@@ -54,10 +54,10 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     static parseJSON(json: any) {
         const source = new ShapefileFeatureSource();
-        source.name = json.name;
+        source.name = _.defaultTo(json.name, 'Unknown');
+        source.flag = _.defaultTo(json.flag, 'rs');
+        source.filePath = _.defaultTo(json.filePath, '');
         source.projection = Projection.parseJSON(json.projection);
-        source.flag = json.flag;
-        source.filePath = json.filePath;
         return source;
     }
 

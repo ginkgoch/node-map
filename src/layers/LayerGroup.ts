@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { FeatureLayer } from ".";
 import { Render } from "../render";
@@ -70,8 +71,8 @@ export class LayerGroup {
 
     static parseJSON(json: any) {
         const group = new LayerGroup();
-        group.name = json.name;
-        group.visible = json.visible;
+        group.name = _.defaultTo(json.name, 'Unknown');
+        group.visible = _.defaultTo(json.visible, true);
         group.layers = (<any[]>json.layers).map(j => {
             return FeatureLayer.parseJSON(j);
         });
