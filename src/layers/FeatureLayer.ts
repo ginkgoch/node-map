@@ -97,16 +97,13 @@ export class FeatureLayer extends Opener {
     static parseJSON(json: any) {
         const source = FeatureSourceFactory.parseJSON(json.source) as FeatureSource;
         const layer = new FeatureLayer(source);
-        layer.name = json.name;
-        layer.minimumScale = json.minimumScale;
-        layer.maximumScale = json.maximumScale;
+        layer.id = _.defaultTo(json.id, 'layer-' + uuid());
+        layer.name = _.defaultTo(json.name, 'Unknown');
+        layer.minimumScale = _.defaultTo(json.minimumScale, 0);
+        layer.maximumScale = _.defaultTo(json.maximumScale, Number.POSITIVE_INFINITY);
         layer.styles = (<any[]>json.styles).map(j => {
             return StyleFactory.parseJSON(j);
         });
-
-        if (json.id !== undefined) {
-            layer.id = json.id;
-        }
 
         return layer;
     }
