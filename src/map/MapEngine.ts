@@ -77,28 +77,47 @@ export class MapEngine {
         return envelope;
     }
 
-    pushLayers(layers: Array<FeatureLayer>, groupName: string = 'Default') {
-        let group = this.groups.find(g => g.name === groupName);
-        if (!group) {
-            group = new LayerGroup([], groupName);
-            this.groups.push(group);
-        }
+    pushLayer(layer: FeatureLayer, groupName: string = 'Default') {
+        let group = this._groupOrNew(groupName);
+        group.push(layer);
+    }
 
+    pushLayers(layers: Array<FeatureLayer>, groupName: string = 'Default') {
+        let group = this._groupOrNew(groupName);
         group.pushAll(layers);
     }
 
-    pushGroups(groups: Array<LayerGroup>) {
+    pushGroups(...groups: Array<LayerGroup>) {
         for (let group of groups) {
             this.groups.push(group);
         }
+    }
+
+    private _groupOrNew(name: string) {
+        let group = this.groups.find(g => g.name === name);
+        if (!group) {
+            group = new LayerGroup([], name);
+            this.groups.push(group);
+        }
+
+        return group;
     }
 
     group(name: string): LayerGroup | undefined {
         return this.groups.find(g => g.name === name);
     }
 
-    layer(name: string): FeatureLayer | undefined {
-        return _.flatMap(this.groups, g => g.layers).find(l => l.name === name);
+    layer(name: string, groupName?: string): FeatureLayer | undefined {
+        if (groupName === undefined) {
+            return _.flatMap(this.groups, g => g.layers).find(l => l.name === name);
+        }
+
+        const group = this.group(groupName);
+        return group ? group.layers.find(l => l.name === name) : undefined;
+    }
+
+    layerByID(id: string): FeatureLayer | undefined {
+        return _.flatMap(this.groups, g => g.layers).find(l => l.id === id);
     }
 
     /**
