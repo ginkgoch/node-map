@@ -2,6 +2,7 @@ import { DbfField, DbfFieldType, ShapefileType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
 import TestUtils from '../shared/TestUtils';
 import { RTIndex } from '../../src/indices';
+import { Unit } from '../../src/shared';
 
 describe('ShapefileFeatureSource', () => {
     it('DbfField parsing', () => {
@@ -99,11 +100,21 @@ describe('ShapefileFeatureSource', () => {
             await source.open();
             await source.buildIndex(true);
             await source.close();
-    
+
             expect(RTIndex.exists(filePath)).toBeTruthy();
         }
         finally {
             RTIndex.clean(filePath);
         }
     });
+
+    it('load proj', async () => {
+        const filePath = './tests/data/layers/latlong.shp';
+
+        let source = new ShapefileFeatureSource(filePath);
+        await source.open();
+        expect(source.projection.from.unit).toEqual(Unit.degrees);
+        expect(source.projection.from.toJSON()).toEqual({ "projection": "GEOGCS[\"GCS_North_American_1983\",DATUM[\"D_North_American_1983\",SPHEROID[\"GRS_1980\",6378137,298.257222101]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]]", "unit": "degrees" });
+        await source.close();
+    })
 });
