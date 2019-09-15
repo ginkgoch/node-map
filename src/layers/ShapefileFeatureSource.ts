@@ -105,7 +105,7 @@ export class ShapefileFeatureSource extends FeatureSource {
 
         const projFilePath = this.filePath.replace(/.shp/i, '.prj');
         if (this.projection.from.projection === undefined && fs.existsSync(projFilePath)) {
-            this.projection.from = new Srs(fs.readFileSync(projFilePath).toString('utf8'));
+            this.projection.from = new Srs(fs.readFileSync(projFilePath).toString('utf-8').trim());
         }
 
         if (this.indexEnabled) {
