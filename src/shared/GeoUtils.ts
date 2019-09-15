@@ -64,7 +64,9 @@ export class GeoUtils {
             const proj = proj4(srs) as any;
             const unit = proj.oProj.units;
             switch (unit) {
-                case 'degrees': return Unit.degrees;
+                case 'degree':
+                case 'degrees': 
+                    return Unit.degrees;
                 case 'm': return Unit.meters;
                 case 'us-ft': return Unit.feet;
                 default: return Unit.unknown;
