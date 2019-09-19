@@ -90,7 +90,8 @@ export class FeatureLayer extends Opener {
             source: this.source.toJSON(),
             styles: this.styles.map(style => style.toJSON()),
             minimumScale: this.minimumScale,
-            maximumScale: this.maximumScale
+            maximumScale: this.maximumScale,
+            visible: this.visible
         }
     }
 
@@ -99,6 +100,7 @@ export class FeatureLayer extends Opener {
         const layer = new FeatureLayer(source);
         layer.id = _.defaultTo(json.id, 'layer-' + uuid());
         layer.name = _.defaultTo(json.name, 'Unknown');
+        layer.visible = _.defaultTo(json.visible, true);
         layer.minimumScale = _.defaultTo(json.minimumScale, 0);
         layer.maximumScale = _.defaultTo(json.maximumScale, Number.POSITIVE_INFINITY);
         layer.styles = (<any[]>json.styles).map(j => {

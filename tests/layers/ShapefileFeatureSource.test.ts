@@ -116,5 +116,18 @@ describe('ShapefileFeatureSource', () => {
         expect(source.projection.from.unit).toEqual(Unit.degrees);
         expect(source.projection.from.toJSON()).toEqual({ "projection": "GEOGCS[\"GCS_North_American_1983\",DATUM[\"D_North_American_1983\",SPHEROID[\"GRS_1980\",6378137,298.257222101]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]]", "unit": "degrees" });
         await source.close();
-    })
+    });
+
+    it('get properties', async () => {
+        const filePath = './tests/data/layers/USStates.shp';
+
+        let source = new ShapefileFeatureSource(filePath);
+        await source.open();
+        const properties = await source.properties(['POP1990']);
+        properties.forEach(p => {
+            expect(p.has('POP1990')).toBeTruthy();
+            expect(p.size).toBe(1);
+        })
+        await source.close();
+    });
 });

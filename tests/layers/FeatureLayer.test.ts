@@ -64,7 +64,9 @@ describe('FeatureLayer', () => {
         json.styles = (<object[]>json.styles).map(s => _.omit(s, 'id'));
 
         TestUtils.compareOrLog(json, {
-            "type": "feature-layer", "name": "Unknown",
+            "type": "feature-layer", 
+            "name": "Unknown",
+            "visible": true,
             "source": {
                 "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 'unknown' }, "to": { "unit": 'unknown' } }, "features": {
                     "id": 0, "type"
