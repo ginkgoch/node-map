@@ -2,6 +2,8 @@ import fs from 'fs';
 import assert from 'assert';
 import { Opener } from "./Opener";
 import { FeatureSource } from "../layers/FeatureSource";
+import { Srs } from '..';
+import { Unit } from './Unit';
 
 export class Validator {
     static checkOpenAndEditable(source: FeatureSource, ignoreOpen = false) {
@@ -24,5 +26,11 @@ export class Validator {
     static checkFilePathNotEmptyAndExist(filePath: string) {
         assert(filePath !== '', 'File path cannot be empty.');
         assert(fs.existsSync(filePath), `File ${ filePath } doesn't exist.`);
+    }
+
+    static checkSrsIsValid(srs: Srs) {
+        if (srs === undefined || srs.unit === Unit.unknown) {
+            throw new Error(`SRS (${ srs.projection }) is not recognized.`);
+        }
     }
 }
