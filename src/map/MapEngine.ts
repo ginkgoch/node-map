@@ -1,8 +1,8 @@
 import _ from "lodash";
-import { IEnvelope, Envelope } from "ginkgoch-geom";
+import { IEnvelope, Envelope, Point, Geometry, Feature } from "ginkgoch-geom";
 import { Render } from "../render";
-import { LayerGroup, FeatureLayer, Srs } from "../layers";
-import { Constants } from "../shared";
+import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
+import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
 
 export class MapEngine {
@@ -118,6 +118,54 @@ export class MapEngine {
 
     layerByID(id: string): FeatureLayer | undefined {
         return _.flatMap(this.groups, g => g.layers).find(l => l.id === id);
+    }
+
+    /**
+     * 
+     * @param geom Geometry to find intersection.
+     * @param geomSrs Geometry srs to find intersection.
+     * @param zoomLevel Zoom level number. Starts from 0.
+     * @param pointTolerance Tolerance for point geometry.
+     * @returns {Array<{layerID:string, features: Feature[]}>} The intersected features that are categorized by layers.
+     */
+    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10) {
+        Validator.checkSrsIsValid(this.srs);
+
+        const projection = new Projection(geomSrs, this.srs.projection);
+        const geomProjected = projection.forward(geom);
+        let envelope = geomProjected.envelope();
+        if (geomProjected instanceof Point) {
+            const scale = this.scales[zoomLevel];
+            const resolution = GeoUtils.resolution(scale, this.srs.unit);
+            const worldTolerance = resolution * pointTolerance;
+            envelope.minx = geomProjected.x - worldTolerance;
+            envelope.maxx = geomProjected.x + worldTolerance;
+            envelope.miny = geomProjected.y - worldTolerance;
+            envelope.maxy = geomProjected.y + worldTolerance;
+        }
+
+        const layers = _.flatMap(this.groups, g => g.layers);
+        const intersectedFeatures: Array<{ layer: string, features: Feature[] }> = [];
+        for (let layer of layers) {
+            try {
+                await layer.open();
+                const features = await layer.source.features(envelope);
+                if (features.length > 0) {
+                    intersectedFeatures.push({
+                        layer: layer.id,
+                        features
+                    });
+                }
+            }
+            catch (ex) {
+                console.log(ex);
+            }
+            finally {
+                await layer.close();
+            }
+        }
+
+        return intersectedFeatures;
     }
 
     /**
