@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { IEnvelope, Envelope, Point, Geometry, Feature } from "ginkgoch-geom";
+import { IEnvelope, Envelope, Point, Geometry, Feature, GeometryFactory } from "ginkgoch-geom";
 import { Render } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
@@ -149,7 +149,9 @@ export class MapEngine {
         for (let layer of layers) {
             try {
                 await layer.open();
-                const features = await layer.source.features(envelope);
+                let features = await layer.source.features(envelope);
+                const testPolygon = GeometryFactory.envelopeAsPolygon(envelope);
+                features = features.filter(f => f.geometry.intersects(testPolygon));
                 if (features.length > 0) {
                     intersectedFeatures.push({
                         layer: layer.id,
