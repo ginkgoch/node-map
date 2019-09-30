@@ -1,9 +1,9 @@
-import { MemoryFeatureSource, ValueStyle, Render } from "..";
+import _ from "lodash";
 import { Feature, Point } from "ginkgoch-geom";
+import { MemoryFeatureSource, ValueStyle, Render } from "..";
 import { Field, FeatureLayer } from "../../src/layers";
 import { PointStyle } from "../../src/styles";
 import TestUtils from "../shared/TestUtils";
-import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/styles/' + name);
 

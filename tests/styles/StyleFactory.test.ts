@@ -1,5 +1,5 @@
-import { StyleFactory, Constants } from "..";
 import _ from "lodash";
+import { StyleFactory, Constants } from "..";
 
 describe('StyleFactory', () => {
     it('deserialize point style', () => {
@@ -57,9 +57,12 @@ describe('StyleFactory', () => {
     });
 
     it('deserialize value style', () => {
-        const json = JSON.parse('{"type":"value-style","name":"Value Style","visible":true,"maximumScale":10000000000,"minimumScale":0,"items":[{"value":"1","style":{"type":"point-style","name":"1","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"2","style":{"type":"point-style","name":"2","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"3","style":{"type":"point-style","name":"3","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"4","style":{"type":"point-style","name":"4","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#000000","lineWidth":1,"radius":12}}],"field":"type"}');
+        const json = JSON.parse('{"type":"value-style","name":"Value Style","visible":true,"maximumScale":10000000000,"minimumScale":0,"items":[{"value":"1","style":{"type":"point-style","visible":true,"name":"1","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"2","style":{"type":"point-style","visible":true,"name":"2","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"3","style":{"type":"point-style","visible":true,"name":"3","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"4","style":{"type":"point-style","visible":true,"name":"4","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#000000","lineWidth":1,"radius":12}}],"field":"type"}');
 
-        testStyleDeserialization(json);
+        testStyleDeserialization(json, nj => { 
+            (<any[]>nj.items).forEach(ij => ij.style = _.omit(ij.style, 'id'));
+            return nj;
+        });
     });
 
     it('deserialize class break style', () => {
@@ -75,10 +78,11 @@ describe('StyleFactory', () => {
     });
 });
 
-function testStyleDeserialization(json: any) {
+function testStyleDeserialization(json: any, normalize?: (j: any) => any) {
     const sf = StyleFactory;
     const style = sf.parseJSON(json);
 
-    const newJson = style.toJSON();
+    let newJson = style.toJSON();
+    newJson = normalize ? normalize(newJson) : newJson;
     expect(_.omit(newJson, 'id')).toEqual(json);
 }
