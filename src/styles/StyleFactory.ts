@@ -32,7 +32,7 @@ export class StyleFactory {
     static parseClassBreakStyle(json: any) {
         const style = new ClassBreakStyle();
         _.forIn(json, (v, k) => {
-            if (k === 'items') {
+            if (k === 'classBreaks') {
                 const items = (<Array<any>>v).map(item => {
                     const newItem: ClassBreakItem = { minimum: item.minimum, maximum: item.maximum, style: JSONUtils.jsonToObject(item.style, this.register) };
                     return newItem;

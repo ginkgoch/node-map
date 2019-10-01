@@ -66,9 +66,12 @@ describe('StyleFactory', () => {
     });
 
     it('deserialize class break style', () => {
-        const json = JSON.parse('{"type":"class-break-style","name":"ClassBreak Style","visible":true,"maximumScale":10000000000,"minimumScale":0,"field":"type","classBreaks":[{"minimum":0,"maximum":25,"style":{"type":"point-style","name":"0 ~ 25","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":25,"maximum":50,"style":{"type":"point-style","name":"25 ~ 50","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":50,"maximum":75,"style":{"type":"point-style","name":"50 ~ 75","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#aaff00","lineWidth":0,"radius":12}},{"minimum":75,"maximum":10000000000,"style":{"type":"point-style","name":"75 ~ 10000000000","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#0000ff","lineWidth":0,"radius":12}}]}');
+        const json = JSON.parse('{"type":"class-break-style","name":"ClassBreak Style","visible":true,"maximumScale":10000000000,"minimumScale":0,"field":"type","classBreaks":[{"minimum":0,"maximum":25,"style":{"type":"point-style","visible":true,"name":"0 ~ 25","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":25,"maximum":50,"style":{"type":"point-style","visible":true,"name":"25 ~ 50","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#ff0000","lineWidth":0,"radius":12}},{"minimum":50,"maximum":75,"style":{"type":"point-style","visible":true,"name":"50 ~ 75","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#aaff00","lineWidth":0,"radius":12}},{"minimum":75,"maximum":10000000000,"style":{"type":"point-style","visible":true,"name":"75 ~ 10000000000","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#0000ff","lineWidth":0,"radius":12}}]}');
         
-        testStyleDeserialization(json);
+        testStyleDeserialization(json, nj => { 
+            (<any[]>nj.classBreaks).forEach(ij => ij.style = _.omit(ij.style, 'id'));
+            return nj;
+        });
     });
     
     it('deserialize icon style', () => {
@@ -84,5 +87,6 @@ function testStyleDeserialization(json: any, normalize?: (j: any) => any) {
 
     let newJson = style.toJSON();
     newJson = normalize ? normalize(newJson) : newJson;
-    expect(_.omit(newJson, 'id')).toEqual(json);
+    newJson = _.omit(newJson, 'id');
+    expect(newJson).toEqual(json);
 }
