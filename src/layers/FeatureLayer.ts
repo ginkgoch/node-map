@@ -67,8 +67,8 @@ export class FeatureLayer extends Opener {
 
         Validator.checkOpened(this);
         
-        const envelope = render.envelope;
-        this.applyMargin(envelope, render);
+        let envelope = render.envelope;
+        envelope = this.applyMargin(envelope, render);
         
         const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
         const features = await this.source.features(envelope, fields);
@@ -79,6 +79,7 @@ export class FeatureLayer extends Opener {
 
     applyMargin(envelope: IEnvelope, render: Render) {
         if (this.margin > 0) {
+            envelope = _.clone(envelope);
             const marginWidth = render.resolutionX * this.margin;
             const marginHeight = render.resolutionY * this.margin;
             envelope.minx -= marginWidth;
@@ -86,6 +87,8 @@ export class FeatureLayer extends Opener {
             envelope.miny -= marginHeight;
             envelope.maxy += marginHeight;
         }
+
+        return envelope;
     }
 
     async thumbnail(width = 256, height = 256): Promise<Image> {
