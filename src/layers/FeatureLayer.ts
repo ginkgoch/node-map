@@ -58,9 +58,12 @@ export class FeatureLayer extends Opener {
             return;
         }
 
-        Validator.checkOpened(this);
-
         const styles = this.styles.filter(s => s.visible && this._scaleInRange(render.scale, s.maximumScale, s.minimumScale));
+        if (styles.length === 0) {
+            return;
+        }
+
+        Validator.checkOpened(this);
         const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
         const envelope = render.envelope;
         const features = await this.source.features(envelope, fields);
