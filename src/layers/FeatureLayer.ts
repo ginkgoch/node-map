@@ -6,6 +6,7 @@ import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
 import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 import uuid from "../shared/UUID";
+import { IEnvelope } from "ginkgoch-geom";
 
 export class FeatureLayer extends Opener {
     id: string;
@@ -15,6 +16,7 @@ export class FeatureLayer extends Opener {
     minimumScale: number;
     maximumScale: number;
     visible = true;
+    margin = 5;
 
     constructor(source: FeatureSource, name?: string) {
         super();
@@ -64,12 +66,26 @@ export class FeatureLayer extends Opener {
         }
 
         Validator.checkOpened(this);
-        const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
+        
         const envelope = render.envelope;
+        this.applyMargin(envelope, render);
+        
+        const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
         const features = await this.source.features(envelope, fields);
         styles.forEach(style => {
             style.drawAll(features, render);
         });
+    }
+
+    applyMargin(envelope: IEnvelope, render: Render) {
+        if (this.margin > 0) {
+            const marginWidth = render.resolutionX * this.margin;
+            const marginHeight = render.resolutionY * this.margin;
+            envelope.minx -= marginWidth;
+            envelope.maxx += marginWidth;
+            envelope.miny -= marginHeight;
+            envelope.maxy += marginHeight;
+        }
     }
 
     async thumbnail(width = 256, height = 256): Promise<Image> {
