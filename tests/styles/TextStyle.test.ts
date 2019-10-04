@@ -101,4 +101,18 @@ describe('TextStyle', () => {
             fillStyle: '#ff0000'
         });
     });
+
+    it('normalizeFont', () => {
+        let font = TextStyle.normalizeFont();
+        expect(font).toEqual('12px arial');
+
+        font = TextStyle.normalizeFont('verdana');
+        expect(font).toEqual('12px verdana');
+
+        font = TextStyle.normalizeFont('verdana', 20);
+        expect(font).toEqual('20px verdana');
+
+        font = TextStyle.normalizeFont('verdana', 20, 'bolder', 'italic');
+        expect(font).toEqual('italic bolder 20px verdana');
+    });
 });
