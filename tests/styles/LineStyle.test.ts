@@ -2,6 +2,7 @@ import { LineStyle, Constants } from "..";
 import { Feature, LineString } from "ginkgoch-geom";
 import { Render } from "..";
 import TestUtils from "../shared/TestUtils";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -30,9 +31,10 @@ describe('LineStyle', () => {
 
     it('json', () => {
         const style1 = new LineStyle('#00ff00', 6);
-        expect(style1.toJSON()).toEqual({
+        expect(_.omit(style1.toJSON(), 'id')).toEqual({
             type: 'line-style',
             name: 'Line Style',
+            visible: true,
             maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             strokeStyle: '#00ff00',

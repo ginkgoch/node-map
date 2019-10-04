@@ -10,10 +10,10 @@ export class GeneralStyle extends Style {
     symbol: PointSymbolType;
     radius: number;
 
-    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
+    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default', name?: string) {
         super();
 
-        this.name = 'General Style';
+        this.name = name || 'General Style';
         this.type = JSONKnownTypes.generalStyle;
         this.lineWidth = lineWidth;
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);

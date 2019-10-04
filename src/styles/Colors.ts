@@ -485,7 +485,37 @@ export class Colors {
      * @param count 
      */
     static between(fromColor: string, toColor: string, count: number): string[] {
-        assert(count > 1, 'Count must be greater than 1 colors.');
+        let fromAlpha = 1.0;
+        let toAlpha = 1.0;
+        
+        if (/rgb/i.test(fromColor)) {
+            const hexWithAlpha = ColorConverter.rgbToHex(fromColor)!;
+            fromColor = hexWithAlpha.hex;
+            fromAlpha = hexWithAlpha.alpha;
+        }
+
+        if (/rgb/i.test(toColor)) {
+            const hexWithAlpha = ColorConverter.rgbToHex(toColor)!;
+            toColor = hexWithAlpha.hex;
+            toAlpha = hexWithAlpha.alpha;
+        }
+
+        let colors = this._between(fromColor, toColor, count);
+        if (fromAlpha !== 1.0 || toAlpha !== 1.0) {
+            const alphaIncrement = (toAlpha - fromAlpha) / (count - 1);
+            colors = colors.map((c, i) => {
+                const alpha = fromAlpha + alphaIncrement * i;
+                return ColorConverter.hexToRgba(c, alpha)!
+            });
+        }
+
+        return colors;
+    }
+
+    private static _between(fromColor: string, toColor: string, count: number): string[] {
+        if (count <= 1) {
+            throw new Error('Count must be greater than 1.')
+        }
 
         const fromHSL = this._colorToHSL(fromColor);
         const toHSL = this._colorToHSL(toColor);
@@ -497,7 +527,7 @@ export class Colors {
 
         const hslColors = new Array<number[]>();
         hslColors.push(fromHSL);
-        for (let i = 0; i < segCount - 1; i++) {
+        for (let i = 1; i < segCount; i++) {
             hslColors.push([
                 this._round(fromHSL[0] + incrementH * i),
                 this._round(fromHSL[1] + incrementS * i),
@@ -1158,4 +1188,56 @@ export class Colors {
         return this.all.get('BLACK')![0];
     }
     //#endregion
+}
+
+export class ColorConverter {
+    static hexToRgbComponents(hex: string): {r: number, g: number, b: number} | null {
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+          return r + r + g + g + b + b;
+        });
+      
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    static hexToRgb(hex: string): string | null {
+        const rgb = this.hexToRgbComponents(hex);
+        if (rgb === null) {
+            return null;
+        }
+
+        return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+    }
+
+    static hexToRgba(hex: string, alpha: number = 1) {
+        const rgb = this.hexToRgbComponents(hex);
+        if (rgb === null) {
+            return null;
+        }
+
+        return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+    }
+
+    static rgbToHex(rgb: string): {hex: string, alpha: number} {
+        const segments = rgb.replace(/rgba\(/i, '').replace(')', '').split(',').map(s => s.trim());
+        const r = parseInt(segments[0]);
+        const g = parseInt(segments[1]);
+        const b = parseInt(segments[2]);
+        let alpha = 1; 
+        if (segments.length > 3) {
+            alpha *= parseFloat(segments[3]);
+        }
+
+        const hex = `#${this._componentToHex(r)}${this._componentToHex(g)}${this._componentToHex(b)}`;
+        return { hex, alpha };
+    }
+
+    private static _componentToHex(component: number): string {
+        return component.toString(16).padStart(2, '0');
+    }
 }

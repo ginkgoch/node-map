@@ -2,6 +2,7 @@ import { LineString, Feature } from "ginkgoch-geom";
 import { MemoryFeatureSource, FeatureLayer, Render, LineStyle, ShapefileFeatureSource } from "..";
 import TestUtils from "../shared/TestUtils";
 import { FillStyle } from "../../src/styles";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/layers/' + name);
 
@@ -41,18 +42,38 @@ describe('FeatureLayer', () => {
         compareImage(render.image, 'layer-area.png');
     });
 
+    it('draw with index - shapefile', async () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        const layer = new FeatureLayer(source);
+        layer.styles.push(new FillStyle('#886600', 'red', 2));
+
+        await layer.open();
+        const envelope = await layer.envelope();
+        const render = Render.create(256, 256, envelope);
+        await layer.draw(render);
+        render.flush();
+
+        compareImage(render.image, 'layer-draw-index.png', true);
+    });
+
     it('json', () => {
         const layer = lineLayer();
-        const json = layer.toJSON();
+        let json = layer.toJSON();
+
+        json = _.omit(json, 'id');
+        json.styles = (<object[]>json.styles).map(s => _.omit(s, 'id'));
+
         TestUtils.compareOrLog(json, {
-            "type": "feature-layer", "name": "Unknown",
+            "type": "feature-layer", 
+            "name": "Unknown",
+            "visible": true,
             "source": {
-                "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 0 }, "to": { "unit": 0 } }, "features": {
+                "type": "memory-feature-source", "name": "Unknown", "projection": { "from": { "unit": 'unknown' }, "to": { "unit": 'unknown' } }, "features": {
                     "id": 0, "type"
                         : "FeatureCollection", "features": [{ "id": 1, "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[-100, 80], [-40, -80], [0, 20], [40, -80], [100, 80]] }, "properties": {} }]
                 }, "fields"
                     : []
-            }, "styles": [{ "type": "line-style", "name": "Line Style", "maximumScale": 10000000000, "minimumScale": 0, "strokeStyle": "#886600", "lineWidth": 4 }], "minimumScale": 0, "maximumScale": 10000000000
+            }, "styles": [{ "type": "line-style", "name": "Line Style", "visible": true, "maximumScale": 10000000000, "minimumScale": 0, "strokeStyle": "#886600", "lineWidth": 4 }], "minimumScale": 0, "maximumScale": 10000000000
         }, false, false);
     });
 
@@ -76,6 +97,12 @@ describe('FeatureLayer', () => {
         const s1 = JSON.stringify(json);
         const s2 = JSON.stringify(newLayer.toJSON());
         expect(s2).toEqual(s1);
+    });
+
+    it('name', () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        const layer = new FeatureLayer(source);
+        expect(layer.name).toEqual('USStates');
     });
 });
 

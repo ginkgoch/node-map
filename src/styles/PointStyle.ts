@@ -13,11 +13,11 @@ export class PointStyle extends Style {
         strokeStyle?: string, 
         lineWidth: number = 2, 
         radius: number = 12, 
-        symbol: PointSymbolType = 'default') {
+        symbol: PointSymbolType = 'default', name?: string) {
 
         super();
 
-        this.name = 'Point Style';
+        this.name = name || 'Point Style';
         this.type = JSONKnownTypes.pointStyle;
         this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
         this.strokeStyle = strokeStyle || this.fillStyle;

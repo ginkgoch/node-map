@@ -1,5 +1,6 @@
-import { MemoryFeatureSource, ValueStyle, Render } from "..";
+import _ from "lodash";
 import { Feature, Point } from "ginkgoch-geom";
+import { MemoryFeatureSource, ValueStyle, Render } from "..";
 import { Field, FeatureLayer } from "../../src/layers";
 import { PointStyle } from "../../src/styles";
 import TestUtils from "../shared/TestUtils";
@@ -70,13 +71,18 @@ describe('ValueStyle', () => {
         await layer.draw(canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'valueStyle-2.png');
+        compareImage(canvas.image, 'valueStyle-2.png', false);
     });
 
-    it('json', () => { 
+    it('json', () => {
         const values = ['1', '2', '3', '4'];
         const style = ValueStyle.auto('point', 'type', values, '#ff0000', '#0000ff', '#000000');
-        TestUtils.compareOrLog(style.toJSON(), `{"type":"value-style","name":"Value Style","maximumScale":10000000000,"minimumScale":0,"items":[{"value":"1","style":{"type":"point-style","name":"1","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"2","style":{"type":"point-style","name":"2","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"3","style":{"type":"point-style","name":"3","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"4","style":{"type":"point-style","name":"4","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#000000","lineWidth":1,"radius":12}}],"field":"type"}`, true, false);
+        const expectedJSON = {"visible":true,"type":"value-style","name":"Value Style","maximumScale":10000000000,"minimumScale":0,"items":[{"value":"1","style":{"visible":true,"type":"point-style","name":"value = 1","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#ff0000","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"2","style":{"visible":true,"type":"point-style","name":"value = 2","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#aaff00","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"3","style":{"visible":true,"type":"point-style","name":"value = 3","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#00ffaa","strokeStyle":"#000000","lineWidth":1,"radius":12}},{"value":"4","style":{"visible":true,"type":"point-style","name":"value = 4","maximumScale":10000000000,"minimumScale":0,"symbol":"default","fillStyle":"#0000ff","strokeStyle":"#000000","lineWidth":1,"radius":12}}],"field":"type"};
+
+        let json = _.omit(style.toJSON(), 'id');
+        json.items = (<any[]>json.items).map(i => _.omit(i, 'style.id'));
+
+        TestUtils.compareOrLog(json, expectedJSON, false, false);
     });
 
     it('props', () => {

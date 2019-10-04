@@ -2,6 +2,7 @@ import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
 import { Opener, Validator, JSONKnownTypes } from "../shared";
 import { Field, PropertyAggregator, Projection } from ".";
+import { BaseIndex } from "../indices";
 
 export type FieldFilters = 'all' | 'none' | string[];
 
@@ -9,6 +10,8 @@ export abstract class FeatureSource extends Opener {
     name: string;
     projection: Projection
     type = JSONKnownTypes.unknown;
+    indexEnabled = true;
+    index?: BaseIndex;
 
     constructor() {
         super();
@@ -67,9 +70,13 @@ export abstract class FeatureSource extends Opener {
         }
     }
 
-    async count() {
+    async count(): Promise<number> {
         Validator.checkOpened(this, !this._openRequired);
+        const count = await this._count();
+        return count;
+    }
 
+    protected async _count(): Promise<number> {
         return (await this.features()).length;
     }
 

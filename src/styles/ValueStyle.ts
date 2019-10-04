@@ -8,10 +8,10 @@ export class ValueStyle extends Style {
     items: ValueItem[];
     field: string;
 
-    constructor(field?: string, items?: ValueItem[]) {
+    constructor(field?: string, items?: ValueItem[], name?: string) {
         super();
 
-        this.name = 'Value Style';
+        this.name = name || 'Value Style';
         this.type = JSONKnownTypes.valueStyle;
         this.items = new Array<ValueItem>();
         items && items.forEach(item => {
@@ -54,19 +54,19 @@ export class ValueStyle extends Style {
             case 'point':
                 return this._auto(field, values, fromColor, toColor, (c, v) => {
                     const style = new PointStyle(c, strokeColor, strokeWidth, radius, symbol);
-                    style.name = v;
+                    style.name = `value = ${v}`;
                     return style;
                 });
             case 'fill':
                 return this._auto(field, values, fromColor, toColor, (c, v) => {
                     const style = new FillStyle(c, strokeColor, strokeWidth);
-                    style.name = v;
+                    style.name = `value = ${v}`;
                     return style;
                 });
             case 'linear':
                 return this._auto(field, values, fromColor, toColor, (c, v) => {
                     const style = new LineStyle(c, strokeWidth);
-                    style.name = v;
+                    style.name = `value = ${v}`;
                     return style;
                 });
         }

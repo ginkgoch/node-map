@@ -1,34 +1,32 @@
-import { Middleware } from "./Middleware";
+import { NativeAdaptor } from "./NativeAdaptor";
 import { NativeImage } from "./NativeImage";
 
 export class NativeFactory {
-    private static _middleware?: Middleware;
+    private static _adaptor?: NativeAdaptor;
 
-    static register(middleware: Middleware) {
-        NativeFactory._middleware = middleware;
+    static register(adaptor: NativeAdaptor) {
+        NativeFactory._adaptor = adaptor;
     }
 
     static unregister() {
-        NativeFactory._middleware = undefined;
+        NativeFactory._adaptor = undefined;
     }
 
     static nativeImage(): NativeImage {
-        return NativeFactory.__middleware.createNativeImage();
+        NativeFactory._checkHasRegistered();
+
+        return NativeFactory._adaptor!.createNativeImage();
     }
 
     static nativeCanvas(width: number, height: number) {
         NativeFactory._checkHasRegistered();
 
-        return NativeFactory.__middleware.createCanvas(width, height);
+        return NativeFactory._adaptor!.createCanvas(width, height);
     }
 
     private static _checkHasRegistered() {
-        if (NativeFactory._middleware === undefined) {
+        if (NativeFactory._adaptor === undefined) {
             throw new Error('Native middleware is not registered.');
         }
-    }
-
-    private static get __middleware() {
-        return NativeFactory._middleware as Middleware;
     }
 }

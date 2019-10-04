@@ -1,4 +1,4 @@
-import { Colors, ColorFormat } from "../../src/styles";
+import { Colors, ColorFormat, ColorConverter } from "../../src/styles";
 import { Render } from "..";
 import { Envelope, Polygon, LinearRing } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
@@ -60,7 +60,7 @@ describe('Colors', () => {
         expect(colors.length).toBe(20);
 
         const image = drawColors(colors);
-        compareImage(image, 'colors-between-3.png', true);
+        compareImage(image, 'colors-between-3.png');
     });
 
     it('between - forward - 1', () => {
@@ -125,6 +125,34 @@ describe('Colors', () => {
 
         const image = drawColors(colors);
         compareImage(image, 'colors-6-b.png');
+    });
+
+    it('between - with alpha 1', () => {
+        const fromColor = 'rgba(255, 0, 0, 1)';
+        const toColor = 'rgba(0, 32, 255, 0.3)';
+        let colors = Colors.between(fromColor, toColor, 20);
+        expect(colors.length).toBe(20);
+
+        let color = ColorConverter.rgbToHex(colors[0]);
+        for (let i = 1; i < colors.length; i++) {
+            const current = ColorConverter.rgbToHex(colors[i]);
+            expect(current.alpha < color.alpha);
+            color = current;
+        }
+    });
+
+    it('between - with alpha 2', () => {
+        const fromColor = '#ff0000';
+        const toColor = 'rgba(0, 32, 255, 0.3)';
+        let colors = Colors.between(fromColor, toColor, 20);
+        expect(colors.length).toBe(20);
+
+        let color = ColorConverter.rgbToHex(colors[0]);
+        for (let i = 1; i < colors.length; i++) {
+            const current = ColorConverter.rgbToHex(colors[i]);
+            expect(current.alpha < color.alpha);
+            color = current;
+        }
     });
 
     it('color by name', () => {

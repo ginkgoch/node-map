@@ -9,10 +9,10 @@ export class ClassBreakStyle extends Style {
     field: string;
     classBreaks: Array<ClassBreakItem>;
 
-    constructor(field?: string, classBreaks?: Array<ClassBreakItem>) {
+    constructor(field?: string, classBreaks?: Array<ClassBreakItem>, name?: string) {
         super();
 
-        this.name = 'ClassBreak Style';
+        this.name = name || 'Class Break Style';
         this.type = JSONKnownTypes.classBreakStyle;
         this.field = field || '';
         this.classBreaks = new Array<ClassBreakItem>();
@@ -63,19 +63,19 @@ export class ClassBreakStyle extends Style {
             case 'point':
                 return this._auto(field, maximum, minimum, count, fromColor, toColor, (c, min, max) => {
                     const style = new PointStyle(c, strokeColor, strokeWidth, radius, symbol);
-                    style.name = `${min} ~ ${max}`;
+                    style.name = this.subStyleName(min, max);
                     return style;
                 });
             case 'fill':
                 return this._auto(field, maximum, minimum, count, fromColor, toColor, (c, min, max) => {
                     const style = new FillStyle(c, strokeColor, strokeWidth);
-                    style.name = `${min} ~ ${max}`;
+                    style.name = this.subStyleName(min, max);
                     return style;
                 });
             case 'linear':
                 return this._auto(field, maximum, minimum, count, fromColor, toColor, (c, min, max) => {
                     const style = new LineStyle(c, strokeWidth);
-                    style.name = `${min} ~ ${max}`;
+                    style.name = this.subStyleName(min, max);
                     return style;
                 });
         }
@@ -105,6 +105,10 @@ export class ClassBreakStyle extends Style {
         }
 
         return style;
+    }
+
+    private static subStyleName(min: number, max: number) {
+        return `${min} ~ ${max >= Constants.POSITIVE_INFINITY_SCALE ? '∞' : max}`;
     }
 }
 

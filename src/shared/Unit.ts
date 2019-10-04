@@ -1,6 +1,6 @@
 export enum Unit {
-    unknown = 0,
-    degrees = 1,
-    meter = 2,
-    feet = 3
+    unknown = 'unknown',
+    degrees = 'degrees',
+    meters = 'm',
+    feet = 'ft'
 }

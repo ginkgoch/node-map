@@ -6,8 +6,8 @@ import { FillStyle } from "./FillStyle";
 import { IconStyle } from "./IconStyle";
 import { TextStyle } from "./TextStyle";
 import { GeneralStyle } from "./GeneralStyle";
-import { ValueStyle } from "./ValueStyle";
-import { ClassBreakStyle } from "./ClassBreakStyle";
+import { ValueStyle, ValueItem } from "./ValueStyle";
+import { ClassBreakStyle, ClassBreakItem } from "./ClassBreakStyle";
 import { JSONKnownTypes, JSONTypeRegister, JSONUtils } from "../shared/JSONUtils";
 
 export class StyleFactory {
@@ -22,10 +22,46 @@ export class StyleFactory {
             this.register.register(JSONKnownTypes.lineStyle, () => new LineStyle());
             this.register.register(JSONKnownTypes.textStyle, () => new TextStyle());
             this.register.register(JSONKnownTypes.pointStyle, () => new PointStyle());
-            this.register.register(JSONKnownTypes.valueStyle, () => new ValueStyle());
             this.register.register(JSONKnownTypes.generalStyle, () => new GeneralStyle());
-            this.register.register(JSONKnownTypes.classBreakStyle, () => new ClassBreakStyle());
+            this.register.register(JSONKnownTypes.valueStyle, json => this.parseValueStyle(json), true);
+            this.register.register(JSONKnownTypes.classBreakStyle, json => this.parseClassBreakStyle(json), true);
         }
         return JSONUtils.jsonToObject(styleJson, this.register);
+    }
+
+    static parseClassBreakStyle(json: any) {
+        const style = new ClassBreakStyle();
+        _.forIn(json, (v, k) => {
+            if (k === 'classBreaks') {
+                const items = (<Array<any>>v).map(item => {
+                    const newItem: ClassBreakItem = { minimum: item.minimum, maximum: item.maximum, style: JSONUtils.jsonToObject(item.style, this.register) };
+                    return newItem;
+                });
+                style.classBreaks.push(...items);
+            }
+            else {
+                (<any>style)[k] = JSONUtils.jsonToObject(v, this.register);
+            }
+        });
+
+        return style;
+    }
+
+    static parseValueStyle(json: any) {
+        const style = new ValueStyle();
+        _.forIn(json, (v, k) => {
+            if (k === 'items') {
+                const items = (<Array<any>>v).map(item => {
+                    const newItem: ValueItem = { value: item.value, style: JSONUtils.jsonToObject(item.style, this.register) };
+                    return newItem;
+                });
+                style.items.push(...items);
+            }
+            else {
+                (<any>style)[k] = JSONUtils.jsonToObject(v, this.register);
+            }
+        });
+
+        return style;
     }
 }

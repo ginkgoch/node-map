@@ -1,6 +1,8 @@
-import { DbfField, DbfFieldType } from 'ginkgoch-shapefile';
+import { DbfField, DbfFieldType, ShapefileType } from 'ginkgoch-shapefile';
 import { ShapefileFeatureSource, Field } from '../../src/layers';
 import TestUtils from '../shared/TestUtils';
+import { RTIndex } from '../../src/indices';
+import { Unit } from '../../src/shared';
 
 describe('ShapefileFeatureSource', () => {
     it('DbfField parsing', () => {
@@ -51,14 +53,81 @@ describe('ShapefileFeatureSource', () => {
 
         TestUtils.compareOrLog(json, {
             type: 'shapefile-feature-source',
-            name: 'Unknown',
+            name: 'fileNotExist',
             projection:
             {
-                from: { projection: undefined, unit: 0 },
-                to: { projection: undefined, unit: 0 }
+                from: { projection: undefined, unit: 'unknown' },
+                to: { projection: undefined, unit: 'unknown' }
             },
             flag: 'rs',
             filePath: './fileNotExist.shp'
         }, false, false);
+    });
+
+    it('name', () => {
+        let source = new ShapefileFeatureSource('./fileNotExist.shp');
+        expect(source.name).toEqual('fileNotExist');
+
+        source = new ShapefileFeatureSource('./fileNotExist.SHP');
+        expect(source.name).toEqual('fileNotExist');
+
+        source = new ShapefileFeatureSource('./fileNotExist.DBF');
+        expect(source.name).toEqual('fileNotExist');
+
+        source.filePath = './fileChanged.shp';
+        expect(source.name).toEqual('fileNotExist');
+    });
+
+    it('shapeType', async () => {
+        let source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        await source.open();
+        let shapeType = source.shapeType;
+        expect(shapeType).toEqual(ShapefileType.polygon);
+        await source.close();
+
+        source = new ShapefileFeatureSource('./tests/data/index/cities.shp');
+        await source.open();
+        shapeType = source.shapeType;
+        expect(shapeType).toEqual(ShapefileType.point);
+        await source.close();
+    });
+
+    it('build index', async () => {
+        const filePath = './tests/data/layers/USStates-building-index.shp';
+
+        try {
+            let source = new ShapefileFeatureSource(filePath);
+            await source.open();
+            await source.buildIndex(true);
+            await source.close();
+
+            expect(RTIndex.exists(filePath)).toBeTruthy();
+        }
+        finally {
+            RTIndex.clean(filePath);
+        }
+    });
+
+    it('load proj', async () => {
+        const filePath = './tests/data/layers/latlong.shp';
+
+        let source = new ShapefileFeatureSource(filePath);
+        await source.open();
+        expect(source.projection.from.unit).toEqual(Unit.degrees);
+        expect(source.projection.from.toJSON()).toEqual({ "projection": "GEOGCS[\"GCS_North_American_1983\",DATUM[\"D_North_American_1983\",SPHEROID[\"GRS_1980\",6378137,298.257222101]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]]", "unit": "degrees" });
+        await source.close();
+    });
+
+    it('get properties', async () => {
+        const filePath = './tests/data/layers/USStates.shp';
+
+        let source = new ShapefileFeatureSource(filePath);
+        await source.open();
+        const properties = await source.properties(['POP1990']);
+        properties.forEach(p => {
+            expect(p.has('POP1990')).toBeTruthy();
+            expect(p.size).toBe(1);
+        })
+        await source.close();
     });
 });

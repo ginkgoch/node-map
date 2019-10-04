@@ -1,6 +1,7 @@
 import { TextStyle, LineStyle, Render, Constants } from "..";
 import { Feature, Point, LineString } from "ginkgoch-geom";
 import TestUtils from "../shared/TestUtils";
+import _ from "lodash";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -77,9 +78,10 @@ describe('TextStyle', () => {
 
     it('json', () => {
         const textStyle = new TextStyle('Hello World', '#ff0000');
-        expect(textStyle.toJSON()).toEqual({
+        expect(_.omit(textStyle.toJSON(), 'id')).toEqual({
             type: 'text-style',
             name: 'Text Style',
+            visible: true,
             maximumScale: Constants.POSITIVE_INFINITY_SCALE,
             minimumScale: 0,
             content: 'Hello World',
@@ -98,5 +100,19 @@ describe('TextStyle', () => {
             lineWidth: 0,
             fillStyle: '#ff0000'
         });
+    });
+
+    it('normalizeFont', () => {
+        let font = TextStyle.normalizeFont();
+        expect(font).toEqual('12px arial');
+
+        font = TextStyle.normalizeFont('verdana');
+        expect(font).toEqual('12px verdana');
+
+        font = TextStyle.normalizeFont('verdana', 20);
+        expect(font).toEqual('20px verdana');
+
+        font = TextStyle.normalizeFont('verdana', 20, 'bolder', 'italic');
+        expect(font).toEqual('italic bolder 20px verdana');
     });
 });

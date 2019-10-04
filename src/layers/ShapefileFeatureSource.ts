@@ -1,23 +1,48 @@
+import fs from "fs";
+import path from 'path';
 import _ from "lodash";
-import { Shapefile, DbfField, DbfFieldType } from "ginkgoch-shapefile";
+import { Shapefile, DbfField, DbfFieldType, ShapefileType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
 import { FeatureSource, Field } from ".";
 import { Validator, JSONKnownTypes } from '../shared';
-import { Projection } from "./Projection";
+import { Projection, Srs } from "./Projection";
+import { RTIndex, RTRecordType } from "../indices";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 
 export class ShapefileFeatureSource extends FeatureSource {
     flag: string;
-    filePath: string;
+    private _filePath: string;
     private _shapefile?: Shapefile;
 
-    constructor(filePath?: string, flag: string = 'rs') {
+    constructor(filePath?: string, flag: string = 'rs', name?: string) {
         super();
 
         this.type = JSONKnownTypes.shapefileFeatureSource;
-        this.filePath = filePath || '';
+        this._filePath = filePath || '';
+
+        if (name !== undefined) {
+            this.name = name;
+        } else if (filePath != undefined) {
+            this.name = ShapefileFeatureSource._filename(filePath);
+        }
         this.flag = flag;
+    }
+
+    public get filePath() {
+        return this._filePath;
+    }
+
+    public set filePath(filePath: string) {
+        this._filePath = filePath;
+        if (this.name === '' || this.name.match(/^unknown/i)) {
+            this.name = ShapefileFeatureSource._filename(filePath);
+        }
+    }
+
+    public get shapeType(): ShapefileType {
+        Validator.checkOpened(this);
+        return this.__shapefile.shapeType();
     }
 
     protected _toJSON() {
@@ -29,10 +54,10 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     static parseJSON(json: any) {
         const source = new ShapefileFeatureSource();
-        source.name = json.name;
+        source.name = _.defaultTo(json.name, 'Unknown');
+        source.flag = _.defaultTo(json.flag, 'rs');
+        source.filePath = _.defaultTo(json.filePath, '');
         source.projection = Projection.parseJSON(json.projection);
-        source.flag = json.flag;
-        source.filePath = json.filePath;
         return source;
     }
 
@@ -43,11 +68,57 @@ export class ShapefileFeatureSource extends FeatureSource {
         return true;
     }
 
+    buildIndex(overwrite = false) {
+        const indexFilePath = RTIndex.entry(this.filePath);
+        const indexFileExists = RTIndex.exists(indexFilePath);
+        if (!overwrite && indexFileExists) {
+            return;
+        }
+
+        const recordType = this.__shapefile.shapeType() === ShapefileType.point ? RTRecordType.point : RTRecordType.rectangle;
+        const recordCount = this.__shapefile.count();
+        const pageSize = RTIndex.recommendPageSize(recordCount);
+        const tempIndexFilePath = RTIndex.temp(indexFilePath);
+
+        RTIndex.clean(tempIndexFilePath);
+        RTIndex.create(tempIndexFilePath, recordType, { overwrite, pageSize });
+        const index = new RTIndex(tempIndexFilePath, 'rs+');
+        index.open();
+
+        const iterator = this.__shapefile.iterator();
+        while(!iterator.done) {
+            const record = iterator.next();
+            if (record.hasValue && record.value !== null) {
+                const feature = record.value!;
+                index.push(feature.geometry, feature.id.toString());
+            }
+        }
+        index.close();
+        RTIndex.move(tempIndexFilePath, indexFilePath, overwrite);
+    }
+
     protected async _open() {
         Validator.checkFilePathNotEmptyAndExist(this.filePath);
 
         this._shapefile = new Shapefile(this.filePath, this.flag);
         this._shapefile.open();
+
+        const projFilePath = this.filePath.replace(/.shp/i, '.prj');
+        if (this.projection.from.projection === undefined && fs.existsSync(projFilePath)) {
+            const projWKT = fs.readFileSync(projFilePath).toString('utf-8').trim().replace(/\u0000$/i, '');
+            this.projection.from = new Srs(projWKT);
+        }
+
+        if (this.indexEnabled) {
+            if (this.index === undefined && RTIndex.exists(this.filePath)) {
+                const idxFilePath = RTIndex.entry(this.filePath);
+                this.index = new RTIndex(idxFilePath, this.flag);
+            }
+
+            if (this.index !== undefined) {
+                this.index.open();
+            }
+        }
     }
 
     protected async _close() {
@@ -55,19 +126,42 @@ export class ShapefileFeatureSource extends FeatureSource {
             this._shapefile.close();
             this._shapefile = undefined;
         }
+
+        if (this.index) {
+            this.index.close();
+            this.index = undefined;
+        }
+    }
+
+    protected async _count(): Promise<number> {
+        return this.__shapefile.count();
     }
 
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
-        const features = this.__shapefile.records({ envelope,  fields });
+        let features: Array<Feature>;
+        if (this.indexEnabled && this.index !== undefined) {
+            const ids = this.index.intersections(envelope);
+            features = new Array<Feature>();
+            for(let id of ids) {
+                const feature = this.__shapefile.get(parseInt(id));
+                if (feature !== null) {
+                    features.push(feature);
+                }
+            }
+        }
+        else {
+            features = this.__shapefile.records({ envelope, fields });
+        }
+
         return Promise.resolve(features);
     }
 
-    protected async _fields(): Promise<Field[]> { 
+    protected async _fields(): Promise<Field[]> {
         const fields = this.__shapefile.fields(true) as DbfField[];
         return fields.map(f => this._mapDbfFieldToField(f));
     }
 
-    protected async _envelope(): Promise<Envelope> { 
+    protected async _envelope(): Promise<Envelope> {
         return this.__shapefile.envelope();
     }
 
@@ -112,7 +206,7 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.__shapefile.removeField(fieldName);
     }
 
-    protected async _flushFields() { 
+    protected async _flushFields() {
         this.__shapefile.flushFields();
     }
 
@@ -139,8 +233,8 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     private _mapDbfFieldTypeToName(fieldType: DbfFieldType) {
         const enumType = DbfFieldType as any;
-        for(let key in enumType) {
-            if(enumType[key] === fieldType) {
+        for (let key in enumType) {
+            if (enumType[key] === fieldType) {
                 return key;
             }
         }
@@ -161,5 +255,9 @@ export class ShapefileFeatureSource extends FeatureSource {
     private _toDbfField(field: Field | DbfField) {
         let dbfField = field instanceof DbfField ? field : this._mapFieldToDbfField(field);
         return dbfField;
+    }
+
+    private static _filename(filePath: string) {
+        return path.basename(filePath).replace(/(.shp)|(.shx)|(.dbf)$/i, '');
     }
 }
