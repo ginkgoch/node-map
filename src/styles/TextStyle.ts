@@ -55,7 +55,7 @@ export class TextStyle extends Style {
         if (geom instanceof MultiPoint) {
             this._drawTextForGeomCollection(geom, text, styleJson, render);
         } else if (geom instanceof MultiPolygon) {
-            this._drawTextForGeomCollection(geom, text, styleJson, render);
+            this._drawTextForMultiPolygon(geom, text, styleJson, render);
         } else if (geom instanceof GeometryCollection) {
             this._drawTextForGeomCollection(geom, text, styleJson, render);
         }
@@ -118,6 +118,20 @@ export class TextStyle extends Style {
         geom.children.forEach(g => {
             render.drawText(text, g.centroid(), styleJson);
         });
+    }
+
+    private _drawTextForMultiPolygon(geom: MultiPolygon, text: string, styleJson: any, render: Render) {
+        if (geom.children.length === 0) {
+            return;
+        }
+
+        const drawingPolygon = geom.children.map(polygon => ({ factor: this._polygonSortFactor(polygon), polygon })).sort((p1, p2) => p2.factor - p1.factor)[0];
+        render.drawText(text, drawingPolygon.polygon.centroid(), styleJson);
+    }
+
+    private _polygonSortFactor(polygon: Polygon): number {
+        const box = polygon.envelope();
+        return box.width + box.height;
     }
 }
 
