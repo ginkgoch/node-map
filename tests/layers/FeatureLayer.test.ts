@@ -104,6 +104,14 @@ describe('FeatureLayer', () => {
         const layer = new FeatureLayer(source);
         expect(layer.name).toEqual('USStates');
     });
+
+    it('find proj file', async () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/latlong.shp');
+        const layer = new FeatureLayer(source);
+        await layer.open();
+
+        expect((<any>source.projection.from)._unit).toEqual('degrees');
+    });
 });
 
 function lineLayer() {
