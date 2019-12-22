@@ -73,7 +73,7 @@ describe('TextStyle', () => {
         textStyle.draw(feature, canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'text-4.png', true);
+        compareImage(canvas.image, 'text-4.png');
     });
 
     it('json', () => {
