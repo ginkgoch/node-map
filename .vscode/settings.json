@@ -3,6 +3,9 @@
         "Shapefile",
         "endregion",
         "ginkgoch",
+        "maxx",
+        "maxy",
+        "miny",
         "rtree"
     ]
 }
