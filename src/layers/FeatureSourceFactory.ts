@@ -2,7 +2,14 @@ import { JSONKnownTypes } from "../shared";
 import { MemoryFeatureSource } from "./MemoryFeatureSource";
 import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
 
+/**
+ * This class is a shortcut to build FeatureSource instance.
+ */
 export class FeatureSourceFactory {
+    /**
+     * Parse supported feature source json data into a corresponding FeatureSource instance.
+     * @param {any} json The JSON format data of a feature source.
+     */
     static parseJSON(json: any) {
         const type = json && json.type;
         if (type !== undefined) {
