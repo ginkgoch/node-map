@@ -264,18 +264,43 @@ export class ShapefileFeatureSource extends FeatureSource {
             .map(r => _.clone(r.values));
     }
 
+    /**
+     * Pushes a feature into this feature source.
+     * @param {IFeature} feature The feature to push into this feature source. 
+     * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
+     * @protected
+     */
     protected async _push(feature: IFeature) {
         this.__shapefile.push(feature);
     }
 
+    /**
+     * Updates an existing feature in this feature source.
+     * @param {IFeature} feature The feature to update in this feature source. 
+     * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
+     * @protected
+     * @override 
+     */
     protected async _update(feature: IFeature) {
         this.__shapefile.update(feature);
     }
 
+    /**
+     * Removes a feature by a specified feature id.
+     * @param {number} id The feature id to remove. 
+     * @protected
+     * @override 
+     */
     protected async _remove(id: number) {
         this.__shapefile.remove(id);
     }
 
+    /**
+     * Pushes a new field into this feature source.
+     * @param {Field|DbfField} field A new field to push into this feature source. 
+     * @protected
+     * @override 
+     */
     protected async _pushField(field: DbfField): Promise<void>
     protected async _pushField(field: Field): Promise<void>
     protected async _pushField(field: Field | DbfField): Promise<void> {
@@ -283,6 +308,13 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.__shapefile.pushField(dbfField);
     }
 
+    /**
+     * Updates an existing field info by field name.
+     * @param {string} sourceFieldName The source field name to update.
+     * @param {Field|DbfField} newField A new field to replace to the old field.
+     * @protected
+     * @override 
+     */
     protected async _updateField(sourceFieldName: string, newField: Field): Promise<void>
     protected async _updateField(sourceFieldName: string, newField: DbfField): Promise<void>
     protected async _updateField(sourceFieldName: string, newField: Field | DbfField): Promise<void> {
@@ -290,10 +322,21 @@ export class ShapefileFeatureSource extends FeatureSource {
         this.__shapefile.updateField(sourceFieldName, dbfField);
     }
 
+    /**
+     * Removes a field by field name.
+     * @param {string} fieldName A field name to remove. 
+     * @protected
+     * @override 
+     */
     protected async _removeField(fieldName: string): Promise<void> {
         this.__shapefile.removeField(fieldName);
     }
 
+    /**
+     * Flush the field changes into this feature source storage.
+     * @protected
+     * @override 
+     */
     protected async _flushFields() {
         this.__shapefile.flushFields();
     }
