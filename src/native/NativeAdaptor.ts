@@ -20,6 +20,8 @@ import { NativeCanvas } from "./NativeCanvas";
  *          return new Canvas(width, height);
  *      }
  * }
+ * 
+ * @see {NativeFactory} Recommend to use `NativeFactory` which is a shortcut of this adaptor. With the `NativeFactory`, the adaptor could be created on the fly with few callback registration.
  */
 export interface NativeAdaptor {
     /**
