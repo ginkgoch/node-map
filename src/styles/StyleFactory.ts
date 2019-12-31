@@ -10,6 +10,7 @@ import { ValueStyle, ValueItem } from "./ValueStyle";
 import { ClassBreakStyle, ClassBreakItem } from "./ClassBreakStyle";
 import { JSONKnownTypes, JSONTypeRegister, JSONUtils } from "../shared/JSONUtils";
 
+/** This class is a style factory to help to easily build style with JSON format data. */
 export class StyleFactory {
     static register: JSONTypeRegister;
 
@@ -29,7 +30,7 @@ export class StyleFactory {
         return JSONUtils.jsonToObject(styleJson, this.register);
     }
 
-    static parseClassBreakStyle(json: any) {
+    private static parseClassBreakStyle(json: any) {
         const style = new ClassBreakStyle();
         _.forIn(json, (v, k) => {
             if (k === 'classBreaks') {
@@ -47,7 +48,7 @@ export class StyleFactory {
         return style;
     }
 
-    static parseValueStyle(json: any) {
+    private static parseValueStyle(json: any) {
         const style = new ValueStyle();
         _.forIn(json, (v, k) => {
             if (k === 'items') {

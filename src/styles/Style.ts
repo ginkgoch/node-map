@@ -52,6 +52,7 @@ export abstract class Style {
 
     /**
      * Collects the required field names that will be used for rendering.
+     * @returns {string[]} The required field names that will be used for rendering.
      */
     fields(): string[] {
         return [];
@@ -81,7 +82,7 @@ export abstract class Style {
     }
 
     /**
-     * The concrete draw process.
+     * The concrete draw operation.
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
