@@ -76,7 +76,7 @@ export abstract class Style {
             return;
         }
 
-        const styleJson = this.props();
+        const styleJson = this.htmlStyle();
         this._draw(features, styleJson, render);
     }
 
@@ -112,15 +112,15 @@ export abstract class Style {
     }
 
     /**
-     * @deprecated Use raw() instead.
+     * @deprecated Use htmlStyle() instead.
      */
     props(): any {
-        let props = this._props();
+        let props = this._htmlStyle();
         return props;
     }
 
     /**
-     * @deprecated Use _raw() instead.
+     * @deprecated Use _htmlStyle() instead.
      */
     protected _props(): any {
         const raw: any = {};
@@ -134,7 +134,7 @@ export abstract class Style {
     }
 
     /**
-     * @deprecated Use _rawKeys() instead.
+     * @deprecated Use _htmlStyleKeys() instead.
      */
     protected _propKeys(): string[] {
         return [];
@@ -143,18 +143,19 @@ export abstract class Style {
     /**
      * Collects all the necessary raw HTML style that will be used.
      */
-    raw(): any {
-        let props = this._props();
+    htmlStyle(): any {
+        let props = this._htmlStyle();
         return props;
     }
 
     /**
      * Collects all the necessary raw HTML style that will be used.
+     * @virtual
      */
-    protected _raw(): any {
+    protected _htmlStyle(): any {
         const raw: any = {};
         _.forIn(this, (v, k) => {
-            if (this._propKeys().some(key => key === k)) {
+            if (this._htmlStyleKeys().some(key => key === k)) {
                 raw[k] = v;
             }
         });
@@ -164,8 +165,9 @@ export abstract class Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
+     * @virtual
      */
-    protected _rawKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [];
     }
 }

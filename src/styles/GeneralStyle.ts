@@ -22,7 +22,7 @@ export class GeneralStyle extends Style {
         this.radius = radius;
     }
 
-    protected _propKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [
             'fillStyle',
             'lineWidth',

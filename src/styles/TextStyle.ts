@@ -24,7 +24,7 @@ export class TextStyle extends Style {
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
     }
 
-    protected _propKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [
             'font',
             'fillStyle',

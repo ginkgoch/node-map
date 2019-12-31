@@ -41,8 +41,8 @@ export class IconStyle extends Style {
         }
     }
 
-    protected _props(): any {
-        let json = super._props();
+    protected _htmlStyle(): any {
+        let json = super._htmlStyle();
         json = _.pickBy(json, (v, k) => {
             if (k === 'offsetX' && v === 0) return false;
             if (k === 'offsetY' && v === 0) return false;
@@ -53,7 +53,7 @@ export class IconStyle extends Style {
         return json;
     }
 
-    protected _propKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [
             'offsetX',
             'offsetY',

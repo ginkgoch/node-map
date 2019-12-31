@@ -15,7 +15,7 @@ export class LineStyle extends Style {
         this.lineWidth = lineWidth;
     }
 
-    protected _propKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [
             'strokeStyle',
             'lineWidth'

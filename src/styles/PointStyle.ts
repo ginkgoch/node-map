@@ -26,7 +26,7 @@ export class PointStyle extends Style {
         this.symbol = symbol;
     }
 
-    protected _propKeys(): string[] {
+    protected _htmlStyleKeys(): string[] {
         return [
             'fillStyle',
             'strokeStyle',
