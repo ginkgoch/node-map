@@ -10,19 +10,61 @@ import {
     LinearRing, Envelope, IEnvelope
 } from "ginkgoch-geom";
 
+/**
+ * This class represents a shared renderer that is used in this component.
+ */
 export class Render {
+    /**
+     * @property {Image} image The image that is rendered on.
+     */
     image: Image;
+    /**
+     * @property {number} width The canvas width for rendering.
+     */
     width: number;
+    /**
+     * @property {number} height The canvas height for rendering.
+     */
     height: number;
+    /**
+     * @property {NativeCanvas} canvas The concrete drawing object.
+     */
     canvas: NativeCanvas;
+    /**
+     * @property {number} scale The scale that is used to port world coordinate to screen coordinate.
+     */
     scale: number;
+    /**
+     * @property {number} resolutionX The horizontal resolution.
+     */
     resolutionX = 0;
+    /**
+     * @property {number} resolutionY The vertical resolution.
+     */
     resolutionY = 0;
+    /**
+     * @property {IEnvelope} envelope The world envelope of the viewport.
+     */
     envelope: IEnvelope;
+    /**
+     * @property {"default"|"none"|"gray"|"subpixel"} antialias The antialias setting of canvas.
+     */
     antialias: "default" | "none" | "gray" | "subpixel" = 'default';
+    /**
+     * @property {any} context The concrete native drawing context.
+     */
     context: any;
+    /**
+     * @property {Array<IEnvelope>} textBounds An array of drawn text bounding box cache. Used to avoid text overlapping.
+     */
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
+    /**
+     * Constructs a renderer instance.
+     * @param {Image} image The image to draws on.
+     * @param {IEnvelope} envelope The world envelope of the viewport.
+     * @param {Unit} envelopeUnit The geography unit of viewport envelope.
+     */
     constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meters) {
         assert(image.width > 0, 'Image width must greater than 0.')
         assert(image.height > 0, 'Image height must greater than 0.')
@@ -40,6 +82,14 @@ export class Render {
         this.context.antialias = this.antialias;
     }
 
+    /**
+     * This is a shortcut of creating a renderer instance with default settings.
+     * 
+     * @param {number} width The image width in pixel.
+     * @param {number} height The image height in pixel.
+     * @param {IEnvelope} envelope The viewport envelope.
+     * @param {Unit} envelopeUnit The geography unit of viewport envelope 
+     */
     static create(width: number = 256, height: number = 256,
         envelope: IEnvelope = { minx: -180, miny: -90, maxx: 180, maxy: 90 }, envelopeUnit = Unit.degrees): Render {
         const image = new Image(width, height);
@@ -47,10 +97,19 @@ export class Render {
         return render;
     }
 
+    /**
+     * Flushes current drawing buffer to the image.
+     */
     flush() {
         this.image.buffer = this.canvas.toBuffer();
     }
 
+    /**
+     * Measures the size of the text with the specified text style setting.
+     * @param {string} text The text to be measured.
+     * @param {any} style The raw text options that is defined with HTML text styles.
+     * @returns The size of the text that is going to render.
+     */
     measureText(text: string, style?: any): Size {
         if (style) {
             _.extend(this.context, style);
@@ -61,6 +120,10 @@ export class Render {
         return { width, height };
     }
 
+    /**
+     * Fills the background
+     * @param {any} bg The fill option. Can be color or a fill pattern.
+     */
     drawBackground(bg: any) {
         if (!bg) return;
 
@@ -70,14 +133,29 @@ export class Render {
         this.context.fill();
     }
 
+    /**
+     * Draws features with the styles.
+     * @param {IFeature[]} features The features to draw.
+     * @param {any} style The raw HTML styles.
+     */
     drawFeatures(features: IFeature[], style: any) {
         features.forEach(f => this.drawFeature(f, style));
     }
 
+    /**
+     * Draws features with the styles.
+     * @param {IFeature} feature The feature to draw.
+     * @param {any} style The raw HTML styles.
+     */
     drawFeature(feature: IFeature, style: any) {
         this.drawGeometry(feature.geometry, style);
     }
 
+    /**
+     * Draws geometries with style.
+     * @param {Geometry} geom The geometry to draw.
+     * @param {any} style The raw HTML styles.
+     */
     drawGeometry(geom: Geometry, style: any) {
         if (geom instanceof Point) {
             this._drawPoint(geom, style);
@@ -191,6 +269,13 @@ export class Render {
     //#endregion
 
     //#region draw normal text
+
+    /**
+     * Draws text.
+     * @param {string} text The text to draw.
+     * @param {ICoordinate} coordinate The text where located.
+     * @param {any} style The raw HTML style.
+     */
     drawText(text: string, coordinate: ICoordinate, style: any) {
         coordinate = this._toViewport(coordinate);
 
@@ -246,6 +331,16 @@ export class Render {
     }
     //#endregion
 
+    /**
+     * Draws text on a polyline along with the line direction.
+     * 
+     * NOTE: the text will only be drawn when one of the polyline segment distance is larger than the text width. 
+     * If the line is too short, it won't be drawn. Or reduce the size of the drawing envelope.
+     * 
+     * @param {string} text The text to draw.
+     * @param {LineString} geom The polyline geometry to plot text.
+     * @param {any} style The raw HTML style to draw.
+     */
     drawTextOnLine(text: string, geom: LineString, style: any) {
         if (text.length === 0) return;
 
@@ -276,6 +371,12 @@ export class Render {
         }
     }
 
+    /**
+     * Draws the icon.
+     * @param {Image} icon The icon to draw. It is usually a marker.
+     * @param {ICoordinate} coordinate The coordinate to plot the icon.
+     * @param {any} style The raw HTML style to draw.
+     */
     drawIcon(icon: Image, coordinate: ICoordinate, style: any) {
         coordinate = this._toViewport(coordinate);
         let left = coordinate.x - icon.width * .5;

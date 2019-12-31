@@ -4,14 +4,48 @@ import { StyleUtils } from "./StyleUtils";
 import { Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
+/** This class represents text style for drawing text based on feature properties on various geometries. */
 export class TextStyle extends Style {
+    /** 
+     * @property {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
+     * 
+     * @example Renders "FOO" as text content on all features.
+     * textStyle.content = "FOO";
+     * 
+     * @example Renders a value based on a field name "NAME".
+     * textStyle.content = "[NAME]";
+     * 
+     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * textStyle.content = "Hi [NAME], I like [Hobby]";
+     */
     content: string | undefined;
+    /** @property {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". */
     font: string;
+    /** @property {string} fillStyle The font color string. e.g. "#000000" or "black". */
     fillStyle: string;
+    /** @property {"start"|"end"|"left"|"right"|"center"}  textAlign The text alignment. */
     textAlign: "start" | "end" | "left" | "right" | "center";
+    /** @property {string|undefined} strokeStyle The outline color string on text. If it is not set, no outline will be drawn. */
     strokeStyle: string | undefined;
+    /** @property {number} lineWidth The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
     lineWidth: number;
 
+    /**
+     * Constructs a text style instance.
+     * @param {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
+     * 
+     * @example Renders "FOO" as text content on all features.
+     * textStyle.content = "FOO";
+     * 
+     * @example Renders a value based on a field name "NAME".
+     * textStyle.content = "[NAME]";
+     * 
+     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * textStyle.content = "Hi [NAME], I like [Hobby]";
+     * @param {string} fillStyle The font color string. e.g. "#000000" or "black". 
+     * @param {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". 
+     * @param {string} name The name of this style.
+     */
     constructor(content?: string, fillStyle?: string, font?: string, name: string = 'Text Style') {
         super();
 
@@ -24,7 +58,11 @@ export class TextStyle extends Style {
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
     }
 
-    protected _propKeys(): string[] {
+    /**
+     * Collects the raw HTML style keys that will be included in the returning raw styles.
+     * @override
+     */
+    protected _htmlStyleKeys(): string[] {
         return [
             'font',
             'fillStyle',
@@ -35,11 +73,12 @@ export class TextStyle extends Style {
     }
 
     /**
-     * 
-     * @param feature 
-     * @param styleJson 
-     * @param render 
+     * The concrete draw operation.
+     * @param {IFeature[]} features The features to draw. 
+     * @param {any} styleJson The raw HTML style.
+     * @param {Render} render The renderer to draw.
      * @override
+     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         if (this.content === undefined) return;
@@ -71,13 +110,23 @@ export class TextStyle extends Style {
     }
 
     /**
-     * @override
+     * Collects the required field names that will be used for rendering.
+     * @returns {string[]} The required field names that will be used for rendering.
+     * @override 
      */
     fields(): string[] {
         const fields = this._extractFields();
         return fields;
     }
 
+    /**
+     * Normalize multiple font settings into a HTML font expression.
+     * @param {string} fontFamily The font family. e.g. "arial".
+     * @param {number} fontSize The font size. Default size is 12. 
+     * @param {FontWeight} fontWeight The font weight.
+     * @param {FontStyle} fontStyle The font style.
+     * @returns {string} A normalized font style string. e.g. "italic small-caps bold 12px arial".
+     */
     static normalizeFont(fontFamily: string = 'arial', fontSize: number = 12, fontWeight: FontWeight = 'normal', fontStyle: FontStyle = 'normal') {
         // e.g. italic small-caps bold 12px arial
         const fontSizeStr = `${fontSize}px`
@@ -135,13 +184,20 @@ export class TextStyle extends Style {
     }
 }
 
+/** This type defines the options of font weight. */
 export type FontWeight = 'normal' | 'bold' | 'bolder' | 'light';
 
+/** This type defines the options for font style. */
 export type FontStyle = 'normal' | 'italic' | 'oblique';
 
+/** This class represents some useful functions for fonts.  */
 export class FontFamilies {
     private static _families = ["Abadi MT Condensed Light", "Aharoni", "Aharoni Bold", "Aldhabi", "AlternateGothic2 BT", "Andale Mono", "Andalus", "Angsana New", "AngsanaUPC", "Aparajita", "Apple Chancery", "Arabic Typesetting", "Arial", "Arial Black", "Arial narrow", "Arial Nova", "Arial Rounded MT Bold", "Arnoldboecklin", "Avanta Garde", "Bahnschrift", "Bahnschrift Light", "Bahnschrift SemiBold", "Bahnschrift SemiLight", "Baskerville", "Batang", "BatangChe", "Big Caslon", "BIZ UDGothic", "BIZ UDMincho Medium", "Blippo", "Bodoni MT", "Book Antiqua", "Bookman", "Bradley Hand", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Brush Script Std", "Brushstroke", "Calibri", "Calibri Light", "Calisto MT", "Cambodian", "Cambria", "Cambria Math", "Candara", "Century Gothic", "Chalkduster", "Cherokee", "Comic Sans", "Comic Sans MS", "Consolas", "Constantia", "Copperplate", "Copperplate Gothic Light", "Copperplate Gothic Bold", "Corbel", "Cordia New", "CordiaUPC", "Coronetscript", "Courier", "Courier New", "DaunPenh", "David", "DengXian", "DFKai-SB", "Didot", "DilleniaUPC", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Estrangelo Edessa", "EucrosiaUPC", "Euphemia", "FangSong", "Florence", "Franklin Gothic Medium", "FrankRuehl", "FreesiaUPC", "Futara", "Gabriola", "Gadugi", "Garamond", "Gautami", "Geneva", "Georgia", "Georgia Pro", "Gill Sans", "Gill Sans Nova", "Gisha", "Goudy Old Style", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Hebrew", "Hoefler Text", "HoloLens MDL2 Assets", "Impact", "Ink Free", "IrisUPC", "Iskoola Pota", "Japanese", "JasmineUPC", "Javanese Text", "Jazz LET", "KaiTi", "Kalinga", "Kartika", "Khmer UI", "KodchiangUPC", "Kokila", "Korean", "Lao", "Lao UI", "Latha", "Leelawadee", "Leelawadee UI", "Leelawadee UI Semilight", "Levenim MT", "LilyUPC", "Lucida Bright", "Lucida Console", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", "Lucidatypewriter", "Luminari", "Malgun Gothic", "Malgun Gothic Semilight", "Mangal", "Marker Felt", "Marlett", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft JhengHei UI", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Sans Serif", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei", "Microsoft YaHei UI", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Miriam", "Monaco", "Mongolian Baiti", "MoolBoran", "MS Gothic", "MS Mincho", "MS PGothic", "MS PMincho", "MS UI Gothic", "MV Boli", "Myanmar Text", "Narkisim", "Neue Haas Grotesk Text Pro", "New Century Schoolbook", "News Gothic MT", "Nirmala UI", "No automatic language associations", "Noto", "NSimSun", "Nyala", "Oldtown", "Optima", "Palatino", "Palatino Linotype", "papyrus", "Parkavenue", "Perpetua", "Plantagenet Cherokee", "PMingLiU", "Raavi", "Rockwell", "Rockwell Extra Bold", "Rockwell Nova", "Rockwell Nova Cond", "Rockwell Nova Extra Bold", "Rod", "Sakkal Majalla", "Sanskrit Text", "Segoe MDL2 Assets", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Emoji", "Segoe UI Historic", "Segoe UI Symbol", "Shonar Bangla", "Shruti", "SimHei", "SimKai", "Simplified Arabic", "Simplified Chinese", "SimSun", "SimSun-ExtB", "Sitka", "Snell Roundhan", "Stencil Std", "Sylfaen", "Symbol", "Tahoma", "Thai", "Times New Roman", "Traditional Arabic", "Traditional Chinese", "Trattatello", "Trebuchet MS", "Tunga", "UD Digi Kyokasho", "UD Digi KyoKasho NK-R", "UD Digi KyoKasho NP-R", "UD Digi KyoKasho N-R", "Urdu Typesetting", "URW Chancery", "Utsaah", "Vani", "Verdana", "Verdana Pro", "Vijaya", "Vrinda", "Webdings", "Westminster", "Wingdings", "Yu Gothic", "Yu Gothic UI", "Yu Mincho", "Zapf Chancery"];
 
+    /**
+     * Gets all common font family names.
+     * @returns {string[]} Common font family names.
+     */
     static get families() {
         return this._families;
     }

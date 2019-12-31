@@ -53,13 +53,17 @@ export class Image {
     }
 
     /**
-     * Converts image to a buffer instance.
+     * Converts this image to a buffer instance.
      * @returns {Buffer} Buffer from this image.
      */
     toBuffer(): Buffer {
         return this.buffer || this._nativeCanvas(this.width, this.height).toBuffer();
     }
 
+    /**
+     * Converts this image to JSON format data.
+     * @returns {any} The JSON format data of this image.
+     */
     toJSON(): any {
         return {
             type: 'image',
