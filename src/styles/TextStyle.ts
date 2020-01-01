@@ -9,14 +9,20 @@ export class TextStyle extends Style {
     /** 
      * The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
      * 
-     * @example Renders "FOO" as text content on all features.
+     * Renders "FOO" as text content on all features.
+     * ```typescript
      * textStyle.content = "FOO";
+     * ```
      * 
-     * @example Renders a value based on a field name "NAME".
+     * Renders a value based on a field name "NAME".
+     * ```typescript
      * textStyle.content = "[NAME]";
+     * ```
      * 
-     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * ```typescript
      * textStyle.content = "Hi [NAME], I like [Hobby]";
+     * ```
      */
     content: string | undefined;
     /** The font string including either font family or size or both. e.g. "ARIAL 12px". */
@@ -34,14 +40,21 @@ export class TextStyle extends Style {
      * Constructs a text style instance.
      * @param {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
      * 
-     * @example Renders "FOO" as text content on all features.
+     * Renders "FOO" as text content on all features.
+     * ```typescript
      * textStyle.content = "FOO";
+     * ```
      * 
-     * @example Renders a value based on a field name "NAME".
+     * Renders a value based on a field name "NAME".
+     * ```typescript
      * textStyle.content = "[NAME]";
+     * ```
      * 
-     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * ```typescript
      * textStyle.content = "Hi [NAME], I like [Hobby]";
+     * ```
+     * 
      * @param {string} fillStyle The font color string. e.g. "#000000" or "black". 
      * @param {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". 
      * @param {string} name The name of this style.

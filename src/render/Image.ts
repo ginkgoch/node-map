@@ -13,12 +13,16 @@ export class Image {
     /**
      * Constructs an instance of Image.
      * @param {IArguments} arguments Parameters could be width: number and height: number, or imagePath: string. 
-     * @example
-     * // construct with width and height
-     * const image = new Image(256, 256)
-     * @example
-     * // construct with image file path
-     * const image = new Image('demo.png')
+     * 
+     * Constructs with width and height:
+     * ```typescript
+     * const image = new Image(256, 256);
+     * ```
+     * 
+     * Constructs with image file path:
+     * ```typescript
+     * const image = new Image('demo.png');
+     * ```
      */
     constructor(buffer?: Buffer)
     constructor(imageFilePath?: string)

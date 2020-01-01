@@ -9,8 +9,9 @@ import { TileOrigin, TileSystem } from ".";
  * This class represents a complete structure of a map instance. 
  * It wraps necessary information that are used for a map rendering.
  * 
- * @example A complete demo to create a map and draw as an image, then save to disk.
+ * A complete demo to create a map and draw as an image, then save to disk.
  * 
+ * ```typescript
  * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
  * const layer = new FeatureLayer(source);
  * layer.pushStyles([new FillStyle('yellow', 'blue', 1)]);
@@ -19,6 +20,7 @@ import { TileOrigin, TileSystem } from ".";
  * const image = map.draw();
  * 
  * fs.writeFileSync('demo.png', image.buffer);
+ * ```
  */
 export class MapEngine {
     /**

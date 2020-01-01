@@ -11,11 +11,12 @@ import { IEnvelope } from "ginkgoch-geom";
 /**
  * FeatureLayer responses for rendering FeatureSource with styles.
  * 
- * @example
+ * ```typescript
  * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
  * const layer = new FeatureLayer(source);
  * layer.styles.push(new FillStyle('#886600', 'red', 2));
  * ...
+ * ```
  */
 export class FeatureLayer extends Opener {
     id: string;

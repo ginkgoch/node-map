@@ -17,12 +17,18 @@ export class LayerFactory {
      * - Path is used for the concrete path or name.
      * - Parameters are used for some optional configurations.
      * 
-     * @example Create a FeatureLayer with a ShapefileFeatureSource.
-     * let layer = FeatureLayerFactory.create(new URL('shp://./cntry02.shp'))
-     * @example Create a FeatureLayer with a ShapefileFeatureSource with rs+ flag.
+     * 1. Create a FeatureLayer with a ShapefileFeatureSource.
+     * ```typescript
+     * let layer = FeatureLayerFactory.create(new URL('shp://./cntry02.shp'));
+     * ```
+     * 2. Create a FeatureLayer with a ShapefileFeatureSource with rs+ flag.
+     * ```typescript
      * let layer = FeatureLayerFactory.create(new URL('shp://./cntry02.shp?flag=rs+'));
-     * @example Create a FeatureLayer with a MemoryFeatureSource with name = 'dynamic' and fields = ['name', 'recid'].
+     * ```
+     * 3. Create a FeatureLayer with a MemoryFeatureSource with name = 'dynamic' and fields = ['name', 'recid'].
+     * ```typescript
      * let layer = FeatureLayerFactory.create(new URL('mem://dynamic?fields=name|c,recid|n,landlocked|b'));
+     * ```
      * @returns {FeatureLayer} The feature layer with specified feature source.
      */
     static create(sourceURL: URL) {
