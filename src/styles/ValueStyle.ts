@@ -4,10 +4,14 @@ import { Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } from ".";
 
+/** This class represents a value style which allows to set various sub-styles based on a field value. */
 export class ValueStyle extends Style {
+    /** A value item list with the definition of value and its corresponding style. */
     items: ValueItem[];
+    /** The field name where the value is fetched from. */
     field: string;
 
+    /** Constructs a value style instance. */
     constructor(field?: string, items?: ValueItem[], name?: string) {
         super();
 
@@ -21,6 +25,10 @@ export class ValueStyle extends Style {
         this.field = field || '';
     }
 
+    /**
+     * Collects the required field names that will be used for rendering.
+     * @returns {string[]} The required field names that will be used for rendering.
+     */
     fields() {
         let fields = [];
         if (this.field && this.field !== '') {
@@ -36,6 +44,12 @@ export class ValueStyle extends Style {
         return fields;
     }
 
+    /**
+     * The concrete draw operation.
+     * @param {IFeature[]} features The features to draw. 
+     * @param {any} styleJson The raw HTML style.
+     * @param {Render} render The renderer to draw.
+     */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         _.groupBy(this.items, i => i.value)
         const itemMap = _.groupBy(this.items, i => i.value);
@@ -49,6 +63,20 @@ export class ValueStyle extends Style {
         });
     }
 
+    /**
+     * This is a shortcut function to automatically generate value items based on the distinct values, 
+     * and assign a gradient colors to each item.
+     * @param {'fill'|'linear'|'point'} styleType The style type of the sub-styles.
+     * @param {string} field The field name where the value is fetched. 
+     * @param {any[]} values The distinct value array.
+     * @param {string} fromColor The fill color begins from.
+     * @param {string} toColor The fill color ends with. 
+     * @param {string} strokeColor The stroke color.
+     * @param {number} strokeWidth The stroke width in pixel. 
+     * @param {number} radius The radius for points symbols. 
+     * @param {PointSymbolType} symbol The point symbol type.
+     * @returns {ValueStyle} A value style with sub styles filled with the specified conditions. 
+     */
     static auto(styleType: 'fill' | 'linear' | 'point', field: string, values: any[], fromColor?: string, toColor?: string, strokeColor?: string, strokeWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
         switch (styleType) {
             case 'point':
@@ -88,7 +116,10 @@ export class ValueStyle extends Style {
     }
 }
 
+/** This interface represents a value item structure. */
 export interface ValueItem {
+    /** The value of this item. */
     value: any;
+    /** The style for drawing with this value. */
     style: Style;
 }

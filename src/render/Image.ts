@@ -3,7 +3,6 @@ import { NativeFactory, NativeImage } from '../native';
 
 /**
  * An image wrapper class.
- * @class
  */
 export class Image {
     buffer: Buffer | null;
@@ -13,14 +12,17 @@ export class Image {
 
     /**
      * Constructs an instance of Image.
-     * @constructor
      * @param {IArguments} arguments Parameters could be width: number and height: number, or imagePath: string. 
-     * @example
-     * // construct with width and height
-     * const image = new Image(256, 256)
-     * @example
-     * // construct with image file path
-     * const image = new Image('demo.png')
+     * 
+     * Constructs with width and height:
+     * ```typescript
+     * const image = new Image(256, 256);
+     * ```
+     * 
+     * Constructs with image file path:
+     * ```typescript
+     * const image = new Image('demo.png');
+     * ```
      */
     constructor(buffer?: Buffer)
     constructor(imageFilePath?: string)
@@ -53,13 +55,17 @@ export class Image {
     }
 
     /**
-     * Converts image to a buffer instance.
+     * Converts this image to a buffer instance.
      * @returns {Buffer} Buffer from this image.
      */
     toBuffer(): Buffer {
         return this.buffer || this._nativeCanvas(this.width, this.height).toBuffer();
     }
 
+    /**
+     * Converts this image to JSON format data.
+     * @returns {any} The JSON format data of this image.
+     */
     toJSON(): any {
         return {
             type: 'image',

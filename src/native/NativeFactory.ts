@@ -1,6 +1,22 @@
 import { NativeAdaptor } from "./NativeAdaptor";
 import { NativeImage } from "./NativeImage";
 
+/**
+ * This class represents a central factory for creating native adaptors with few callback registration. 
+ * Once this is registered, it will be used everywhere during the concrete rendering.
+ * 
+ * Register a native adaptor on the fly.
+ * 
+ * ```typescript
+ * import { Canvas, Image } from 'canvas';
+ * import { NativeFactory } from 'ginkgoch-map';
+ * 
+ * NativeFactory.register({
+ *      createCanvas: (w, h) => new Canvas(w, h),
+ *      createNativeImage: () => new Image()
+ * });
+ * ```
+ */
 export class NativeFactory {
     private static _adaptor?: NativeAdaptor;
 

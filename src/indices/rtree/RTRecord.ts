@@ -3,6 +3,7 @@ import { Envelope, IEnvelope, Point } from "ginkgoch-geom";
 import { BufferReader, BufferWriter } from "ginkgoch-buffer-io";
 import { RTRecordType } from "./RTRecordType";
 
+/** @ignore */
 export class RTRecordHeader {
     keyLength = 0;
     elementLength = 0;
@@ -21,6 +22,7 @@ export class RTRecordHeader {
     }
 }
 
+/** @ignore */
 export abstract class RTRecord {
     public data = 0;
     public header = new RTRecordHeader();
@@ -55,6 +57,7 @@ export abstract class RTRecord {
     }
 }
 
+/** @ignore */
 export class RTPointRecord extends RTRecord {
     _point: RTPoint = new RTPoint();
     header = new RTRecordHeader();
@@ -115,6 +118,7 @@ export class RTPointRecord extends RTRecord {
     }
 }
 
+/** @ignore */
 export class RTRectangleRecord extends RTRecord {
     id = 0;
     header = new RTRecordHeader();
@@ -185,6 +189,7 @@ export class RTRectangleRecord extends RTRecord {
     }
 }
 
+/** @ignore */
 export class RTEntryRecord extends RTRectangleRecord {
     constructor(recordHeader?: RTRecordHeader, rect?: IEnvelope) {
         recordHeader = recordHeader || new RTRecordHeader();
@@ -207,6 +212,8 @@ export class RTEntryRecord extends RTRectangleRecord {
 }
 
 //#region rect and point
+
+/** @ignore */
 export class RTPoint extends Point {
     constructor(x: number = 0, y: number = 0) {
         super(x, y);
@@ -239,6 +246,7 @@ export class RTPoint extends Point {
     }
 }
 
+/** @ignore */
 export class RTRectangle extends Envelope {
     constructor(minx: number, miny: number, maxx: number, maxy: number) {
         super(minx, miny, maxx, maxy);

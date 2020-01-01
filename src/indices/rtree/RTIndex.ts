@@ -13,14 +13,35 @@ import { BaseIndex } from '../BaseIndex';
 
 const FILE_EXTENSIONS = ['.idx', '.ids'];
 
+/**
+ * This class is an implementation of {BaseIndex}. It allows to build or read index with R-Tree index technology.
+ */
 export class RTIndex extends BaseIndex {
     private _rtFile: RTFile;
     private _idsEngine: RTIds;
 
+    /**
+     * The file system flags to open the r-tree spatial index file.
+     * @see {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options.
+     */
     flag: string;
+
+    /**
+     * The r-tree spatial index file path.
+     */
     filePath: string;
+
+    /**
+     * Gets the status whether this index file is opened.
+     */
     opened = false;
 
+    /**
+     * Constructs the r-tree spatial index instance.
+     * @param {string} [filePath] The file path of the spatial indexed file. Default is ``.
+     * @param {string} [flag] The file system flags to open the r-tree spatial index file. 
+     * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. Default is `rs`.
+     */
     constructor(filePath: string = '', flag: string = 'rs') {
         super();
 
@@ -30,6 +51,12 @@ export class RTIndex extends BaseIndex {
         this._idsEngine = new RTIds();
     }
 
+    /**
+     * Opens the spatial index file.
+     * @param {string} [flag] The file system flags to open the r-tree spatial index file. Default value is `"rs"` or the flag used to open last time.
+     * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. 
+     * It is optional with default option 'rs'.
+     */
     open(flag?: string) {
         if (flag !== undefined && this.flag !== flag) {
             this.close();
@@ -44,11 +71,17 @@ export class RTIndex extends BaseIndex {
         this.opened = true;
     }
 
+    /**
+     * The concrete implementation of open() func.
+     */
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
         this._idsEngine.open(RTIndex._idsFilePath(this.filePath), this.flag);
     }
 
+    /**
+     * Closes the r-tree spatial index file handler and release stream resource.
+     */
     close() {
         if (!this.opened) { 
             return;
@@ -58,11 +91,18 @@ export class RTIndex extends BaseIndex {
         this._close();
     }
 
+    /**
+     * The concrete implementation of close() func.
+     */
     protected _close() {
         this._rtFile.close();
         this._idsEngine.close();
     }
 
+    /**
+     * Deletes the indexed records that intersect with the given geometry or envelope.
+     * @param {Geometry | IEnvelope} geom The geometry or envelope to filter inside the r-tree spatial index file for deleting.
+     */
     delete(geom: Geometry): void;
     delete(rect: IEnvelope): void;
     delete(geom: Geometry | IEnvelope): void {
@@ -77,6 +117,11 @@ export class RTIndex extends BaseIndex {
         }
     }
 
+    /**
+     * Pushes new record into the r-tree spatial index.
+     * @param {Geometry | IEnvelope} geom The geometry or envelope to push into the index.
+     * @param {string} id The id of the record to push into the index. 
+     */
     push(geom: Geometry | IEnvelope, id: string): void {
         if (geom instanceof Point) {
             this._insertPoint(geom.x, geom.y, id);
@@ -89,7 +134,13 @@ export class RTIndex extends BaseIndex {
         }
     }
 
-    static recommendPageSize(recordCount: number) {
+    /**
+     * Gets a recommend page size in kilobytes based on the record count to index. 
+     * A proper page size will directly impact the query performance and the index file physical size.
+     * @param {number} recordCount The record count of the records that is going to be indexed.
+     * @returns {number} A page size in kilobytes that is recommend to use when create a new spatial index file.
+     */
+    static recommendPageSize(recordCount: number): number {
         if (recordCount <= 4086) {
             return RTUtils.kilobytes(4);
         }
@@ -104,7 +155,13 @@ export class RTIndex extends BaseIndex {
         }
     }
 
-    static exists(filePath: string) {
+    /**
+     * Check whether the r-tree spatial index file exists. 
+     * Both *.ids and *.idx files will be checked.
+     * @param {string} filePath The file path (either *.idx and *.ids are acceptable) of the r-tree spatial index.
+     * @returns {boolean} Whether the r-tree spatial index file exists.
+     */
+    static exists(filePath: string): boolean {
         const ext = path.extname(filePath);
         const regex = new RegExp(ext + '$', 'i');
         const count = FILE_EXTENSIONS.filter(ex => {
@@ -115,11 +172,23 @@ export class RTIndex extends BaseIndex {
         return count === FILE_EXTENSIONS.length;
     }
 
-    static entry(filePath: string) {
+    /**
+     * Gets the index entry file path from a given file path. Any file extension will be replaced with *.idx.
+     * @param {string} filePath The source file.
+     * @returns {string} The .idx file path based on the given file path.
+     */
+    static entry(filePath: string): string {
         const ext = path.extname(filePath);
         return filePath.replace(ext, '.idx');
     }
 
+    /**
+     * Gets the index temp file path from a given file path.
+     * @param {string} filePath The source file.
+     * @returns {string} The temp file path based on the given file path.
+     * @summary Temp file path is used to avoid to pollute current existing index file. 
+     * Once the building process is complete, the new index file will replace the old one.
+     */
     static temp(filePath: string) {
         const ext = path.extname(filePath);
         filePath = filePath.replace(ext, '.idx');
@@ -130,6 +199,10 @@ export class RTIndex extends BaseIndex {
         return tempFilePath;
     }
 
+    /**
+     * Clean all index files based on the given file path.
+     * @param {string} filePath The source file path of the index file.
+     */
     static clean(filePath: string) {
         const sourceExt = path.extname(filePath);
         FILE_EXTENSIONS.forEach(ext => {
@@ -140,6 +213,12 @@ export class RTIndex extends BaseIndex {
         })
     }
 
+    /**
+     * Moves index file path from one to another.
+     * @param {string} sourcePath The source file to move.
+     * @param {string} targetPath The target file to move to.
+     * @param {boolean} overwrite True to overwrite the target file if exists. Otherwise not.
+     */
     static move(sourcePath: string, targetPath: string, overwrite = true) {
         const exists = this.exists(targetPath);
         if (exists && overwrite) {
@@ -158,14 +237,23 @@ export class RTIndex extends BaseIndex {
         });
     }
 
+    /**
+     * Gets the page size.
+     */
     get pageSize() {
         return this._rtFile.pageSize;
     }
 
+    /**
+     * Sets the page size.
+     */
     set pageSize(pageSize: number) {
         this._rtFile.pageSize = pageSize;
     }
 
+    /**
+     * The root node.
+     */
     get root(): RTNode | null {
         const dataPage = this._rtFile.rootNodePage;
         if (dataPage === null) {
@@ -183,10 +271,19 @@ export class RTIndex extends BaseIndex {
         return root;
     }
 
+    /**
+     * The concrete function to get indexed record count for override.
+     */
     protected _count(): number {
         return this.root!.allRecordCount;
     }
 
+    /**
+     * Create an empty r-tree spatial index file.
+     * @param {string} filePath The target index file path.
+     * @param {RTRecordType} recordType The record type.
+     * @param {RTIndexCreateOption} options The extra options for creating index file.
+     */
     static create(filePath: string, recordType: RTRecordType, options?: RTIndexCreateOption) {
         options = this._defaultCreateOptions(options);
         this._cleanForOverwrite(filePath, options);
@@ -197,6 +294,11 @@ export class RTIndex extends BaseIndex {
         this._create(filePath, recordType, options);
     }
 
+    /**
+     * The concrete abstract function to get the record ids that are inside the rectangle from index.
+     * @param {IEnvelope} rect rect The rectangle to query records.
+     * @return {string[]} The record ids that intersects the given rectangle.
+     */
     protected _insiders(rect: IEnvelope) {
         const root = this.root!;
         const idx = new Array<number>();
@@ -288,6 +390,11 @@ export class RTIndex extends BaseIndex {
 
 }
 
+/**
+ * The extra options for creating r-tree spatial index file.
+ * @category indices
+ * @interface
+ */
 export interface RTIndexCreateOption {
     float?: boolean;
     pageSize?: number;

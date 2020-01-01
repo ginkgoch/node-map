@@ -8,6 +8,16 @@ import { StyleFactory } from "../styles";
 import uuid from "../shared/UUID";
 import { IEnvelope } from "ginkgoch-geom";
 
+/**
+ * FeatureLayer responses for rendering FeatureSource with styles.
+ * 
+ * ```typescript
+ * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+ * const layer = new FeatureLayer(source);
+ * layer.styles.push(new FillStyle('#886600', 'red', 2));
+ * ...
+ * ```
+ */
 export class FeatureLayer extends Opener {
     id: string;
     name: string;
@@ -18,6 +28,11 @@ export class FeatureLayer extends Opener {
     visible = true;
     margin = 5;
 
+    /**
+     * Constructs a FeatureLayer instance.
+     * @param {FeatureSource} source The feature source where the features are fetched.
+     * @param {string} name The name of this layer. Optional with default value `layer-${uuid()}`.
+     */
     constructor(source: FeatureSource, name?: string) {
         super();
 
@@ -29,6 +44,10 @@ export class FeatureLayer extends Opener {
         this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     }
 
+    /**
+     * Pushes multiple styles into this layer.
+     * @param {Array<Style>} styles The styles to render features.
+     */
     pushStyles(styles: Array<Style>) {
         for (let style of styles) {
             this.styles.push(style);
@@ -36,25 +55,33 @@ export class FeatureLayer extends Opener {
     }
 
     /**
-     * @override
+     * Opens this layer and prepares the resources for querying and rendering.
      */
     protected async _open(): Promise<void> {
         await this.source.open();
     }
 
     /**
-     * @override
+     * Closes this layer and release its related resources.
      */
     protected async _close(): Promise<void> {
         await this.source.close();
     }
 
+    /**
+     * Gets the envelope of this layer.
+     * @returns {IEnvelope} The envelope of this layer.
+     */
     async envelope() {
         Validator.checkOpened(this);
 
         return await this.source.envelope();
     }
 
+    /**
+     * Draws this layer with styles and feature source in a restricted envelope.
+     * @param {Render} render The renderer that holds the image source and necessary spatial infos.
+     */
     async draw(render: Render) {
         if (!this.visible || !this._scaleInRange(render.scale, this.maximumScale, this.minimumScale)) {
             return;
@@ -77,6 +104,12 @@ export class FeatureLayer extends Opener {
         });
     }
 
+    /**
+     * Enlarges the specified envelope based on the `margin` property.
+     * @param {IEnvelope} envelope The envelope to enlarge.
+     * @param {Render} render The render.
+     * @returns {IEnvelope} The enlarged envelope.
+     */
     applyMargin(envelope: IEnvelope, render: Render) {
         if (this.margin > 0) {
             envelope = _.clone(envelope);
@@ -91,6 +124,11 @@ export class FeatureLayer extends Opener {
         return envelope;
     }
 
+    /**
+     * Gets a thumbnail image of this layer.
+     * @param {number} width The width in pixel of the thumbnail image.
+     * @param {number} height The height in pixel of the thumbnail image.
+     */
     async thumbnail(width = 256, height = 256): Promise<Image> {
         const envelope = await this.envelope();
         const render = Render.create(width, height, envelope, this.source.projection.from.unit);
@@ -100,10 +138,19 @@ export class FeatureLayer extends Opener {
         return render.image;
     }
 
+    /**
+     * Converts this layer into a JSON format data.
+     * @returns A JSON format data of this layer.
+     */
     toJSON(): any {
         return this._toJSON();
     }
 
+    /**
+     * Converts this layer into a JSON format data.
+     * @returns A JSON format data of this layer.
+     * 
+     */
     protected _toJSON() {
         return {
             type: JSONKnownTypes.featureLayer,
@@ -117,6 +164,12 @@ export class FeatureLayer extends Opener {
         }
     }
 
+    /**
+     * Parses the given JSON format data to a FeatureLayer instance. 
+     * The JSON data must match FeatureLayer schema.
+     * @param {any} json The JSON format data of this layer.
+     * @returns {FeatureLayer} A FeatureLayer instance.
+     */
     static parseJSON(json: any) {
         const source = FeatureSourceFactory.parseJSON(json.source) as FeatureSource;
         const layer = new FeatureLayer(source);

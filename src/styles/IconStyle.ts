@@ -5,11 +5,22 @@ import { Style } from "./Style";
 import { Image, Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
+/** This class represents an icon style to draw icons on map. */
 export class IconStyle extends Style {
+    /** The image source to draw. */
     icon: Image;
+    /** The horizontal offset to draw. */
     offsetX: number;
+    /** The vertical offset to draw. */
     offsetY: number;
 
+    /**
+     * Constructs an icon style instance.
+     * @param {Image} icon The image source to draw.
+     * @param {number} offsetX The horizontal offset to draw.
+     * @param {number} offsetY The vertical offset to draw. 
+     * @param {string} name The name of this style.
+     */
     constructor(icon?: Image, offsetX = 0, offsetY = 0, name?: string) {
         super();
 
@@ -20,6 +31,12 @@ export class IconStyle extends Style {
         this.offsetY = offsetY;
     }
 
+    /**
+     * The concrete draw process.
+     * @param {IFeature[]} features The features to draw. 
+     * @param {any} styleJson The raw HTML style.
+     * @param {Render} render The renderer to draw.
+     */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => {
             const geom = f.geometry;
@@ -41,8 +58,11 @@ export class IconStyle extends Style {
         }
     }
 
-    protected _props(): any {
-        let json = super._props();
+    /**
+     * Collects all the necessary raw HTML style that will be used.
+     */
+    protected _htmlStyle(): any {
+        let json = super._htmlStyle();
         json = _.pickBy(json, (v, k) => {
             if (k === 'offsetX' && v === 0) return false;
             if (k === 'offsetY' && v === 0) return false;
@@ -53,7 +73,10 @@ export class IconStyle extends Style {
         return json;
     }
 
-    protected _propKeys(): string[] {
+    /**
+     * Collects the raw HTML style keys that will be included in the returning raw styles.
+     */
+    protected _htmlStyleKeys(): string[] {
         return [
             'offsetX',
             'offsetY',

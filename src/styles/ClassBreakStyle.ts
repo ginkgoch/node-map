@@ -5,10 +5,25 @@ import { Constants } from "../shared";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils } from ".";
 
+/**
+ * This class represents a style to render different sub-styles based on the break down values.
+ */
 export class ClassBreakStyle extends Style {
+    /**
+     * The field name where to fetch the values to break down.
+     */
     field: string;
+    /**
+     * classBreaks The break down sub-styles and its corresponding value.
+     */
     classBreaks: Array<ClassBreakItem>;
 
+    /**
+     * Constructs a class break style instance.
+     * @param {string} field The field name where to fetch the values to break down.
+     * @param {Array<ClassBreakItem>} classBreaks The break down sub-styles and its corresponding value.
+     * @param {string} name The name of this style.
+     */
     constructor(field?: string, classBreaks?: Array<ClassBreakItem>, name?: string) {
         super();
 
@@ -22,6 +37,9 @@ export class ClassBreakStyle extends Style {
         }
     }
 
+    /**
+     * Collects the required field names that will be used for rendering.
+     */
     fields() {
         let fields = [];
         if (this.field && this.field !== '') {
@@ -37,6 +55,12 @@ export class ClassBreakStyle extends Style {
         return fields;
     }
 
+    /**
+     * The concrete draw process.
+     * @param {IFeature[]} features The features to draw. 
+     * @param {any} styleJson The raw HTML style.
+     * @param {Render} render The renderer to draw.
+     */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => {
             this._drawFeature(f, render);
@@ -56,6 +80,22 @@ export class ClassBreakStyle extends Style {
         styles.forEach(s => s.draw(f, render));
     }
 
+    /**
+     * This is a shortcut function to automatically generate class breaks based on the values, 
+     * and assign a gradient colors to each item.
+     * @param {'fill'|'linear'|'point'} styleType The style type of the sub-styles.
+     * @param {string} field The field name where the value is fetched. 
+     * @param {number} maximum The maximum value to break down. 
+     * @param {number} minimum The minimum value to break down. 
+     * @param {number} count The break down items count to generate. 
+     * @param {string} fromColor The fill color begins from.
+     * @param {string} toColor The fill color ends with. 
+     * @param {string} strokeColor The stroke color.
+     * @param {number} strokeWidth The stroke width in pixel. 
+     * @param {number} radius The radius for points symbols. 
+     * @param {PointSymbolType} symbol The point symbol type.
+     * @returns {ClassBreakStyle} A class break style with sub styles filled with the specified conditions. 
+     */
     static auto(styleType: 'fill' | 'linear' | 'point', field: string, maximum: number, minimum: number, count: number,
         fromColor?: string, toColor?: string, strokeColor?: string,
         strokeWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
@@ -112,6 +152,9 @@ export class ClassBreakStyle extends Style {
     }
 }
 
+/**
+ * This interface represents a structure of a class break item.
+ */
 export interface ClassBreakItem {
     minimum: number,
     maximum: number,
