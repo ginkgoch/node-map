@@ -3,5 +3,3 @@ built/
 dist/
 yarn.lock
 yarn-error.log
-docs/
-docs-type/
