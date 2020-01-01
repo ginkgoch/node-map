@@ -102,8 +102,7 @@ export abstract class Style {
     /**
      * Converts this style to a JSON format data.
      * @returns {any} The JSON format data.
-     * @protected
-     * @virtual
+     * 
      */
     protected _toJSON() {
         let json = JSONUtils.objectToJSON(this);
@@ -112,6 +111,7 @@ export abstract class Style {
 
     /**
      * @deprecated Use htmlStyle() instead.
+     * @ignore
      */
     props(): any {
         let props = this._htmlStyle();
@@ -119,9 +119,9 @@ export abstract class Style {
     }
 
     /**
-     * @protected
-     * @virtual
+     * 
      * @deprecated Use _htmlStyle() instead.
+     * @ignore
      */
     protected _props(): any {
         const raw: any = {};
@@ -135,9 +135,8 @@ export abstract class Style {
     }
 
     /**
-     * @protected
-     * @virtual
      * @deprecated Use _htmlStyleKeys() instead.
+     * @ignore
      */
     protected _propKeys(): string[] {
         return [];
@@ -153,8 +152,7 @@ export abstract class Style {
 
     /**
      * Collects all the necessary raw HTML style that will be used.
-     * @virtual
-     * @protected
+     * 
      */
     protected _htmlStyle(): any {
         const raw: any = {};
@@ -169,8 +167,7 @@ export abstract class Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @virtual
-     * @protected
+     * 
      */
     protected _htmlStyleKeys(): string[] {
         return [];

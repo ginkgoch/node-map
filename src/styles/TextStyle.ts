@@ -60,7 +60,6 @@ export class TextStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [
@@ -77,8 +76,6 @@ export class TextStyle extends Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @override
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         if (this.content === undefined) return;
@@ -112,7 +109,6 @@ export class TextStyle extends Style {
     /**
      * Collects the required field names that will be used for rendering.
      * @returns {string[]} The required field names that will be used for rendering.
-     * @override 
      */
     fields(): string[] {
         const fields = this._extractFields();

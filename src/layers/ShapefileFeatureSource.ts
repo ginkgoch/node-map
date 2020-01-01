@@ -69,7 +69,7 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     /**
      * Converts this feature source into JSON data.
-     * @protected
+     * 
      */
     protected _toJSON() {
         const json = super._toJSON();
@@ -95,7 +95,6 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Gets whether this feature source is editable (creating, updating and deleting).
      * @returns {boolean} This is feature source is always editable.
-     * @override
      */
     get editable() {
         return true;
@@ -170,7 +169,6 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Closes this feature source and release the resources. 
      * Once it is closed, any CRUD resource related operation will throw an exception.
-     * @override
      */
     protected async _close() {
         if (this._shapefile) {
@@ -187,7 +185,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Gets the features count. 
      * @returns The feature count.
-     * @protected 
+     *  
      */
     protected async _count(): Promise<number> {
         return this.__shapefile.count();
@@ -198,8 +196,6 @@ export class ShapefileFeatureSource extends FeatureSource {
      * @param {IEnvelope} envelope The condition to filter out the features within the specified envelope. Optional with default value undefined.
      * @param {FieldFilters} fields The fields will come with the returned feature array. Optional with default value undefined.
      * @returns {Promise<Feature[]>} The feature array that matches the specified condition.
-     * @protected 
-     * @override 
      */
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
         let features: Array<Feature>;
@@ -223,8 +219,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Gets all fields info in this feature source.
      * @returns {Promise<Field[]>} An array of fields info in this feature source.
-     * @override 
-     * @protected 
+     *  
      */
     protected async _fields(): Promise<Field[]> {
         const fields = this.__shapefile.fields(true) as DbfField[];
@@ -244,8 +239,6 @@ export class ShapefileFeatureSource extends FeatureSource {
      * @param {number} id The id of the feature to find.
      * @param {FieldFilters} fields The field filters that indicate the fields will be fetched with the returned feature instance.
      * @returns {Promise<Feature|undefined>} The feature that id equals to the specified id.
-     * @protected 
-     * @override 
      */
     protected async _feature(id: number, fields: string[]): Promise<Feature | undefined> {
         const feature = this.__shapefile.get(id, fields);
@@ -256,7 +249,6 @@ export class ShapefileFeatureSource extends FeatureSource {
      * This methods fetches properties from all features in this feature source.
      * @param fields The fields filter.
      * @returns {Promise<Array<Map<string, any>>>} An array of properties from all features in this feature source.
-     * @override
      */
     protected async _properties(fields: string[]): Promise<Array<Map<string, any>>> {
         return this.__shapefile._dbf.value.records({ fields })
@@ -268,7 +260,7 @@ export class ShapefileFeatureSource extends FeatureSource {
      * Pushes a feature into this feature source.
      * @param {IFeature} feature The feature to push into this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
+     * 
      */
     protected async _push(feature: IFeature) {
         this.__shapefile.push(feature);
@@ -278,8 +270,6 @@ export class ShapefileFeatureSource extends FeatureSource {
      * Updates an existing feature in this feature source.
      * @param {IFeature} feature The feature to update in this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
-     * @override 
      */
     protected async _update(feature: IFeature) {
         this.__shapefile.update(feature);
@@ -288,8 +278,6 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Removes a feature by a specified feature id.
      * @param {number} id The feature id to remove. 
-     * @protected
-     * @override 
      */
     protected async _remove(id: number) {
         this.__shapefile.remove(id);
@@ -298,8 +286,6 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Pushes a new field into this feature source.
      * @param {Field|DbfField} field A new field to push into this feature source. 
-     * @protected
-     * @override 
      */
     protected async _pushField(field: DbfField): Promise<void>
     protected async _pushField(field: Field): Promise<void>
@@ -312,8 +298,6 @@ export class ShapefileFeatureSource extends FeatureSource {
      * Updates an existing field info by field name.
      * @param {string} sourceFieldName The source field name to update.
      * @param {Field|DbfField} newField A new field to replace to the old field.
-     * @protected
-     * @override 
      */
     protected async _updateField(sourceFieldName: string, newField: Field): Promise<void>
     protected async _updateField(sourceFieldName: string, newField: DbfField): Promise<void>
@@ -325,8 +309,6 @@ export class ShapefileFeatureSource extends FeatureSource {
     /**
      * Removes a field by field name.
      * @param {string} fieldName A field name to remove. 
-     * @protected
-     * @override 
      */
     protected async _removeField(fieldName: string): Promise<void> {
         this.__shapefile.removeField(fieldName);
@@ -334,8 +316,6 @@ export class ShapefileFeatureSource extends FeatureSource {
 
     /**
      * Flush the field changes into this feature source storage.
-     * @protected
-     * @override 
      */
     protected async _flushFields() {
         this.__shapefile.flushFields();

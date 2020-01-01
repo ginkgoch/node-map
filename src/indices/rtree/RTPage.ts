@@ -146,7 +146,6 @@ export class RTDataPage extends RTPage {
 
     public deleteRecord(id: number) { }
 
-    /**@override */
     public flush() {
         if (this.pageNo === 0) {
             throw 'Data page number cannot be 0.'

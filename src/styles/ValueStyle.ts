@@ -28,7 +28,6 @@ export class ValueStyle extends Style {
     /**
      * Collects the required field names that will be used for rendering.
      * @returns {string[]} The required field names that will be used for rendering.
-     * @override 
      */
     fields() {
         let fields = [];
@@ -50,8 +49,6 @@ export class ValueStyle extends Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @override
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         _.groupBy(this.items, i => i.value)

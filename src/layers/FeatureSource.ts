@@ -99,8 +99,7 @@ export abstract class FeatureSource extends Opener {
      * @param {IEnvelope} envelope The condition to filter out the features within the specified envelope. Optional with default value undefined.
      * @param {FieldFilters} fields The fields will come with the returned feature array. Optional with default value undefined.
      * @returns {Promise<Feature[]>} The feature array that matches the specified condition.
-     * @protected 
-     * @abstract 
+     *  
      */
     protected abstract async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]>;
 
@@ -126,8 +125,7 @@ export abstract class FeatureSource extends Opener {
      * @param {number} id The id of the feature to find.
      * @param {FieldFilters} fields The field filters that indicate the fields will be fetched with the returned feature instance.
      * @returns {Promise<Feature|undefined>} The feature that id equals to the specified id.
-     * @protected 
-     * @abstract 
+     *  
      */
     protected abstract async _feature(id: number, fields: string[]): Promise<Feature | undefined>;
 
@@ -135,7 +133,7 @@ export abstract class FeatureSource extends Opener {
      * Normalizes field filters to concrete field name array.
      * @param {FieldFilters} fields The field filter.
      * @returns An array of filed names.
-     * @protected 
+     *  
      */
     protected async _normalizeFields(fields?: FieldFilters): Promise<string[]> {
         if (fields === 'none') return [];
@@ -164,7 +162,7 @@ export abstract class FeatureSource extends Opener {
      * It is a general implementation but bad performance. When creating a new feature source, 
      * consider to override this function with a corresponding implementation to get the count.
      * @returns The feature count.
-     * @protected 
+     *  
      */
     protected async _count(): Promise<number> {
         return (await this.features()).length;
@@ -183,8 +181,6 @@ export abstract class FeatureSource extends Opener {
     /**
      * Gets all fields info in this feature source.
      * @returns {Promise<Field[]>} An array of fields info in this feature source.
-     * @abstract 
-     * @protected 
      */
     protected abstract async _fields(): Promise<Field[]>;
 
@@ -265,7 +261,7 @@ export abstract class FeatureSource extends Opener {
      * Converts a feature or envelope from target SRS to source SRS.
      * @param {IEnvelope|IFeature} param The envelope or feature to be converted.
      * @returns {IEnvelope|IFeature} The envelope or feature in source SRS.
-     * @protected
+     * 
      */
     protected _inverseProjection(envelope: IEnvelope): IEnvelope;
     protected _inverseProjection(feature: IFeature): Feature;
@@ -285,7 +281,7 @@ export abstract class FeatureSource extends Opener {
      * Converts a feature or envelope from source SRS to target SRS.
      * @param {IEnvelope|IFeature} param The envelope or feature to be converted.
      * @returns {IEnvelope|IFeature} The envelope or feature in target SRS.
-     * @protected
+     * 
      */
     protected _forwardProjection(feature: IFeature): Feature
     protected _forwardProjection(features: IFeature[]): Feature[]
@@ -329,7 +325,7 @@ export abstract class FeatureSource extends Opener {
      * Pushes a feature into this feature source.
      * @param {IFeature} feature The feature to push into this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
+     * 
      */
     protected async _push(feature: IFeature) {
         this._notImplemented();
@@ -351,7 +347,7 @@ export abstract class FeatureSource extends Opener {
      * Updates an existing feature in this feature source.
      * @param {IFeature} feature The feature to update in this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
+     * 
      */
     protected async _update(feature: IFeature) {
         this._notImplemented();
@@ -370,7 +366,7 @@ export abstract class FeatureSource extends Opener {
     /**
      * Removes a feature by a specified feature id.
      * @param {number} id The feature id to remove. 
-     * @protected
+     * 
      */
     protected async _remove(id: number) {
         this._notImplemented();
@@ -389,7 +385,7 @@ export abstract class FeatureSource extends Opener {
     /**
      * Pushes a new field into this feature source.
      * @param {Field} field A new field to push into this feature source. 
-     * @protected
+     * 
      */
     protected async _pushField(field: Field): Promise<void> {
         this._notImplemented();
@@ -410,7 +406,7 @@ export abstract class FeatureSource extends Opener {
      * Updates an existing field info by field name.
      * @param {string} sourceFieldName The source field name to update.
      * @param {Field} newField A new field to replace to the old field.
-     * @protected
+     * 
      */
     protected async _updateField(sourceFieldName: string, newField: Field): Promise<void> {
         this._notImplemented();
@@ -429,7 +425,7 @@ export abstract class FeatureSource extends Opener {
     /**
      * Removes a field by field name.
      * @param {string} fieldName A field name to remove. 
-     * @protected
+     * 
      */
     protected async _removeField(fieldName: string): Promise<void> {
         this._notImplemented();
@@ -446,7 +442,7 @@ export abstract class FeatureSource extends Opener {
 
     /**
      * Flush the field changes into this feature source storage.
-     * @protected
+     * 
      */
     protected async _flushFields() { }
 
@@ -466,7 +462,7 @@ export abstract class FeatureSource extends Opener {
 
     /**
      * Converts this feature source into JSON data.
-     * @protected
+     * 
      */
     protected _toJSON(): any {
         return {

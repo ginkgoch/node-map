@@ -4,9 +4,7 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 
 /** 
  * This class represents a line style. 
- * @class
- * @extends Style
- * */
+ */
 export class LineStyle extends Style {
     /** The stroke color string. e.g. "000000" or "black" */
     strokeStyle: string;
@@ -25,7 +23,6 @@ export class LineStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [

@@ -272,6 +272,7 @@ export class MapEngine {
 
     /**
      * @deprecated This method is deprecated. Please call image(envelope?: IEnvelope) instead.
+     * @ignore 
      */
     async draw(envelope?: IEnvelope) {
         return await this.image(envelope);

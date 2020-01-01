@@ -36,8 +36,6 @@ export class IconStyle extends Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @override
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => {
@@ -62,7 +60,6 @@ export class IconStyle extends Style {
 
     /**
      * Collects all the necessary raw HTML style that will be used.
-     * @override
      */
     protected _htmlStyle(): any {
         let json = super._htmlStyle();
@@ -78,7 +75,6 @@ export class IconStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [

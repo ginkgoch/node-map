@@ -15,7 +15,6 @@ const FILE_EXTENSIONS = ['.idx', '.ids'];
 
 /**
  * This class is an implementation of {BaseIndex}. It allows to build or read index with R-Tree index technology.
- * @extends BaseIndex
  */
 export class RTIndex extends BaseIndex {
     private _rtFile: RTFile;
@@ -39,7 +38,6 @@ export class RTIndex extends BaseIndex {
 
     /**
      * Constructs the r-tree spatial index instance.
-     * @constructor
      * @param {string} [filePath] The file path of the spatial indexed file. Default is ``.
      * @param {string} [flag] The file system flags to open the r-tree spatial index file. 
      * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. Default is `rs`.
@@ -75,8 +73,6 @@ export class RTIndex extends BaseIndex {
 
     /**
      * The concrete implementation of open() func.
-     * @protected 
-     * @override
      */
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
@@ -97,8 +93,6 @@ export class RTIndex extends BaseIndex {
 
     /**
      * The concrete implementation of close() func.
-     * @protected 
-     * @override
      */
     protected _close() {
         this._rtFile.close();
@@ -279,7 +273,6 @@ export class RTIndex extends BaseIndex {
 
     /**
      * The concrete function to get indexed record count for override.
-     * @override
      */
     protected _count(): number {
         return this.root!.allRecordCount;
@@ -305,7 +298,6 @@ export class RTIndex extends BaseIndex {
      * The concrete abstract function to get the record ids that are inside the rectangle from index.
      * @param {IEnvelope} rect rect The rectangle to query records.
      * @return {string[]} The record ids that intersects the given rectangle.
-     * @override 
      */
     protected _insiders(rect: IEnvelope) {
         const root = this.root!;

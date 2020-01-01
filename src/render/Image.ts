@@ -3,7 +3,6 @@ import { NativeFactory, NativeImage } from '../native';
 
 /**
  * An image wrapper class.
- * @class
  */
 export class Image {
     buffer: Buffer | null;
@@ -13,7 +12,6 @@ export class Image {
 
     /**
      * Constructs an instance of Image.
-     * @constructor
      * @param {IArguments} arguments Parameters could be width: number and height: number, or imagePath: string. 
      * @example
      * // construct with width and height

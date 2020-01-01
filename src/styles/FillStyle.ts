@@ -30,7 +30,6 @@ export class FillStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return ['fillStyle', 'lineWidth', 'strokeStyle'];
