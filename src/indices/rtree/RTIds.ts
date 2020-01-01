@@ -5,6 +5,7 @@ import { RTConstants } from './RTUtils';
 const HEADER_LENGTH = 32;
 const RECORD_LENGTH = 16;
 
+/** @ignore */
 export class RTIdsHeader {
     nextValidBlock = 0;
 
@@ -27,6 +28,7 @@ export class RTIdsHeader {
     }
 }
 
+/** @ignore */
 export class RTIdsRecord {
     id: string = '';
     length: number = 0;
@@ -49,6 +51,7 @@ export class RTIdsRecord {
     }
 }
 
+/** @ignore */
 export class RTIds {
     filePath?: string;
     flag: string = 'rs';

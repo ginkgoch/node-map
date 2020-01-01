@@ -2,11 +2,13 @@ import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
-/** This class represents a line style. */
+/** 
+ * This class represents a line style. 
+ */
 export class LineStyle extends Style {
-    /** @property {string} strokeStyle The stroke color string. e.g. "000000" or "black" */
+    /** The stroke color string. e.g. "000000" or "black" */
     strokeStyle: string;
-    /** @property {number} lineWidth The stroke width in pixel. */
+    /** The stroke width in pixel. */
     lineWidth: number;
 
     /** Constructs a line style instance. */
@@ -21,7 +23,6 @@ export class LineStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [

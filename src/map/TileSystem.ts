@@ -74,6 +74,7 @@ export class TileSystem {
 
     /**
      * @deprecated This method is deprecated, please call `envelope(z: number, x: number, y: number)` instead.
+     * @ignore
      */
     quadXYZtoTile(z: number, x: number, y: number) {
         return this.envelope(z, x, y);

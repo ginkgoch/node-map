@@ -7,15 +7,15 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
  * This class represents a general style regardless the geometry type to draw.
  */
 export class GeneralStyle extends Style {
-    /** @property {string} fillStyle The fill color string. e.g. "#ff0000" or "red". */
+    /** The fill color string. e.g. "#ff0000" or "red". */
     fillStyle: string;
-    /** @property {number} lineWidth The stroke width in pixel. */
+    /** The stroke width in pixel. */
     lineWidth: number;
-    /** @property {string} strokeStyle The stroke color string. e.g. "#000000" or "black". */
+    /** The stroke color string. e.g. "#000000" or "black". */
     strokeStyle: string;
-    /** @property {PointSymbolType} symbol The symbol type for point geometry. */
+    /** The symbol type for point geometry. */
     symbol: PointSymbolType;
-    /** @property {number} radius The radius width in pixel for point geometry. */
+    /** The radius width in pixel for point geometry. */
     radius: number;
 
     /** Constructs a general style instance that regardless the geometry type to draw. */
@@ -33,7 +33,6 @@ export class GeneralStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [

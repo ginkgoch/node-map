@@ -7,6 +7,7 @@ import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { RTIds } from "./RTIds";
 import { RTFile } from "./RTFile";
 
+/** @ignore */
 export class RTNode {
     dataPage: RTDataPage;
     cursor = 0;
@@ -574,6 +575,7 @@ export class RTNode {
     }
 }
 
+/** @ignore */
 export class RTChild extends RTNode {
     constructor(dataPage: RTChildPage) {
         super(dataPage);
@@ -596,6 +598,7 @@ export class RTChild extends RTNode {
     }
 }
 
+/** @ignore */
 export class RTLeaf extends RTNode {
     constructor(dataPage: RTLeafPage) {
         super(dataPage);

@@ -17,16 +17,19 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "docs": "./node_modules/.bin/typedoc --out docs --mode file --excludePrivate --excludeExternals src"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
+    "better-docs": "^1.4.7",
     "canvas": "^2.6.0",
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
+    "typedoc": "^0.15.6",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"

@@ -38,8 +38,6 @@ export class MemoryFeatureSource extends FeatureSource {
 
     /**
      * Converts this feature source into JSON data.
-     * @protected
-     * @override
      */
     protected _toJSON(): any {
         const json = super._toJSON();
@@ -69,8 +67,6 @@ export class MemoryFeatureSource extends FeatureSource {
      * @param {IEnvelope} envelope The condition to filter out the features within the specified envelope. Optional with default value undefined.
      * @param {FieldFilters} fields The fields will come with the returned feature array. Optional with default value undefined.
      * @returns {Promise<Feature[]>} The feature array that matches the specified condition.
-     * @protected 
-     * @override 
      */
     protected async _features(envelope: IEnvelope, fields: string[]): Promise<Feature[]> {
         const features = this._interFeatures.features.filter(f => {
@@ -91,8 +87,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Gets all fields info in this feature source.
      * @returns {Promise<Field[]>} An array of fields info in this feature source.
-     * @override 
-     * @protected 
      */
     protected async _fields(): Promise<Field[]> {
         return this._interFields;
@@ -111,8 +105,6 @@ export class MemoryFeatureSource extends FeatureSource {
      * @param {number} id The id of the feature to find.
      * @param {FieldFilters} fields The field filters that indicate the fields will be fetched with the returned feature instance.
      * @returns {Promise<Feature|undefined>} The feature that id equals to the specified id.
-     * @protected 
-     * @override 
      */
     protected async _feature(id: number, fields: string[]): Promise<Feature | undefined> {
         let feature = this._interFeatures.features.find(f => f.id === id);
@@ -126,7 +118,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Gets whether this feature source is editable (creating, updating and deleting).
      * @returns {boolean} This is feature source is always editable.
-     * @override
      */
     get editable() {
         return true;
@@ -135,7 +126,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Indicates whether this feature source is necessary to manually open before doing CRUD operation.
      * @returns False means this feature source is allow to CRUD operation.
-     * @override
      */
     get _openRequired() {
         return false;
@@ -145,8 +135,6 @@ export class MemoryFeatureSource extends FeatureSource {
      * Pushes a feature into this feature source.
      * @param {IFeature} feature The feature to push into this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
-     * @override
      */
     protected async _push(feature: IFeature) {
         this._interFeatures.features.push(this._newFeature(feature));
@@ -156,8 +144,6 @@ export class MemoryFeatureSource extends FeatureSource {
      * Updates an existing feature in this feature source.
      * @param {IFeature} feature The feature to update in this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * @protected
-     * @override
      */
     protected async _update(feature: IFeature) {
         const sourceIndex = this._interFeatures.features.findIndex(f => f.id === feature.id);
@@ -169,8 +155,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Removes a feature by a specified feature id.
      * @param {number} id The feature id to remove. 
-     * @protected
-     * @override
      */
     protected async _remove(id: number) {
         const sourceIndex = this._interFeatures.features.findIndex(f => f.id === id);
@@ -182,7 +166,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Pushes a new field into this feature source.
      * @param {Field} field A new field to push into this feature source. 
-     * @override
      */
     protected async _pushField(field: Field) {
         this._interFields.push(field);
@@ -192,8 +175,6 @@ export class MemoryFeatureSource extends FeatureSource {
      * Updates an existing field info by field name.
      * @param {string} sourceFieldName The source field name to update.
      * @param {Field} newField A new field to replace to the old field.
-     * @protected
-     * @override
      */
     protected async _updateField(sourceFieldName: string, newField: Field) {
         const sourceIndex = this._interFields.findIndex(f => f.name === sourceFieldName);
@@ -205,7 +186,6 @@ export class MemoryFeatureSource extends FeatureSource {
     /**
      * Removes a field by field name.
      * @param {string} fieldName A field name to remove. 
-     * @override
      */
     protected async _removeField(fieldName: string): Promise<void> {
         const sourceIndex = this._interFields.findIndex(f => f.name === fieldName);

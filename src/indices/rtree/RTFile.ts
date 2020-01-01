@@ -7,6 +7,7 @@ import { RTConstants, RTUtils } from './RTUtils';
 
 const DESCRIPTION = 'Gist data file ';
 
+/** @ignore */
 export class RTFile {
     opened = false;
     isFloat = false;

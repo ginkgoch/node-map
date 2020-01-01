@@ -6,9 +6,9 @@ import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } 
 
 /** This class represents a value style which allows to set various sub-styles based on a field value. */
 export class ValueStyle extends Style {
-    /** @property {ValueItem[]} items A value item list with the definition of value and its corresponding style. */
+    /** A value item list with the definition of value and its corresponding style. */
     items: ValueItem[];
-    /** @property {string} field The field name where the value is fetched from. */
+    /** The field name where the value is fetched from. */
     field: string;
 
     /** Constructs a value style instance. */
@@ -28,7 +28,6 @@ export class ValueStyle extends Style {
     /**
      * Collects the required field names that will be used for rendering.
      * @returns {string[]} The required field names that will be used for rendering.
-     * @override 
      */
     fields() {
         let fields = [];
@@ -50,8 +49,6 @@ export class ValueStyle extends Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @override
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         _.groupBy(this.items, i => i.value)
@@ -121,8 +118,8 @@ export class ValueStyle extends Style {
 
 /** This interface represents a value item structure. */
 export interface ValueItem {
-    /** @property {any} value The value of this item. */
+    /** The value of this item. */
     value: any;
-    /** @property {Style} style The style for drawing with this value. */
+    /** The style for drawing with this value. */
     style: Style;
 }

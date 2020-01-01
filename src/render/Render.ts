@@ -15,47 +15,47 @@ import {
  */
 export class Render {
     /**
-     * @property {Image} image The image that is rendered on.
+     * The image that is rendered on.
      */
     image: Image;
     /**
-     * @property {number} width The canvas width for rendering.
+     * The canvas width for rendering.
      */
     width: number;
     /**
-     * @property {number} height The canvas height for rendering.
+     * The canvas height for rendering.
      */
     height: number;
     /**
-     * @property {NativeCanvas} canvas The concrete drawing object.
+     * The concrete drawing object.
      */
     canvas: NativeCanvas;
     /**
-     * @property {number} scale The scale that is used to port world coordinate to screen coordinate.
+     * The scale that is used to port world coordinate to screen coordinate.
      */
     scale: number;
     /**
-     * @property {number} resolutionX The horizontal resolution.
+     * The horizontal resolution.
      */
     resolutionX = 0;
     /**
-     * @property {number} resolutionY The vertical resolution.
+     * The vertical resolution.
      */
     resolutionY = 0;
     /**
-     * @property {IEnvelope} envelope The world envelope of the viewport.
+     * The world envelope of the viewport.
      */
     envelope: IEnvelope;
     /**
-     * @property {"default"|"none"|"gray"|"subpixel"} antialias The antialias setting of canvas.
+     * The antialias setting of canvas.
      */
     antialias: "default" | "none" | "gray" | "subpixel" = 'default';
     /**
-     * @property {any} context The concrete native drawing context.
+     * The concrete native drawing context.
      */
     context: any;
     /**
-     * @property {Array<IEnvelope>} textBounds An array of drawn text bounding box cache. Used to avoid text overlapping.
+     * An array of drawn text bounding box cache. Used to avoid text overlapping.
      */
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 

@@ -11,11 +11,12 @@ import { IEnvelope } from "ginkgoch-geom";
 /**
  * FeatureLayer responses for rendering FeatureSource with styles.
  * 
- * @example
+ * ```typescript
  * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
  * const layer = new FeatureLayer(source);
  * layer.styles.push(new FillStyle('#886600', 'red', 2));
  * ...
+ * ```
  */
 export class FeatureLayer extends Opener {
     id: string;
@@ -55,7 +56,6 @@ export class FeatureLayer extends Opener {
 
     /**
      * Opens this layer and prepares the resources for querying and rendering.
-     * @override
      */
     protected async _open(): Promise<void> {
         await this.source.open();
@@ -63,7 +63,6 @@ export class FeatureLayer extends Opener {
 
     /**
      * Closes this layer and release its related resources.
-     * @override
      */
     protected async _close(): Promise<void> {
         await this.source.close();
@@ -150,7 +149,7 @@ export class FeatureLayer extends Opener {
     /**
      * Converts this layer into a JSON format data.
      * @returns A JSON format data of this layer.
-     * @protected
+     * 
      */
     protected _toJSON() {
         return {

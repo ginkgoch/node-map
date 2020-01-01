@@ -115,7 +115,7 @@ export class LayerGroup {
     /**
      * Converts current layer into a JSON format data.
      * @returns {any} A JSON format data that reflects this group.
-     * @protected
+     * 
      */
     protected _toJSON(): any {
         return {

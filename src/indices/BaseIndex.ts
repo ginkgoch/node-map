@@ -6,7 +6,7 @@ const INDEX_NOT_OPENED = 'Index is not opened.';
 /**
  * This class represents the base class of spatial index that allows to efficiently read data source with pre-built index files.
  * e.g. R-Tree, Quad-Tree etc.
- * @see {RTIndex} for a concrete implementation.
+ * @see RTIndex for a concrete implementation.
  */
 export abstract class BaseIndex {
     opened = false;
@@ -22,13 +22,12 @@ export abstract class BaseIndex {
 
     /**
      * The concrete function to get indexed record count for override.
-     * @abstract
      */
     protected abstract _count(): number;
 
     /**
      * Opens the index.
-     * @param option The options to open the index.
+     * @param {string} [option] The options to open the index.
      */
     open(option?: string) { 
         this.opened = true;
@@ -62,7 +61,6 @@ export abstract class BaseIndex {
     }
 
     /**
-     * @abstract 
      * The concrete abstract function to get the record ids that are inside the rectangle from index.
      * @param {IEnvelope} rect rect The rectangle to query records.
      * @return {string[]} The record ids that intersects the given rectangle.

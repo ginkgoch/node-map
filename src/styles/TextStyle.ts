@@ -7,41 +7,54 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 /** This class represents text style for drawing text based on feature properties on various geometries. */
 export class TextStyle extends Style {
     /** 
-     * @property {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
+     * The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
      * 
-     * @example Renders "FOO" as text content on all features.
+     * Renders "FOO" as text content on all features.
+     * ```typescript
      * textStyle.content = "FOO";
+     * ```
      * 
-     * @example Renders a value based on a field name "NAME".
+     * Renders a value based on a field name "NAME".
+     * ```typescript
      * textStyle.content = "[NAME]";
+     * ```
      * 
-     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * ```typescript
      * textStyle.content = "Hi [NAME], I like [Hobby]";
+     * ```
      */
     content: string | undefined;
-    /** @property {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". */
+    /** The font string including either font family or size or both. e.g. "ARIAL 12px". */
     font: string;
-    /** @property {string} fillStyle The font color string. e.g. "#000000" or "black". */
+    /** The font color string. e.g. "#000000" or "black". */
     fillStyle: string;
-    /** @property {"start"|"end"|"left"|"right"|"center"}  textAlign The text alignment. */
+    /** The text alignment. */
     textAlign: "start" | "end" | "left" | "right" | "center";
-    /** @property {string|undefined} strokeStyle The outline color string on text. If it is not set, no outline will be drawn. */
+    /** The outline color string on text. If it is not set, no outline will be drawn. */
     strokeStyle: string | undefined;
-    /** @property {number} lineWidth The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
+    /** The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
     lineWidth: number;
 
     /**
      * Constructs a text style instance.
      * @param {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
      * 
-     * @example Renders "FOO" as text content on all features.
+     * Renders "FOO" as text content on all features.
+     * ```typescript
      * textStyle.content = "FOO";
+     * ```
      * 
-     * @example Renders a value based on a field name "NAME".
+     * Renders a value based on a field name "NAME".
+     * ```typescript
      * textStyle.content = "[NAME]";
+     * ```
      * 
-     * @example Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * Renders values based on multiple fields such as "NAME" and "Hobby", and join them with some static string.
+     * ```typescript
      * textStyle.content = "Hi [NAME], I like [Hobby]";
+     * ```
+     * 
      * @param {string} fillStyle The font color string. e.g. "#000000" or "black". 
      * @param {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". 
      * @param {string} name The name of this style.
@@ -60,7 +73,6 @@ export class TextStyle extends Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * @override
      */
     protected _htmlStyleKeys(): string[] {
         return [
@@ -77,8 +89,6 @@ export class TextStyle extends Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @override
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         if (this.content === undefined) return;
@@ -112,7 +122,6 @@ export class TextStyle extends Style {
     /**
      * Collects the required field names that will be used for rendering.
      * @returns {string[]} The required field names that will be used for rendering.
-     * @override 
      */
     fields(): string[] {
         const fields = this._extractFields();
