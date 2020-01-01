@@ -4,15 +4,15 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 
 /** This class represents a simple point style to render point based geometries (point, multi-point). */
 export class PointStyle extends Style {
-    /** @property {string} fillStyle The fill color string. e.g. "#ff0000" or "red". */
+    /** The fill color string. e.g. "#ff0000" or "red". */
     fillStyle: string;
-    /** @property {string} strokeStyle The stroke color string. e.g. "#000000" or "black". */
+    /** The stroke color string. e.g. "#000000" or "black". */
     strokeStyle: string;
-    /** @property {number} lineWidth The stroke width in pixel. */
+    /** The stroke width in pixel. */
     lineWidth: number;
-    /** @property {number} radius The radius in pixel for drawing circle or rect. */
+    /** The radius in pixel for drawing circle or rect. */
     radius: number;
-    /** @property {PointSymbolType} symbol The point symbol type. */
+    /** The point symbol type. */
     symbol: PointSymbolType = 'default';
 
     /**

@@ -19,21 +19,21 @@ export class Srs {
     }
 
     /**
-     * @property {Unit} unit Gets the unit of SRS.
+     * Gets the unit of SRS.
      */
     get unit() {
         return this._unit;
     }
 
     /**
-     * @property {string} projection A shortcut property to get the projection string; can be either proj4, EPSG name or WKT. 
+     * A shortcut property to get the projection string; can be either proj4, EPSG name or WKT. 
      */
     get projection() {
         return this._projection;
     }
 
     /**
-     * @property {string} projection Sets the projection string; can be either proj4, EPSG name or WKT.
+     * Sets the projection string; can be either proj4, EPSG name or WKT.
      */
     set projection(projection: string | undefined) {
         this._projection = projection;
@@ -106,14 +106,14 @@ export class Projection {
 
     //#region properties
     /**
-     * @property {Srs} from The from SRS of this projection.
+     * The from SRS of this projection.
      */
     get from(): Srs {
         return this._from
     }
 
     /**
-     * @property {Srs} from Sets the from SRS of this projection.
+     * Sets the from SRS of this projection.
      */
     set from(fromProjection: Srs) {
         if (this._from !== fromProjection) {
@@ -123,7 +123,7 @@ export class Projection {
     }
 
     /**
-     * @property {Srs} to Gets the target SRS of this projection.
+     * Gets the target SRS of this projection.
      */
     get to(): Srs {
         return this._to

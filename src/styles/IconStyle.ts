@@ -7,11 +7,11 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 
 /** This class represents an icon style to draw icons on map. */
 export class IconStyle extends Style {
-    /** @property {Image} icon The image source to draw. */
+    /** The image source to draw. */
     icon: Image;
-    /** @property {number} offsetX The horizontal offset to draw. */
+    /** The horizontal offset to draw. */
     offsetX: number;
-    /** @property {number} offsetY The vertical offset to draw. */
+    /** The vertical offset to draw. */
     offsetY: number;
 
     /**

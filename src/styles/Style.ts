@@ -7,31 +7,30 @@ import uuid from "../shared/UUID";
 
 /**
  * This class represents a base class of all styles.
- * @abstract
  */
 export abstract class Style {
     /**
-     * @property {string} id The id of this style. Default value is `style-${uuid()}`.
+     * The id of this style. Default value is `style-${uuid()}`.
      */
     id: string;
     /**
-     * @property {string} type The geometry type that is proper for this style. e.g. Polygon is proper for FillStyle, not proper for polyline.
+     * The geometry type that is proper for this style. e.g. Polygon is proper for FillStyle, not proper for polyline.
      */
     type: string;
     /**
-     * @property {string} name The name of this style.
+     * The name of this style.
      */
     name: string;
     /**
-     * @property {number} maximumScale The maximum visible scale for drawing this style.
+     * The maximum visible scale for drawing this style.
      */
     maximumScale: number;
     /**
-     * @property {number} minimumScale The minimum visible scale for drawing this style.
+     * The minimum visible scale for drawing this style.
      */
     minimumScale: number;
     /**
-     * @property {boolean} visible The main visible switcher of this style.
+     * The main visible switcher of this style.
      */
     visible = true;
 
@@ -86,8 +85,6 @@ export abstract class Style {
      * @param {IFeature[]} features The features to draw. 
      * @param {any} styleJson The raw HTML style.
      * @param {Render} render The renderer to draw.
-     * @virtual
-     * @protected
      */
     protected _draw(features: IFeature[], styleJson: any, render: Render) {
         features.forEach(f => render.drawFeature(f, styleJson));

@@ -15,7 +15,7 @@ const DBF_FIELD_DECIMAL = 'decimal';
  */
 export class ShapefileFeatureSource extends FeatureSource {
     /**
-     * @property {string} flag The file system flags to open the shapefile.
+     * The file system flags to open the shapefile.
      * @see {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options.
      */
     flag: string;
@@ -43,14 +43,14 @@ export class ShapefileFeatureSource extends FeatureSource {
     }
 
     /**
-     * @property {string} filePath Gets the path file name of the shapefile.
+     * filePath Gets the path file name of the shapefile.
      */
     public get filePath() {
         return this._filePath;
     }
 
     /**
-     * @property {string} filePath Sets the path file name of the shapefile.
+     * Sets the path file name of the shapefile.
      */
     public set filePath(filePath: string) {
         this._filePath = filePath;
@@ -60,7 +60,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     }
 
     /**
-     * @property {ShapefileType} shapeType Gets the shapefile type.
+     * Gets the shapefile type.
      */
     public get shapeType(): ShapefileType {
         Validator.checkOpened(this);

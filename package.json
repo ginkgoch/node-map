@@ -19,7 +19,7 @@
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
     "docs": "yarn clean && rm -rf docs/* && ./node_modules/.bin/jsdoc src -r -c docconfig.json -d docs",
-    "docs-type": "./node_modules/.bin/typedoc --out docs-type --mode file --excludePrivate src"
+    "docs-type": "./node_modules/.bin/typedoc --out docs-type --mode file --excludePrivate --excludeExternals src"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

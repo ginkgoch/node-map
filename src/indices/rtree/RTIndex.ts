@@ -22,18 +22,18 @@ export class RTIndex extends BaseIndex {
     private _idsEngine: RTIds;
 
     /**
-     * @property {string} flag The file system flags to open the r-tree spatial index file.
+     * The file system flags to open the r-tree spatial index file.
      * @see {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options.
      */
     flag: string;
 
     /**
-     * @property {string} filePath The r-tree spatial index file path.
+     * The r-tree spatial index file path.
      */
     filePath: string;
 
     /**
-     * @property {boolean} opened Gets the status whether this index file is opened.
+     * Gets the status whether this index file is opened.
      */
     opened = false;
 
@@ -244,21 +244,21 @@ export class RTIndex extends BaseIndex {
     }
 
     /**
-     * @property {number} pageSize Gets the page size.
+     * Gets the page size.
      */
     get pageSize() {
         return this._rtFile.pageSize;
     }
 
     /**
-     * @property {number} pageSize Sets the page size.
+     * Sets the page size.
      */
     set pageSize(pageSize: number) {
         this._rtFile.pageSize = pageSize;
     }
 
     /**
-     * @property {RTNode} root The root node.
+     * The root node.
      */
     get root(): RTNode | null {
         const dataPage = this._rtFile.rootNodePage;

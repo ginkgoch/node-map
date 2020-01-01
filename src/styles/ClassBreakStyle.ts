@@ -12,11 +12,11 @@ import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils } 
  */
 export class ClassBreakStyle extends Style {
     /**
-     * @property {string} field The field name where to fetch the values to break down.
+     * The field name where to fetch the values to break down.
      */
     field: string;
     /**
-     * @property {Array<ClassBreakItem>} classBreaks The break down sub-styles and its corresponding value.
+     * classBreaks The break down sub-styles and its corresponding value.
      */
     classBreaks: Array<ClassBreakItem>;
 

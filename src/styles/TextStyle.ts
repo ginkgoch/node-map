@@ -7,7 +7,7 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 /** This class represents text style for drawing text based on feature properties on various geometries. */
 export class TextStyle extends Style {
     /** 
-     * @property {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
+     * The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
      * 
      * @example Renders "FOO" as text content on all features.
      * textStyle.content = "FOO";
@@ -19,15 +19,15 @@ export class TextStyle extends Style {
      * textStyle.content = "Hi [NAME], I like [Hobby]";
      */
     content: string | undefined;
-    /** @property {string} font The font string including either font family or size or both. e.g. "ARIAL 12px". */
+    /** The font string including either font family or size or both. e.g. "ARIAL 12px". */
     font: string;
-    /** @property {string} fillStyle The font color string. e.g. "#000000" or "black". */
+    /** The font color string. e.g. "#000000" or "black". */
     fillStyle: string;
-    /** @property {"start"|"end"|"left"|"right"|"center"}  textAlign The text alignment. */
+    /** The text alignment. */
     textAlign: "start" | "end" | "left" | "right" | "center";
-    /** @property {string|undefined} strokeStyle The outline color string on text. If it is not set, no outline will be drawn. */
+    /** The outline color string on text. If it is not set, no outline will be drawn. */
     strokeStyle: string | undefined;
-    /** @property {number} lineWidth The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
+    /** The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
     lineWidth: number;
 
     /**

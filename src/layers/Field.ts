@@ -9,22 +9,18 @@ import { JSONUtils } from "../shared/JSONUtils";
  */
 export class Field {
     /**
-     * @property
      * The name of the field.
      */
     name: string;
     /**
-     * @property
      * The data type of the field.
      */
     type: string;
     /**
-     * @property
      * The maximum data length of the field.
      */
     length: number;
     /**
-     * @property
      * The extra info of the field.
      */
     extra: Map<string, any>;

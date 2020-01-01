@@ -8,9 +8,9 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
  * @extends Style
  * */
 export class LineStyle extends Style {
-    /** @property {string} strokeStyle The stroke color string. e.g. "000000" or "black" */
+    /** The stroke color string. e.g. "000000" or "black" */
     strokeStyle: string;
-    /** @property {number} lineWidth The stroke width in pixel. */
+    /** The stroke width in pixel. */
     lineWidth: number;
 
     /** Constructs a line style instance. */
