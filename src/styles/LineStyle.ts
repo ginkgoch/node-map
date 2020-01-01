@@ -2,7 +2,11 @@ import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
-/** This class represents a line style. */
+/** 
+ * This class represents a line style. 
+ * @class
+ * @extends Style
+ * */
 export class LineStyle extends Style {
     /** @property {string} strokeStyle The stroke color string. e.g. "000000" or "black" */
     strokeStyle: string;

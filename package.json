@@ -17,14 +17,17 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "docs": "yarn clean && rm -rf docs/* && ./node_modules/.bin/jsdoc src -r -c docconfig.json -d docs"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
+    "better-docs": "^1.4.7",
     "canvas": "^2.6.0",
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
+    "jsdoc": "^3.6.3",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",

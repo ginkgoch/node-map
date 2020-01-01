@@ -121,6 +121,8 @@ export abstract class Style {
     }
 
     /**
+     * @protected
+     * @virtual
      * @deprecated Use _htmlStyle() instead.
      */
     protected _props(): any {
@@ -135,6 +137,8 @@ export abstract class Style {
     }
 
     /**
+     * @protected
+     * @virtual
      * @deprecated Use _htmlStyleKeys() instead.
      */
     protected _propKeys(): string[] {
@@ -152,6 +156,7 @@ export abstract class Style {
     /**
      * Collects all the necessary raw HTML style that will be used.
      * @virtual
+     * @protected
      */
     protected _htmlStyle(): any {
         const raw: any = {};
@@ -167,6 +172,7 @@ export abstract class Style {
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
      * @virtual
+     * @protected
      */
     protected _htmlStyleKeys(): string[] {
         return [];

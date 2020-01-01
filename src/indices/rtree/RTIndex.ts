@@ -15,6 +15,7 @@ const FILE_EXTENSIONS = ['.idx', '.ids'];
 
 /**
  * This class is an implementation of {BaseIndex}. It allows to build or read index with R-Tree index technology.
+ * @extends BaseIndex
  */
 export class RTIndex extends BaseIndex {
     private _rtFile: RTFile;
@@ -27,7 +28,7 @@ export class RTIndex extends BaseIndex {
     flag: string;
 
     /**
-     * @property {string}
+     * @property {string} filePath The r-tree spatial index file path.
      */
     filePath: string;
 
@@ -39,9 +40,9 @@ export class RTIndex extends BaseIndex {
     /**
      * Constructs the r-tree spatial index instance.
      * @constructor
-     * @param {string} filePath The file path of the spatial indexed file.
-     * @param {string} flag The file system flags to open the r-tree spatial index file. 
-     * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. Default is 'rs'.
+     * @param {string} [filePath] The file path of the spatial indexed file. Default is ``.
+     * @param {string} [flag] The file system flags to open the r-tree spatial index file. 
+     * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. Default is `rs`.
      */
     constructor(filePath: string = '', flag: string = 'rs') {
         super();
@@ -54,7 +55,7 @@ export class RTIndex extends BaseIndex {
 
     /**
      * Opens the spatial index file.
-     * @param {string} flag The file system flags to open the r-tree spatial index file. 
+     * @param {string} [flag] The file system flags to open the r-tree spatial index file. Default value is `"rs"` or the flag used to open last time.
      * Refers {@link https://nodejs.org/api/fs.html#fs_file_system_flags} for options. 
      * It is optional with default option 'rs'.
      */
@@ -73,8 +74,9 @@ export class RTIndex extends BaseIndex {
     }
 
     /**
-     * @protected 
      * The concrete implementation of open() func.
+     * @protected 
+     * @override
      */
     protected _open() {
         this._rtFile.open(this.filePath, this.flag);
@@ -94,8 +96,9 @@ export class RTIndex extends BaseIndex {
     }
 
     /**
-     * @protected 
      * The concrete implementation of close() func.
+     * @protected 
+     * @override
      */
     protected _close() {
         this._rtFile.close();
@@ -255,7 +258,7 @@ export class RTIndex extends BaseIndex {
     }
 
     /**
-     * @property {RTNode} R
+     * @property {RTNode} root The root node.
      */
     get root(): RTNode | null {
         const dataPage = this._rtFile.rootNodePage;
@@ -299,10 +302,10 @@ export class RTIndex extends BaseIndex {
     }
 
     /**
-     * @override 
      * The concrete abstract function to get the record ids that are inside the rectangle from index.
      * @param {IEnvelope} rect rect The rectangle to query records.
      * @return {string[]} The record ids that intersects the given rectangle.
+     * @override 
      */
     protected _insiders(rect: IEnvelope) {
         const root = this.root!;
@@ -397,6 +400,7 @@ export class RTIndex extends BaseIndex {
 
 /**
  * The extra options for creating r-tree spatial index file.
+ * @interface
  */
 export interface RTIndexCreateOption {
     float?: boolean;
