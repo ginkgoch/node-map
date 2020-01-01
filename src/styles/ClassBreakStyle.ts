@@ -7,6 +7,8 @@ import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils } 
 
 /**
  * This class represents a style to render different sub-styles based on the break down values.
+ * @extends Style
+ * @class
  */
 export class ClassBreakStyle extends Style {
     /**
@@ -23,6 +25,7 @@ export class ClassBreakStyle extends Style {
      * @param {string} field The field name where to fetch the values to break down.
      * @param {Array<ClassBreakItem>} classBreaks The break down sub-styles and its corresponding value.
      * @param {string} name The name of this style.
+     * @constructor
      */
     constructor(field?: string, classBreaks?: Array<ClassBreakItem>, name?: string) {
         super();

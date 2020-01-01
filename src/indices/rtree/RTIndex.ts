@@ -400,6 +400,7 @@ export class RTIndex extends BaseIndex {
 
 /**
  * The extra options for creating r-tree spatial index file.
+ * @category indices
  * @interface
  */
 export interface RTIndexCreateOption {

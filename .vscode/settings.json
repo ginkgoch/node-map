@@ -2,12 +2,16 @@
     "cSpell.words": [
         "ARIAL",
         "EPSG",
+        "RECORDSET",
         "Shapefile",
+        "automock",
         "endregion",
+        "filestream",
         "ginkgoch",
         "maxx",
         "maxy",
         "miny",
-        "rtree"
+        "rtree",
+        "typedoc"
     ]
 }

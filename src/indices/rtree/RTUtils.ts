@@ -5,6 +5,7 @@ import { RTRecordType } from "./RTRecordType";
 
 const defaultEncoding: 'utf-8' = 'utf-8';
 
+/** @ignore */
 export let RTConstants = Object.freeze({
     ALIGNED_SLOT_COUNT: 2,
     RECORD_ALIGNED: 4,
@@ -26,6 +27,7 @@ export let RTConstants = Object.freeze({
     KILOBYTES: 1024
 });
 
+/** @ignore */
 export class RTUtils {
     static sizeOfRecordType(recordType: RTRecordType, float: boolean) {
         if (recordType === RTRecordType.point) {
@@ -61,6 +63,7 @@ export class RTUtils {
     }
 }
 
+/** @ignore */
 export class StreamUtils {
     static readUInt16(stream: FileStream): number {
         const buff = stream.read(2);

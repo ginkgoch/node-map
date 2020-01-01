@@ -18,7 +18,8 @@
     "test": "./node_modules/.bin/jest",
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
-    "docs": "yarn clean && rm -rf docs/* && ./node_modules/.bin/jsdoc src -r -c docconfig.json -d docs"
+    "docs": "yarn clean && rm -rf docs/* && ./node_modules/.bin/jsdoc src -r -c docconfig.json -d docs",
+    "docs-type": "./node_modules/.bin/typedoc --out docs-type --mode file --excludePrivate src"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
@@ -30,6 +31,7 @@
     "jsdoc": "^3.6.3",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
+    "typedoc": "^0.15.6",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"

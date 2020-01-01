@@ -6,6 +6,7 @@ import { Envelope } from "ginkgoch-geom";
 import { RTRecord, RTEntryRecord, RTRectangle } from "./RTRecord";
 import { RTConstants, StreamUtils } from "./RTUtils";
 
+/** @ignore */
 export abstract class RTPage {
     public fileStream?: FileStream;
     public rtFile: RTFile;
@@ -65,6 +66,7 @@ export abstract class RTPage {
     }
 }
 
+/** @ignore */
 export class RTDataPage extends RTPage {
     header = new RTPageHeader();
     recordSetHeader = new RTRecordSetHeader();
@@ -209,6 +211,7 @@ export class RTDataPage extends RTPage {
     public updateEntry(entry: RTEntryRecord, id: number) { }
 }
 
+/** @ignore */
 export class RTLeafPage extends RTDataPage {
     constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
         super(rtFile, recordType, pageNo);
@@ -365,6 +368,7 @@ export class RTLeafPage extends RTDataPage {
     }
 }
 
+/** @ignore */
 export class RTChildPage extends RTLeafPage {
     constructor(rtFile: RTFile, recordType: RTRecordType, pageNo?: number) {
         super(rtFile, recordType, pageNo);
@@ -406,6 +410,7 @@ export class RTChildPage extends RTLeafPage {
     }
 }
 
+/** @ignore */
 export class RTHeaderPage extends RTPage {
     public header: RTFileHeader = new RTFileHeader();
 
@@ -426,6 +431,7 @@ export class RTHeaderPage extends RTPage {
     }
 }
 
+/** @ignore */
 export class RTPageHeader {
     pageId = 0;
     pageFreeSpace = 0;
@@ -453,6 +459,7 @@ export class RTPageHeader {
     }
 }
 
+/** @ignore */
 export class RTSlot {
     offset: number = 0;
     length: number = 0;
@@ -468,6 +475,7 @@ export class RTSlot {
     }
 }
 
+/** @ignore */
 export class RTRecordSetHeader {
     root = 0;
     level = 0;
@@ -486,6 +494,7 @@ export class RTRecordSetHeader {
     }
 }
 
+/** @ignore */
 export class RTFileHeader {
     description: string = '';
     recordType: number = 0;

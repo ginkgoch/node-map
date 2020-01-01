@@ -106,6 +106,7 @@ export abstract class Style {
      * Converts this style to a JSON format data.
      * @returns {any} The JSON format data.
      * @protected
+     * @virtual
      */
     protected _toJSON() {
         let json = JSONUtils.objectToJSON(this);
