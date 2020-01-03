@@ -1,6 +1,7 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
+import { IFeature, GeometryType } from "ginkgoch-geom";
 
 /** This class represents a simple point style to render point based geometries (point, multi-point). */
 export class PointStyle extends Style {
@@ -52,6 +53,15 @@ export class PointStyle extends Style {
             'radius',
             'symbol'
         ];
+    }
+
+    /**
+     * Whether this feature type matches this style.
+     * @param {IFeature} feature The feature to match.
+     */
+    protected _matches(feature: IFeature): boolean {
+        const geomType = feature.geometry.type;
+        return geomType === GeometryType.Point || geomType === GeometryType.MultiPoint;
     }
 }
 

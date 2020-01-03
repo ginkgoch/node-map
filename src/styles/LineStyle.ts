@@ -1,6 +1,7 @@
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
+import { IFeature, GeometryType } from "ginkgoch-geom";
 
 /** 
  * This class represents a line style. 
@@ -29,5 +30,14 @@ export class LineStyle extends Style {
             'strokeStyle',
             'lineWidth'
         ];
+    }
+
+    /**
+     * Whether this feature type matches this style.
+     * @param {IFeature} feature The feature to match.
+     */
+    protected _matches(feature: IFeature): boolean {
+        const geomType = feature.geometry.type;
+        return geomType === GeometryType.LineString || geomType === GeometryType.MultiLineString;
     }
 }
