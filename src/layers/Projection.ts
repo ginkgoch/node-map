@@ -200,7 +200,7 @@ export class Projection {
 
     private _inverseCoordinate(coordinate: ICoordinate) {
         return this._transform(coordinate, () => {
-            return (<proj4.Converter>this._converter).inverse(coordinate);
+            return this._converter!.inverse(coordinate);
         });
     }
 
@@ -226,6 +226,7 @@ export class Projection {
 
         if (this._converter === undefined || this._invalid) {
             this._converter = proj4(this._from.projection, this._to.projection);
+            this._invalid = false;
         }
 
         return project();

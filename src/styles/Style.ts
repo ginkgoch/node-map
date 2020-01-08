@@ -77,7 +77,16 @@ export abstract class Style {
         }
 
         const styleJson = this.htmlStyle();
+        features = features.filter(this._matches);
         this._draw(features, styleJson, render);
+    }
+
+    /**
+     * Whether this feature type matches this style.
+     * @param {IFeature} feature The feature to match.
+     */
+    protected _matches(feature: IFeature): boolean {
+        return true
     }
 
     /**
@@ -167,7 +176,6 @@ export abstract class Style {
 
     /**
      * Collects the raw HTML style keys that will be included in the returning raw styles.
-     * 
      */
     protected _htmlStyleKeys(): string[] {
         return [];

@@ -28,7 +28,7 @@ describe('ClassBreakStyle', () => {
         const source = new MemoryFeatureSource(features);
 
         source.pushField(new Field('type', 'char', 40));
-        const style = ClassBreakStyle.auto('point', 'type', 100, 0, size, '#ff0000', '#0000ff', undefined, 0);
+        const style = ClassBreakStyle.auto('fill', 'type', 100, 0, size, '#ff0000', '#0000ff', undefined, 0);
 
         const layer = new FeatureLayer(source);
         layer.styles.push(style);
