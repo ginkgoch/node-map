@@ -24,5 +24,15 @@ export default {
     native,
     mapping,
     indices,
-    geom
+    geom,
+    all: {
+        ...layers,
+        ...render,
+        ...shared,
+        ...styles,
+        ...native,
+        ...mapping,
+        ...indices,
+        ...geom
+    }
 };

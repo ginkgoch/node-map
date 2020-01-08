@@ -59,6 +59,8 @@ export class ValueStyle extends Style {
             if (v === undefined) return;
 
             const items = itemMap[v];
+            if (items === undefined) return;
+
             items.forEach(i => i.style.draw(f, render));
         });
     }

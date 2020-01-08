@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
+import { IFeature, GeometryType } from "ginkgoch-geom";
 
 /**
  * This class represents a style for an area based geometries (e.g. polygon, multi-polygon) only.
@@ -33,5 +34,14 @@ export class FillStyle extends Style {
      */
     protected _htmlStyleKeys(): string[] {
         return ['fillStyle', 'lineWidth', 'strokeStyle'];
+    }
+
+    /**
+     * Whether this feature type matches this style.
+     * @param {IFeature} feature The feature to match.
+     */
+    protected _matches(feature: IFeature): boolean {
+        const geomType = feature.geometry.type;
+        return geomType === GeometryType.Polygon || geomType === GeometryType.MultiPolygon;
     }
 }
