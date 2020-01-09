@@ -36,6 +36,10 @@ export class MemoryFeatureSource extends FeatureSource {
         fields  && fields.forEach(f => this._interFields.push(f));
     }
 
+    get internalFeatures(): Feature[] {
+        return this._interFeatures.features;
+    }
+
     /**
      * Converts this feature source into JSON data.
      */
