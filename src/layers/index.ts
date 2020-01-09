@@ -5,6 +5,7 @@ export * from './FeatureLayer';
 export * from './FeatureSource';
 export * from './PropertyAggregator';
 export * from './MemoryFeatureSource';
+export * from './GeoJsonFeatureSource';
 export * from './ShapefileFeatureSource';
 export * from './FeatureSourceFactory';
 export * from './LayerFactory';

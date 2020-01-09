@@ -90,6 +90,7 @@ export enum JSONKnownTypes {
 
     memoryFeatureSource = 'memory-feature-source',
     shapefileFeatureSource = 'shapefile-feature-source',
+    geoJSONFeatureSource = 'geo-json-feature-source',
 
     featureLayer = 'feature-layer',
     layerGroup = 'layer-group',
