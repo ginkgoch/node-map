@@ -6,7 +6,7 @@ import { Field } from './Field';
 import { JSONKnownTypes } from '..';
 import { Projection } from './Projection';
 
-export class GeoJsonFeatureSource extends MemoryFeatureSource {
+export class GeoJSONFeatureSource extends MemoryFeatureSource {
     _geoJSON?: any|string = undefined;
 
     constructor(geoJSON?: string|any, name?: string) {
@@ -77,7 +77,7 @@ export class GeoJsonFeatureSource extends MemoryFeatureSource {
     }
 
     static parseJSON(json: any) {
-        const source = new GeoJsonFeatureSource();
+        const source = new GeoJSONFeatureSource();
         source.name = json.name;
         source.projection = Projection.parseJSON(json.projection);
         source._geoJSON = json.geoJSON;
