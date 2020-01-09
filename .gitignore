@@ -3,3 +3,5 @@ built/
 dist/
 yarn.lock
 yarn-error.log
+TEP_*.id*
+*-tmp.id*
