@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { FeatureSource } from "./FeatureSource";
+import { FeatureSource } from "./sources/FeatureSource";
 import { Style } from "../styles/Style";
 import { Render, Image } from "../render";
 import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";

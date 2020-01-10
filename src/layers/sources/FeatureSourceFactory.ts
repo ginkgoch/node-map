@@ -1,4 +1,4 @@
-import { JSONKnownTypes } from "../shared";
+import { JSONKnownTypes } from "../../shared";
 import { MemoryFeatureSource } from "./MemoryFeatureSource";
 import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
 

@@ -1,8 +1,8 @@
 import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature, GeometryFactory } from "ginkgoch-geom";
-import { Field } from "./Field";
+import { Field } from "../Field";
 import { FeatureSource } from "./FeatureSource";
-import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
-import { Projection } from "./Projection";
+import { JSONUtils, JSONKnownTypes } from "../../shared/JSONUtils";
+import { Projection } from "../Projection";
 
 /**
  * This class represents a feature source that maintains features in memory.

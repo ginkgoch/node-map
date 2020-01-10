@@ -1,8 +1,8 @@
 import fs from 'fs';
 import _ from 'lodash';
-import { MemoryFeatureSource } from '.';
-import { JSONKnownTypes } from '..';
-import { Projection } from './Projection';
+import { MemoryFeatureSource } from '..';
+import { JSONKnownTypes } from '../..';
+import { Projection } from '../Projection';
 
 export interface CSVFieldOptions {
     geomField?: string

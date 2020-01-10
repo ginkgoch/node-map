@@ -1,10 +1,10 @@
 import fs from 'fs';
 import _ from 'lodash';
-import { MemoryFeatureSource } from '.';
+import { MemoryFeatureSource } from '..';
 import { Feature, FeatureCollection } from 'ginkgoch-geom';
-import { Field } from './Field';
-import { JSONKnownTypes } from '..';
-import { Projection } from './Projection';
+import { Field } from '../Field';
+import { JSONKnownTypes } from '../..';
+import { Projection } from '../Projection';
 
 export class GeoJSONFeatureSource extends MemoryFeatureSource {
     _geoJSON?: any|string = undefined;

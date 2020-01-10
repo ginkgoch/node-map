@@ -1,7 +1,7 @@
 import fs from 'fs';
 import assert from 'assert';
 import { Opener } from "./Opener";
-import { FeatureSource } from "../layers/FeatureSource";
+import { FeatureSource } from "../layers/sources/FeatureSource";
 import { Srs } from '..';
 import { Unit } from './Unit';
 
