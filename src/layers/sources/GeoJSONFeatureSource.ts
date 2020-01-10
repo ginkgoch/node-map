@@ -28,7 +28,6 @@ export class GeoJSONFeatureSource extends MemoryFeatureSource {
     async _open(): Promise<void> {
         let tempGeoJSON = this._geoJSON;
         if (this._geoJSON === undefined) {
-            console.debug(`geoJSON is not specified.`);
             return;
         } else if (typeof this._geoJSON === 'string') {
             let content = fs.readFileSync(this._geoJSON, { flag: 'r'}).toString();

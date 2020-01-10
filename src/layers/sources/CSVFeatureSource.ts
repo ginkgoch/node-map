@@ -4,25 +4,32 @@ import csvParse from 'csv-parse/lib/sync';
 import { MemoryFeatureSource } from '..';
 import { JSONKnownTypes } from '../..';
 import { Projection } from '../Projection';
-import { Feature, GeometryFactory } from 'ginkgoch-geom';
+import { Feature, GeometryFactory, Point, Geometry } from 'ginkgoch-geom';
 import { Field } from '../Field';
 
 export interface CSVFieldOptions {
-    geomField?: string
     fields?: string[]
     hasFieldsRow?: boolean
+    geomField?: string | { x: string, y: string },
 }
 
+const geomFieldUndefinedError = new Error(`Property 'geomField' is not properly defined.`);
 export class CSVFeatureSource extends MemoryFeatureSource {
     fieldOptions: CSVFieldOptions;
     delimiter: string = ','
 
+    /**
+     * Constructs a `CSVFeatureSource` instance.
+     * @param {string} filePath The CSV file path.
+     * @param {CSVFieldOptions} fieldOptions The CSV field options. e.g. { geoField: {x:'longitude', y:'latitude'}, hasFieldsRow: true }
+     * @param {string} name The feature source name. 
+     */
     constructor(public filePath?: string, fieldOptions?: CSVFieldOptions, name?: string) {
         super();
 
         this.type = JSONKnownTypes.geoJSONFeatureSource;
         this.name = name || this.name;
-        this.fieldOptions = _.defaults(fieldOptions, { });
+        this.fieldOptions = _.defaults(fieldOptions, {});
     }
 
     async _open(): Promise<void> {
@@ -38,13 +45,18 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         const records = csvParse(csvContent, csvParseOption);
         if (records.length === 0) return;
 
-        const fields = Object.keys(records[0]).filter(f => f !== this.fieldOptions.geomField);
+        const fields = this.getFieldNames(records[0]);
         this._interFields.length = 0;
         this._interFields.push(...(fields.map(f => new Field(f))));
 
         this._interFeatures.features.length = 0;
         for (let record of records) {
-            let feature = new Feature(GeometryFactory.create(record[this.fieldOptions.geomField!]));
+            let geometry = this.parseGeometry(record);
+            if (geometry === undefined) {
+                continue;
+            }
+
+            let feature = new Feature(geometry);
             for (let field of fields) {
                 feature.properties.set(field, record[field]);
             }
@@ -78,7 +90,45 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         return false;
     }
 
-    private getCSVColumnsOption(): boolean|Array<string> {
+    private getFieldNames(record: any): string[] {
+        let geomColumns = new Array<string>();
+        if (typeof this.fieldOptions.geomField === 'string') {
+            geomColumns.push(this.fieldOptions.geomField);
+        } else if (this.fieldOptions.geomField !== undefined) {
+            let xCol = this.fieldOptions.geomField.x;
+            let yCol = this.fieldOptions.geomField.y;
+            if (xCol !== undefined && yCol !== undefined) {
+                geomColumns.push(xCol);
+                geomColumns.push(yCol);
+            }
+        }
+
+        return Object.keys(record).filter(c => !_.includes(geomColumns, c))
+    }
+
+    private parseGeometry(record: any): Geometry | undefined {
+        if (typeof this.fieldOptions.geomField === 'string') {
+            return GeometryFactory.create(record[this.fieldOptions.geomField]);
+        } else if (this.fieldOptions.geomField !== undefined) {
+            let xCol = this.fieldOptions.geomField.x;
+            let yCol = this.fieldOptions.geomField.y;
+            if (xCol === undefined || yCol === undefined) {
+                throw geomFieldUndefinedError;
+            }
+
+            let x = parseFloat(record[xCol]);
+            let y = parseFloat(record[yCol]);
+            if (!Number.isNaN(x) && !Number.isNaN(y)) {
+                return new Point(x, y);
+            } else {
+                return undefined;
+            }
+        } else {
+            throw geomFieldUndefinedError;
+        }
+    }
+
+    private getCSVColumnsOption(): boolean | Array<string> {
         if (this.fieldOptions.hasFieldsRow) {
             return this.fieldOptions.hasFieldsRow;
         } else if (this.fieldOptions.fields) {
@@ -104,9 +154,9 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         }
 
         if (source.fieldOptions.geomField === undefined) {
-            throw new Error(`Property 'geomField' is not defined.`);
+            throw geomFieldUndefinedError;
         }
-        
+
         if (source.fieldOptions.fields === undefined && !source.fieldOptions.hasFieldsRow) {
             throw new Error(`Fields cannot be identified. Set either 'fields' array or 'hasFieldsRow' to true if the CSV file contains the fields as the first row.`);
         }

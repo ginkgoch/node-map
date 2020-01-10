@@ -7,6 +7,7 @@ export * from './PropertyAggregator';
 export * from './sources/MemoryFeatureSource';
 export * from './sources/GeoJSONFeatureSource';
 export * from './sources/ShapefileFeatureSource';
+export * from './sources/CSVFeatureSource';
 export * from './sources/FeatureSourceFactory';
 export * from './LayerFactory';
 export * from 'ginkgoch-shapefile';
