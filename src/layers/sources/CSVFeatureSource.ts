@@ -1,8 +1,11 @@
 import fs from 'fs';
 import _ from 'lodash';
+import csvParse from 'csv-parse/lib/sync';
 import { MemoryFeatureSource } from '..';
 import { JSONKnownTypes } from '../..';
 import { Projection } from '../Projection';
+import { Feature, GeometryFactory } from 'ginkgoch-geom';
+import { Field } from '../Field';
 
 export interface CSVFieldOptions {
     geomField?: string
@@ -12,6 +15,7 @@ export interface CSVFieldOptions {
 
 export class CSVFeatureSource extends MemoryFeatureSource {
     fieldOptions: CSVFieldOptions;
+    delimiter: string = ','
 
     constructor(public filePath?: string, fieldOptions?: CSVFieldOptions, name?: string) {
         super();
@@ -22,12 +26,30 @@ export class CSVFeatureSource extends MemoryFeatureSource {
     }
 
     async _open(): Promise<void> {
-        if (this.fieldOptions.geomField === undefined) {
-            throw new Error(`Property 'geomField' is not defined.`);
+        CSVFeatureSource.validate(this);
+
+        const csvContent = fs.readFileSync(this.filePath!, { flag: 'r' });
+        const csvParseOption = {
+            trim: true,
+            skip_lines_with_error: true,
+            columns: this.getCSVColumnsOption()
         }
-        
-        if (this.fieldOptions.fields === undefined && !this.fieldOptions.hasFieldsRow) {
-            throw new Error(`Fields cannot be identified. Set either 'fields' array or 'hasFieldsRow' to true if the CSV file contains the fields as the first row.`);
+
+        const records = csvParse(csvContent, csvParseOption);
+        if (records.length === 0) return;
+
+        const fields = Object.keys(records[0]).filter(f => f !== this.fieldOptions.geomField);
+        this._interFields.length = 0;
+        this._interFields.push(...(fields.map(f => new Field(f))));
+
+        this._interFeatures.features.length = 0;
+        for (let record of records) {
+            let feature = new Feature(GeometryFactory.create(record[this.fieldOptions.geomField!]));
+            for (let field of fields) {
+                feature.properties.set(field, record[field]);
+            }
+
+            this._interFeatures.features.push(feature);
         }
     }
 
@@ -40,11 +62,30 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         const json: any = {
             type: this.type,
             name: this.name,
-            projection: this.projection.toJSON()
+            projection: this.projection.toJSON(),
+            filePath: this.filePath,
+            delimiter: this.delimiter,
+            fieldOptions: this.fieldOptions
         };
 
-        json.filePath = this.filePath;
         return json;
+    }
+
+    /**
+     * @override 
+     */
+    get editable() {
+        return false;
+    }
+
+    private getCSVColumnsOption(): boolean|Array<string> {
+        if (this.fieldOptions.hasFieldsRow) {
+            return this.fieldOptions.hasFieldsRow;
+        } else if (this.fieldOptions.fields) {
+            return this.fieldOptions.fields;
+        } else {
+            throw new Error(`Field options is not properly set. ${JSON.stringify(this.fieldOptions)}`);
+        }
     }
 
     static parseJSON(json: any) {
@@ -52,6 +93,22 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         source.name = json.name;
         source.projection = Projection.parseJSON(json.projection);
         source.filePath = json.filePath;
+        source.delimiter = json.delimiter;
+        source.fieldOptions = json.fieldOptions;
         return source;
+    }
+
+    private static validate(source: CSVFeatureSource) {
+        if (source.filePath === undefined) {
+            throw new Error(`Property 'filePath' is not defined.`)
+        }
+
+        if (source.fieldOptions.geomField === undefined) {
+            throw new Error(`Property 'geomField' is not defined.`);
+        }
+        
+        if (source.fieldOptions.fields === undefined && !source.fieldOptions.hasFieldsRow) {
+            throw new Error(`Fields cannot be identified. Set either 'fields' array or 'hasFieldsRow' to true if the CSV file contains the fields as the first row.`);
+        }
     }
 }

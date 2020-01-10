@@ -69,11 +69,18 @@ export class GeoJSONFeatureSource extends MemoryFeatureSource {
         const json: any = {
             type: this.type,
             name: this.name,
-            projection: this.projection.toJSON()
+            projection: this.projection.toJSON(),
+            geoJSON: this._geoJSON
         };
 
-        json.geoJSON = this._geoJSON;
         return json;
+    }
+
+    /**
+     * @override 
+     */
+    get editable() {
+        return false;
     }
 
     static parseJSON(json: any) {
