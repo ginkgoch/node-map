@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
-import { Opener, Validator, JSONKnownTypes } from "../shared";
-import { Field, PropertyAggregator, Projection } from ".";
-import { BaseIndex } from "../indices";
+import { Opener, Validator, JSONKnownTypes } from "../../shared";
+import { Field, PropertyAggregator, Projection } from "..";
+import { BaseIndex } from "../../indices";
 
 /**
  * This is a new type that could be replaced with 'all', 'none' or a string array.

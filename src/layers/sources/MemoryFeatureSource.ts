@@ -1,8 +1,8 @@
 import { IEnvelope, Feature, Envelope, FeatureCollection, IFeature, GeometryFactory } from "ginkgoch-geom";
-import { Field } from "./Field";
+import { Field } from "../Field";
 import { FeatureSource } from "./FeatureSource";
-import { JSONUtils, JSONKnownTypes } from "../shared/JSONUtils";
-import { Projection } from "./Projection";
+import { JSONUtils, JSONKnownTypes } from "../../shared/JSONUtils";
+import { Projection } from "../Projection";
 
 /**
  * This class represents a feature source that maintains features in memory.
@@ -34,6 +34,10 @@ export class MemoryFeatureSource extends FeatureSource {
         this._maxFeatureId = this._interFeatures.features.length;
         this._interFields = new Array<Field>();
         fields  && fields.forEach(f => this._interFields.push(f));
+    }
+
+    get internalFeatures(): Feature[] {
+        return this._interFeatures.features;
     }
 
     /**

@@ -1,18 +1,18 @@
-import { GeoJsonFeatureSource, FeatureLayer, GeneralStyle, Render } from '..';
+import { GeoJSONFeatureSource, FeatureLayer, GeneralStyle, Render } from '..';
 import TestUtils from '../shared/TestUtils';
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/layers/' + name);
 
 describe('GeoJsonFeatureSource', () => {
     it('open with empty', async () => {
-        let source = new GeoJsonFeatureSource();
+        let source = new GeoJSONFeatureSource();
         await source.open();
         expect(source._interFeatures.features.length).toBe(0);
         expect(source._interFields.length).toBe(0);
     });
 
     it('open with geoJSON feature', async () => {
-        let source = new GeoJsonFeatureSource(geoJSON_Feature);
+        let source = new GeoJSONFeatureSource(geoJSON_Feature);
         await source.open();
         expect(source._interFeatures.features.length).toBe(1);
         expect(source._interFields.length).toBe(2);
@@ -25,7 +25,7 @@ describe('GeoJsonFeatureSource', () => {
     });
 
     it('open with geoJSON feature collection', async () => {
-        let source = new GeoJsonFeatureSource(geoJSON_FeatureCollection);
+        let source = new GeoJSONFeatureSource(geoJSON_FeatureCollection);
         await source.open();
         expect(source._interFeatures.features.length).toBe(3);
         expect(source._interFields.length).toBe(2);
@@ -40,7 +40,7 @@ describe('GeoJsonFeatureSource', () => {
     });
 
     it('open with geoJSON feature file', async () => {
-        let source = new GeoJsonFeatureSource('./tests/data/layers/layer-geoJSON.json');
+        let source = new GeoJSONFeatureSource('./tests/data/layers/layer-geoJSON.json');
         await source.open();
         expect(source._interFeatures.features.length).toBe(3);
         expect(source._interFields.length).toBe(2);
@@ -55,7 +55,7 @@ describe('GeoJsonFeatureSource', () => {
     });
 
     it('draw with geoJSON', async () => {
-        let source = new GeoJsonFeatureSource(geoJSON_FeatureCollection);
+        let source = new GeoJSONFeatureSource(geoJSON_FeatureCollection);
         let layer = new FeatureLayer(source);
         layer.styles.push(new GeneralStyle('#e34a33', 'cccc', 4, 20));
 
@@ -70,10 +70,10 @@ describe('GeoJsonFeatureSource', () => {
     });
 
     it('toJSON', async () => {
-        let oldSource = new GeoJsonFeatureSource('./tests/data/layers/layer-geoJSON.json');
+        let oldSource = new GeoJSONFeatureSource('./tests/data/layers/layer-geoJSON.json');
         let json = oldSource.toJSON();
 
-        let source = GeoJsonFeatureSource.parseJSON(json);
+        let source = GeoJSONFeatureSource.parseJSON(json);
         await source.open();
         expect(source._interFeatures.features.length).toBe(3);
         expect(source._interFields.length).toBe(2);

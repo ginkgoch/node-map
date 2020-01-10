@@ -1,12 +1,12 @@
 import fs from 'fs';
 import _ from 'lodash';
-import { MemoryFeatureSource } from '.';
+import { MemoryFeatureSource } from '..';
 import { Feature, FeatureCollection } from 'ginkgoch-geom';
-import { Field } from './Field';
-import { JSONKnownTypes } from '..';
-import { Projection } from './Projection';
+import { Field } from '../Field';
+import { JSONKnownTypes } from '../..';
+import { Projection } from '../Projection';
 
-export class GeoJsonFeatureSource extends MemoryFeatureSource {
+export class GeoJSONFeatureSource extends MemoryFeatureSource {
     _geoJSON?: any|string = undefined;
 
     constructor(geoJSON?: string|any, name?: string) {
@@ -28,7 +28,6 @@ export class GeoJsonFeatureSource extends MemoryFeatureSource {
     async _open(): Promise<void> {
         let tempGeoJSON = this._geoJSON;
         if (this._geoJSON === undefined) {
-            console.debug(`geoJSON is not specified.`);
             return;
         } else if (typeof this._geoJSON === 'string') {
             let content = fs.readFileSync(this._geoJSON, { flag: 'r'}).toString();
@@ -69,15 +68,22 @@ export class GeoJsonFeatureSource extends MemoryFeatureSource {
         const json: any = {
             type: this.type,
             name: this.name,
-            projection: this.projection.toJSON()
+            projection: this.projection.toJSON(),
+            geoJSON: this._geoJSON
         };
 
-        json.geoJSON = this._geoJSON;
         return json;
     }
 
+    /**
+     * @override 
+     */
+    get editable() {
+        return false;
+    }
+
     static parseJSON(json: any) {
-        const source = new GeoJsonFeatureSource();
+        const source = new GeoJSONFeatureSource();
         source.name = json.name;
         source.projection = Projection.parseJSON(json.projection);
         source._geoJSON = json.geoJSON;

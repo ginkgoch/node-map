@@ -1,8 +1,8 @@
 import { FeatureLayer } from "./FeatureLayer";
 import { Srs } from "./Projection";
-import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
+import { ShapefileFeatureSource } from "./sources/ShapefileFeatureSource";
 import { Field } from ".";
-import { MemoryFeatureSource } from "./MemoryFeatureSource";
+import { MemoryFeatureSource } from "./sources/MemoryFeatureSource";
 
 export class LayerFactory {
 

@@ -6,6 +6,7 @@
         "RECORDSET",
         "Shapefile",
         "automock",
+        "devtool",
         "endregion",
         "filestream",
         "ginkgoch",
