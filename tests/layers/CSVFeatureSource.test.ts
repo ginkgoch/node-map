@@ -15,6 +15,30 @@ describe('CSVFeatureSource', () => {
         await source.close();
     });
 
+    it('open with wkt', async () => {
+        let fieldOptions = { geomField: 'geom', hasFieldsRow: true };
+        let source = new CSVFeatureSource('./tests/data/layers/csv-wkt.csv', fieldOptions);
+        source.delimiter = ';';
+        await source.open();
+
+        let fields = await source.fields();
+        expect(fields.length).toBe(4);
+        expect(source.internalFeatures.length).toBe(3);
+        await source.close();
+    });
+
+    it('open with wkt but no column row', async () => {
+        let fieldOptions = { geomField: 'geom', fields: 'id;name;amount;city;geom'.split(';'), hasFieldsRow: false };
+        let source = new CSVFeatureSource('./tests/data/layers/csv-wkt-no-field.csv', fieldOptions);
+        source.delimiter = ';';
+        await source.open();
+
+        let fields = await source.fields();
+        expect(fields.length).toBe(4);
+        expect(source.internalFeatures.length).toBe(3);
+        await source.close();
+    });
+
     it('draw', async () => {
         let fieldOptions = { geomField: { x: 'longitude', y: 'latitude' }, hasFieldsRow: true };
         let source = new CSVFeatureSource('./tests/data/layers/airports.csv', fieldOptions);

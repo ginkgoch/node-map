@@ -38,6 +38,7 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         const csvContent = fs.readFileSync(this.filePath!, { flag: 'r' });
         const csvParseOption = {
             trim: true,
+            delimiter: this.delimiter,
             skip_lines_with_error: true,
             columns: this.getCSVColumnsOption()
         }
@@ -45,7 +46,7 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         const records = csvParse(csvContent, csvParseOption);
         if (records.length === 0) return;
 
-        const fields = this.getFieldNames(records[0]);
+        const fields = this.getFieldNames(this.fieldOptions.fields || Object.keys(records[0]));
         this._interFields.length = 0;
         this._interFields.push(...(fields.map(f => new Field(f))));
 
@@ -90,7 +91,7 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         return false;
     }
 
-    private getFieldNames(record: any): string[] {
+    private getFieldNames(allColumns: string[]): string[] {
         let geomColumns = new Array<string>();
         if (typeof this.fieldOptions.geomField === 'string') {
             geomColumns.push(this.fieldOptions.geomField);
@@ -103,7 +104,7 @@ export class CSVFeatureSource extends MemoryFeatureSource {
             }
         }
 
-        return Object.keys(record).filter(c => !_.includes(geomColumns, c))
+        return allColumns.filter(c => !_.includes(geomColumns, c));
     }
 
     private parseGeometry(record: any): Geometry | undefined {
