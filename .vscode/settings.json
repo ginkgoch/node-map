@@ -4,8 +4,10 @@
         "EPSG",
         "FEATURECOLLECTION",
         "RECORDSET",
+        "Rapperswil",
         "Shapefile",
         "automock",
+        "cntry",
         "devtool",
         "endregion",
         "filestream",
@@ -13,6 +15,7 @@
         "maxx",
         "maxy",
         "miny",
+        "recid",
         "rtree",
         "typedoc"
     ]
