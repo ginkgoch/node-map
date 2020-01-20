@@ -1,5 +1,4 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -11,12 +10,6 @@ module.exports = {
     filename: "bundle.js",
     libraryTarget: "umd"
   },
-  plugins: [
-    new CopyPlugin([{
-      from: 'src/plugins',
-      to: 'plugins'
-    }])
-  ],
   module: {
     rules: [{
       test: /.tsx?$/,
