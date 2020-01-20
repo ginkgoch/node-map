@@ -34,7 +34,7 @@ Here is also a snapshot for the reference.
     ```
 3. Inject `HTML5` canvas as native graphic API
     ```javascript
-    require('ginkgoch-map/plugins/native-dom').init();
+    require('ginkgoch-map/native/dom').init();
     ```
 
 ### Services & Command Line Tools
@@ -45,7 +45,7 @@ Here is also a snapshot for the reference.
     ```
 2. Inject `canvas` as native graphic API
     ```javascript
-    require('ginkgoch-map/plugins/native-node').init();
+    require('ginkgoch-map/native/node').init();
     ```
 
 At this step, your development env is ready. The next step is to build your fantastic applications. Here are [some feature demos](https://github.com/ginkgoch/map-quick-started-demos) to follow up.
