@@ -10,7 +10,10 @@
 6. Cross-platform - Web service, Desktop or Mobile; macOS, Linux or Windows; no native APIs.
 
 ## Features
-WIP...
+1. Geometry and Spatial Analysis.
+2. Thematic Styles.
+3. Various data format (SHP, CSV, MEM, GeoJSON etc.) read and write support.
+4. Map with multiple layers overlap.
 
 ## Getting Started
 Here is a project to represents basic functions of Ginkgoch and build a very simple XYZ map tile service with KOA with your own data. https://github.com/ginkgoch/map-quick-started-demos

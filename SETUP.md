@@ -30,12 +30,11 @@ Here is also a snapshot for the reference.
     ```
 2. Install `ginkgoch-map`.
     ```bash
-    npm i canvas ginkgoch-map ginkgoch-map-native --save
+    npm i ginkgoch-map --save
     ```
 3. Inject `HTML5` canvas as native graphic API
     ```javascript
-    const NativeFactory = require('ginkgoch-map-native');
-    NativeFactory.useDomCanvas();
+    require('ginkgoch-map/plugins/native-dom').init();
     ```
 
 ### Services & Command Line Tools
@@ -46,8 +45,7 @@ Here is also a snapshot for the reference.
     ```
 2. Inject `canvas` as native graphic API
     ```javascript
-    const NativeFactory = require('ginkgoch-map-native');
-    NativeFactory.useNodeCanvas();
+    require('ginkgoch-map/plugins/native-node').init();
     ```
 
 At this step, your development env is ready. The next step is to build your fantastic applications. Here are [some feature demos](https://github.com/ginkgoch/map-quick-started-demos) to follow up.
