@@ -44,6 +44,8 @@ export abstract class FeatureSource extends Opener {
      */
     index?: BaseIndex;
 
+    decorateFeature?: (f: Feature) => Feature;
+
     /**
      * This is the constructor of feature source.
      * 
@@ -90,7 +92,12 @@ export abstract class FeatureSource extends Opener {
 
         const fieldsNorm = await this._normalizeFields(fields);
         const featuresIn = await this._features(envelopeIn, fieldsNorm);
-        const featuresOut = this._forwardProjection(featuresIn);
+        let featuresOut = this._forwardProjection(featuresIn);
+
+        if (this.decorateFeature !== undefined) {
+            featuresOut = featuresOut.map(this.decorateFeature);
+        }
+
         return featuresOut;
     }
 
@@ -117,6 +124,11 @@ export abstract class FeatureSource extends Opener {
         }
 
         feature = this._forwardProjection(feature);
+
+        if (this.decorateFeature !== undefined) {
+            feature = this.decorateFeature(feature);
+        }
+
         return feature;
     }
 
