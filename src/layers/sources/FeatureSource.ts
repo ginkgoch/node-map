@@ -520,7 +520,7 @@ export abstract class FeatureSource extends Opener {
     private fillFeatureWithDynamicFields(feature: IFeature, dynamicFields: DynamicField[]) {
         for (let field of dynamicFields) {
             let fieldValue = field.mapper(feature);
-            if (fieldValue === undefined) {
+            if (fieldValue !== undefined) {
                 feature.properties.set(field.name, fieldValue);
             }
         }

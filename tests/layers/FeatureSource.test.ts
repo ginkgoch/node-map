@@ -23,6 +23,19 @@ describe('FeatureSource', () => {
             expect(fields.includes(name)).toBeTruthy();
         });
     });
+
+    it('dynamicFields', async () => {
+        const filePath = './tests/data/layers/USStates.shp';
+        let source = new DynamicShpSource(filePath);
+        source.dynamicFields.push({ name: 'STATE_FULL', fieldsDependOn: ['STATE_NAME', 'STATE_ABBR'], mapper: f => {
+            return `${f.properties.get('STATE_NAME')} (${f.properties.get('STATE_ABBR')})`;
+        } });
+
+        await source.open();
+        let feature = await source.feature(1);
+        expect(feature!.properties.has('STATE_FULL')).toBeTruthy();
+        expect(feature!.properties.get('STATE_FULL')).toEqual('Washington (WA)');
+    });
 });
 
 class DynamicShpSource extends ShapefileFeatureSource {
