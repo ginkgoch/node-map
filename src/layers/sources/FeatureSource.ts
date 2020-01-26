@@ -9,6 +9,8 @@ import { BaseIndex } from "../../indices";
  */
 export type FieldFilters = 'all' | 'none' | string[];
 
+export interface DynamicField { name: string, fieldsDependOn: string[], mapper: (f: IFeature) => any };
+
 /**
  * This class represents a base class of all feature source.
  * It provides the portal for developers to CRUD features from the the database.
@@ -46,6 +48,8 @@ export abstract class FeatureSource extends Opener {
 
     decorateFeature?: (f: Feature) => Feature;
 
+    dynamicFields: Array<DynamicField>
+
     /**
      * This is the constructor of feature source.
      * 
@@ -57,6 +61,7 @@ export abstract class FeatureSource extends Opener {
 
         this.name = 'Unknown';
         this.projection = new Projection();
+        this.dynamicFields = new Array<DynamicField>();
     }
 
     /**
@@ -98,6 +103,8 @@ export abstract class FeatureSource extends Opener {
             featuresOut = featuresOut.map(this.decorateFeature);
         }
 
+        this.fillFeaturesWithDynamicFields(featuresOut, fieldsNorm);
+        
         return featuresOut;
     }
 
@@ -129,6 +136,8 @@ export abstract class FeatureSource extends Opener {
             feature = this.decorateFeature(feature);
         }
 
+        this.fillFeaturesWithDynamicFields([feature], fieldsNorm);
+
         return feature;
     }
 
@@ -150,12 +159,21 @@ export abstract class FeatureSource extends Opener {
     protected async _normalizeFields(fields?: FieldFilters): Promise<string[]> {
         if (fields === 'none') return [];
 
-        const allFields = (await this.fields()).map(f => f.name);
+        let allFields = (await this.fields()).map(f => f.name);
+        allFields = _.concat(allFields, this.dynamicFields.map(f => f.name));
+
+        let result: string[];
         if (fields === 'all' || fields === undefined) {
-            return allFields;
+            result = allFields;
         } else {
-            return _.intersection(allFields, fields);
+            if (this.dynamicFields.length > 0) {
+                fields = _.concat(fields, _.flatMap(this.dynamicFields, f => f.fieldsDependOn));
+                fields = _.uniq(fields);
+            }
+            result = _.intersection(allFields, fields);
         }
+
+        return result;
     }
 
     /**
@@ -229,10 +247,12 @@ export abstract class FeatureSource extends Opener {
      */
     protected async _properties(fields: string[]): Promise<Array<Map<string, any>>> {
         const features = await this.features(undefined, fields);
+        this.fillFeaturesWithDynamicFields(features, fields);
+
         const properties = new Array<Map<string, any>>();
         features.forEach(f => {
             properties.push(_.clone(f.properties));
-        })
+        });
 
         return properties;
     }
@@ -488,5 +508,33 @@ export abstract class FeatureSource extends Opener {
 
     private isEnvelope(obj: any) {
         return ['minx', 'miny', 'maxx', 'maxy'].every(v => v in obj)
+    }
+
+    private getRequiredDynamicFields(fields: string[]): DynamicField[] {
+        if (this.dynamicFields.length === 0) return [];
+        else if (fields.length === 0) return [];
+
+        return this.dynamicFields.filter(f => fields.includes(f.name));
+    }
+
+    private fillFeatureWithDynamicFields(feature: IFeature, dynamicFields: DynamicField[]) {
+        for (let field of dynamicFields) {
+            let fieldValue = field.mapper(feature);
+            if (fieldValue !== undefined) {
+                feature.properties.set(field.name, fieldValue);
+            }
+        }
+    }
+
+    private fillFeaturesWithDynamicFields(features: IFeature[], fields: string[]) {
+        let dynamicFields = this.getRequiredDynamicFields(fields);
+
+        if (dynamicFields.length === 0) {
+            return;
+        }
+
+        features.forEach(f => {
+            this.fillFeatureWithDynamicFields(f, dynamicFields);
+        });
     }
 }
