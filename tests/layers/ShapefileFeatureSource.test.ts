@@ -92,6 +92,21 @@ describe('ShapefileFeatureSource', () => {
         await source.close();
     });
 
+    it('decorateFeature', async () => {
+        let source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
+        source.decorateFeature = f => {
+            const name = f.properties.get('STATE_NAME');
+            const abbr = f.properties.get('STATE_ABBR');
+            f.properties.set('STATE_FULL', `${name} (${abbr})`);
+            return f;
+        };
+        await source.open();
+        let feature = await source.feature(1);
+        
+        expect(feature!.properties.has('STATE_FULL')).toBeTruthy();
+        expect(feature!.properties.get('STATE_FULL')).toEqual('Washington (WA)');
+    });
+
     it('build index', async () => {
         const filePath = './tests/data/layers/USStates-building-index.shp';
 

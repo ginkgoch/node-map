@@ -1,4 +1,5 @@
 const path = require('path');
+
 module.exports = {
   mode: 'production',
   entry: path.join(__dirname, 'src', 'index.ts'),
@@ -25,37 +26,29 @@ module.exports = {
   resolve: {
     extensions: ['.json', '.js', '.jsx', '.ts']
   },
-  externals: {
-    "lodash": {
-      commonjs: "lodash",
-      commonjs2: "lodash",
-      amd: "lodash",
-      root: "_"
-    },
-    "ginkgoch-geom": {
-      commonjs: "ginkgoch-geom",
-      commonjs2: "ginkgoch-geom",
-      amd: "ginkgoch-geom",
-      root: "ginkgoch-geom"
-    },
-    "ginkgoch-shapefile": {
-      commonjs: "ginkgoch-shapefile",
-      commonjs2: "ginkgoch-shapefile",
-      amd: "ginkgoch-shapefile",
-      root: "ginkgoch-shapefile"
-    },
-    "proj4": {
-      commonjs: "proj4",
-      commonjs2: "proj4",
-      amd: "proj4",
-      root: "proj4"
-    },
-    "canvas": {
-      commonjs: "canvas",
-      commonjs2: "canvas",
-      amd: "canvas",
-      root: "canvas"
-    }
-  },
+  externals: getExternals(),
   devtool: 'source-map'
 };
+
+function getExternals() {
+  let externals = {};
+  setExternal(externals, 'lodash', '_');
+  setExternal(externals, 'ginkgoch-geom');
+  setExternal(externals, 'ginkgoch-shapefile');
+  setExternal(externals, 'proj4');
+  setExternal(externals, 'canvas');
+  setExternal(externals, 'csv-parse');
+  return externals;
+}
+
+function setExternal(externalModules, moduleName, moduleRootAlias) {
+  moduleRootAlias = moduleRootAlias || moduleName;
+  let moduleObj = {
+    commonjs: moduleName,
+    commonjs2: moduleName,
+    amd: moduleName,
+    root: moduleRootAlias
+  };
+
+  externalModules[moduleName] = moduleObj;
+}

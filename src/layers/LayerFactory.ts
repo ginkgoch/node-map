@@ -1,8 +1,8 @@
 import { FeatureLayer } from "./FeatureLayer";
 import { Srs } from "./Projection";
-import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
+import { ShapefileFeatureSource } from "./sources/ShapefileFeatureSource";
 import { Field } from ".";
-import { MemoryFeatureSource } from "./MemoryFeatureSource";
+import { MemoryFeatureSource } from "./sources/MemoryFeatureSource";
 
 export class LayerFactory {
 
@@ -13,7 +13,7 @@ export class LayerFactory {
      * {FeatureLayer} is a uniform maintainer for {FeatureSource}. It describes how the features in {FeatureSource} are rendered. 
      * This method is a shortcut of creating a feature layer with one line of code.
      * URL is formed with protocol, path and parameters. 
-     * - Protocal is defined as the abbr. of the feature source. e.g. shp = ShapefileFeatureSource, mem = MemoryFeatureSource.
+     * - Protocol is defined as the abbr. of the feature source. e.g. shp = ShapefileFeatureSource, mem = MemoryFeatureSource.
      * - Path is used for the concrete path or name.
      * - Parameters are used for some optional configurations.
      * 
@@ -38,7 +38,7 @@ export class LayerFactory {
             case 'shp:':
                 return this._createShapefileFeatureLayer(sourceURL);
             default:
-                throw new Error(`Unsupported feature layer protocal ${sourceURL.protocol}.`);
+                throw new Error(`Unsupported feature layer protocol ${sourceURL.protocol}.`);
         }
     }
 

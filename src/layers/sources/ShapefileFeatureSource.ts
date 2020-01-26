@@ -3,10 +3,10 @@ import path from 'path';
 import _ from "lodash";
 import { Shapefile, DbfField, DbfFieldType, ShapefileType } from "ginkgoch-shapefile";
 import { IEnvelope, Feature, Envelope, IFeature } from "ginkgoch-geom";
-import { FeatureSource, Field } from ".";
-import { Validator, JSONKnownTypes } from '../shared';
-import { Projection, Srs } from "./Projection";
-import { RTIndex, RTRecordType } from "../indices";
+import { FeatureSource, Field } from "..";
+import { Validator, JSONKnownTypes } from '../../shared';
+import { Projection, Srs } from "../Projection";
+import { RTIndex, RTRecordType } from "../../indices";
 
 const DBF_FIELD_DECIMAL = 'decimal';
 

@@ -2,15 +2,20 @@
     "cSpell.words": [
         "ARIAL",
         "EPSG",
+        "FEATURECOLLECTION",
         "RECORDSET",
+        "Rapperswil",
         "Shapefile",
         "automock",
+        "cntry",
+        "devtool",
         "endregion",
         "filestream",
         "ginkgoch",
         "maxx",
         "maxy",
         "miny",
+        "recid",
         "rtree",
         "typedoc"
     ]
