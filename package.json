@@ -1,6 +1,6 @@
 {
   "name": "ginkgoch-map",
-  "version": "1.7.3",
+  "version": "1.7.5",
   "description": "This is a map kit for node.js. Provide capabilities to build map service with various data sources and customized styles.",
   "main": "dist/bundle.js",
   "types": "dist/index.d.ts",
@@ -29,6 +29,7 @@
     "jest-cli": "^24.8.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
+    "ts-node": "^8.6.2",
     "typedoc": "^0.15.6",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
