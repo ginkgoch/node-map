@@ -103,6 +103,8 @@ export abstract class FeatureSource extends Opener {
             featuresOut = featuresOut.map(this.decorateFeature);
         }
 
+        this.fillFeaturesWithDynamicFields(featuresOut, fieldsNorm);
+        
         return featuresOut;
     }
 
@@ -133,6 +135,8 @@ export abstract class FeatureSource extends Opener {
         if (this.decorateFeature !== undefined) {
             feature = this.decorateFeature(feature);
         }
+
+        this.fillFeaturesWithDynamicFields([feature], fieldsNorm);
 
         return feature;
     }
@@ -243,10 +247,12 @@ export abstract class FeatureSource extends Opener {
      */
     protected async _properties(fields: string[]): Promise<Array<Map<string, any>>> {
         const features = await this.features(undefined, fields);
+        this.fillFeaturesWithDynamicFields(features, fields);
+
         const properties = new Array<Map<string, any>>();
         features.forEach(f => {
             properties.push(_.clone(f.properties));
-        })
+        });
 
         return properties;
     }
@@ -502,5 +508,33 @@ export abstract class FeatureSource extends Opener {
 
     private isEnvelope(obj: any) {
         return ['minx', 'miny', 'maxx', 'maxy'].every(v => v in obj)
+    }
+
+    private getRequiredDynamicFields(fields: string[]): DynamicField[] {
+        if (this.dynamicFields.length === 0) return [];
+        else if (fields.length === 0) return [];
+
+        return this.dynamicFields.filter(f => fields.includes(f.name));
+    }
+
+    private fillFeatureWithDynamicFields(feature: IFeature, dynamicFields: DynamicField[]) {
+        for (let field of dynamicFields) {
+            let fieldValue = field.mapper(feature);
+            if (fieldValue === undefined) {
+                feature.properties.set(field.name, fieldValue);
+            }
+        }
+    }
+
+    private fillFeaturesWithDynamicFields(features: IFeature[], fields: string[]) {
+        let dynamicFields = this.getRequiredDynamicFields(fields);
+
+        if (dynamicFields.length === 0) {
+            return;
+        }
+
+        features.forEach(f => {
+            this.fillFeatureWithDynamicFields(f, dynamicFields);
+        });
     }
 }
