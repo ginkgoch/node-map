@@ -53,7 +53,7 @@ describe('FeatureLayer', () => {
         await layer.draw(render);
         render.flush();
 
-        compareImage(render.image, 'layer-draw-index.png', true);
+        compareImage(render.image, 'layer-draw-index.png');
     });
 
     it('json', () => {

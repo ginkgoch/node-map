@@ -25,21 +25,19 @@ export class RenderUtils {
      */
     static compressViewportCoordinates(coordinates: ICoordinate[], tolerance = 1) {
         const compressed: ICoordinate[] = [];
-        
-        let previous = coordinates.shift();
-        if (previous === undefined) {
+        if (coordinates.length === 0) {
             return compressed;
         }
 
+        let previous = coordinates[0];
         compressed.push(previous);
-        let current = coordinates.shift();
-        while (current !== undefined) {
+        
+        for (let i = 1; i < coordinates.length; i++) {
+            let current = coordinates[i];
             if (Math.abs(current.x - previous.x) > tolerance || Math.abs(current.y - previous.y) > tolerance) {
                 compressed.push(current);
                 previous = current;
             }
-
-            current = coordinates.shift();
         }
 
         return compressed;

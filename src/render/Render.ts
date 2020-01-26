@@ -59,6 +59,8 @@ export class Render {
      */
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
+    simplifyTolerance: number = 2;
+
     /**
      * Constructs a renderer instance.
      * @param {Image} image The image to draws on.
@@ -66,8 +68,8 @@ export class Render {
      * @param {Unit} envelopeUnit The geography unit of viewport envelope.
      */
     constructor(image: Image, envelope: IEnvelope, envelopeUnit: Unit = Unit.meters) {
-        assert(image.width > 0, 'Image width must greater than 0.')
-        assert(image.height > 0, 'Image height must greater than 0.')
+        assert(image.width > 0, 'Image width must greater than 0.');
+        assert(image.height > 0, 'Image height must greater than 0.');
 
         this.image = image;
         this.envelope = envelope;
@@ -204,13 +206,13 @@ export class Render {
     _drawLineString(geom: LineString, style: any) {
         let coordinates = geom.coordinatesFlat().map(c => this._toViewport(c));
 
-        coordinates = RenderUtils.compressViewportCoordinates(coordinates);
+        coordinates = RenderUtils.compressViewportCoordinates(coordinates, this.simplifyTolerance);
         if (coordinates.length <= 1) return;
 
-        const first = coordinates.shift() as ICoordinate;
+        const first = coordinates[0];
         this.context.beginPath();
         this.context.moveTo(first.x, first.y);
-        coordinates.forEach(c => {
+        coordinates.slice(1).forEach(c => {
             this.context.lineTo(c.x, c.y);
         });
 
@@ -222,31 +224,36 @@ export class Render {
 
     _drawPolygon(geom: Polygon, style: any) {
         this.context.beginPath();
-        this._drawRing(geom.externalRing);
-        geom.internalRings.forEach(r => {
-            this._drawRing(r);
-        });
+        let drawn = this._drawRing(geom.externalRing);
+        if (drawn) {
+            geom.internalRings.forEach(r => {
+                this._drawRing(r);
+            });
+        }
 
         _.extend(this.context, style);
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, style);
             this.context.stroke();
         }
     }
 
-    _drawRing(geom: LinearRing) {
+    _drawRing(geom: LinearRing): boolean {
         let coordinates = geom.coordinatesFlat();
         coordinates = coordinates.map(c => this._toViewport(c));
-        coordinates = RenderUtils.compressViewportCoordinates(coordinates);
+        coordinates = RenderUtils.compressViewportCoordinates(coordinates, this.simplifyTolerance);
 
-        if (coordinates.length < 4) return;
+        if (coordinates.length < 4) {
+            this.context.closePath();
+            return false;
+        }
 
-        const first = coordinates.shift() as ICoordinate;
+        const first = coordinates[0];
         this.context.moveTo(first.x, first.y);
-        coordinates.forEach(c => this.context.lineTo(c.x, c.y));
+        coordinates.slice(1).forEach(c => this.context.lineTo(c.x, c.y));
         this.context.closePath();
+        return true;
     }
 
     _drawGeometryCollection<T extends Geometry>(geom: GeometryCollectionBase<T>, style: any) {
@@ -353,9 +360,9 @@ export class Render {
         const textWidth = this.measureText(text, style).width;
         coordinates = coordinates.map(c => this._toViewport(c));
 
-        let previous = coordinates.shift() as ICoordinate;
-        while (coordinates.length > 0) {
-            const current = coordinates.shift() as ICoordinate;
+        let previous = coordinates[0];
+        for (let i = 1; i < coordinates.length; i++) {
+            const current = coordinates[i];
             const distance = RenderUtils.distance(current, previous);
             if (distance > textWidth) {
                 const x = (previous.x + current.x) * .5;
