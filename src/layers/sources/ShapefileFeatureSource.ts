@@ -203,7 +203,7 @@ export class ShapefileFeatureSource extends FeatureSource {
             const ids = this.index.intersections(envelope);
             features = new Array<Feature>();
             for(let id of ids) {
-                const feature = this.__shapefile.get(parseInt(id));
+                const feature = this.__shapefile.get(parseInt(id), fields);
                 if (feature !== null) {
                     features.push(feature);
                 }
