@@ -9,14 +9,14 @@ describe('ShapefileFeatureSource', () => {
         const dbfField = new DbfField('STATE_NAME', DbfFieldType.number, 8, 4);
 
         const source = new ShapefileFeatureSource() as any;
-        const field = source._mapDbfFieldToField(dbfField) as Field;
+        const field = (<any>ShapefileFeatureSource)._mapDbfFieldToField(dbfField) as Field;
         expect(field.name).toEqual(dbfField.name);
         expect(field.length).toBe(dbfField.length);
         expect(field.type).toEqual('number');
         expect(field.extra.size).toBe(1);
         expect(field.extra.get('decimal')).toBe(4);
 
-        const newDbfField = source._mapFieldToDbfField(field) as DbfField;
+        const newDbfField = (<any>ShapefileFeatureSource)._mapFieldToDbfField(field) as DbfField;
         expect(newDbfField).toEqual(dbfField);
     });
 
