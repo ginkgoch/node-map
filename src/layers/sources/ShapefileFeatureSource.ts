@@ -223,7 +223,7 @@ export class ShapefileFeatureSource extends FeatureSource {
      */
     protected async _fields(): Promise<Field[]> {
         const fields = this.__shapefile.fields(true) as DbfField[];
-        return fields.map(f => this._mapDbfFieldToField(f));
+        return fields.map(f => ShapefileFeatureSource._mapDbfFieldToField(f));
     }
 
     /**
@@ -255,6 +255,10 @@ export class ShapefileFeatureSource extends FeatureSource {
             .filter(r => !r.deleted)
             .map(r => _.clone(r.values));
     }
+
+    // static createEmpty(filePath: string, fileType: ShapefileType, fields: Field[]) {
+    //     const shapefile = Shapefile.createEmpty(filePath, fileType, fields);
+    // }
 
     /**
      * Pushes a feature into this feature source.
@@ -290,7 +294,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     protected async _pushField(field: DbfField): Promise<void>
     protected async _pushField(field: Field): Promise<void>
     protected async _pushField(field: Field | DbfField): Promise<void> {
-        let dbfField = this._toDbfField(field);
+        let dbfField = ShapefileFeatureSource._toDbfField(field);
         this.__shapefile.pushField(dbfField);
     }
 
@@ -302,7 +306,7 @@ export class ShapefileFeatureSource extends FeatureSource {
     protected async _updateField(sourceFieldName: string, newField: Field): Promise<void>
     protected async _updateField(sourceFieldName: string, newField: DbfField): Promise<void>
     protected async _updateField(sourceFieldName: string, newField: Field | DbfField): Promise<void> {
-        let dbfField = this._toDbfField(newField);
+        let dbfField = ShapefileFeatureSource._toDbfField(newField);
         this.__shapefile.updateField(sourceFieldName, dbfField);
     }
 
@@ -325,15 +329,15 @@ export class ShapefileFeatureSource extends FeatureSource {
         return this._shapefile as Shapefile;
     }
 
-    private _mapDbfFieldToField(dbfField: DbfField) {
-        const fieldType = this._mapDbfFieldTypeToName(dbfField.type);
+    private static _mapDbfFieldToField(dbfField: DbfField) {
+        const fieldType = ShapefileFeatureSource._mapDbfFieldTypeToName(dbfField.type);
         const field = new Field(dbfField.name, fieldType, dbfField.length);
         field.extra.set(DBF_FIELD_DECIMAL, dbfField.decimal);
         return field;
     }
 
-    private _mapFieldToDbfField(field: Field) {
-        const fieldType = this._mapNameToDbfFieldType(field.type);
+    private static _mapFieldToDbfField(field: Field) {
+        const fieldType = ShapefileFeatureSource._mapNameToDbfFieldType(field.type);
         const dbfField = new DbfField(field.name, fieldType, field.length);
         if (field.extra.has(DBF_FIELD_DECIMAL)) {
             dbfField.decimal = field.extra.get(DBF_FIELD_DECIMAL);
@@ -342,7 +346,7 @@ export class ShapefileFeatureSource extends FeatureSource {
         return dbfField;
     }
 
-    private _mapDbfFieldTypeToName(fieldType: DbfFieldType) {
+    private static _mapDbfFieldTypeToName(fieldType: DbfFieldType) {
         const enumType = DbfFieldType as any;
         for (let key in enumType) {
             if (enumType[key] === fieldType) {
@@ -353,7 +357,7 @@ export class ShapefileFeatureSource extends FeatureSource {
         return 'unknown';
     }
 
-    private _mapNameToDbfFieldType(name: string): DbfFieldType {
+    private static _mapNameToDbfFieldType(name: string): DbfFieldType {
         const enumType = DbfFieldType as any;
         const found = Object.keys(enumType).some(k => k === name);
         if (found) {
@@ -363,8 +367,8 @@ export class ShapefileFeatureSource extends FeatureSource {
         }
     }
 
-    private _toDbfField(field: Field | DbfField) {
-        let dbfField = field instanceof DbfField ? field : this._mapFieldToDbfField(field);
+    private static _toDbfField(field: Field | DbfField) {
+        let dbfField = field instanceof DbfField ? field : ShapefileFeatureSource._mapFieldToDbfField(field);
         return dbfField;
     }
 
