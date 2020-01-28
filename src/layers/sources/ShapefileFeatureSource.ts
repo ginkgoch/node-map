@@ -256,9 +256,31 @@ export class ShapefileFeatureSource extends FeatureSource {
             .map(r => _.clone(r.values));
     }
 
-    // static createEmpty(filePath: string, fileType: ShapefileType, fields: Field[]) {
-    //     const shapefile = Shapefile.createEmpty(filePath, fileType, fields);
-    // }
+    static createEmpty(filePath: string, fileType: ShapefileType, fields: Field[]): ShapefileFeatureSource {
+        const dbfFields = fields.map(ShapefileFeatureSource._mapFieldToDbfField);
+        const shapefile = Shapefile.createEmpty(filePath, fileType, dbfFields);
+        shapefile.close();
+
+        const newSource = new ShapefileFeatureSource(filePath, 'rs+');
+        return newSource;
+    }
+
+    public async copySchemaAs(targetFilePath: string): Promise<ShapefileFeatureSource> {
+        const openStatus = this.opened;
+
+        if (!openStatus) {
+            await this.open();
+        }
+
+        const fileType = this.shapeType;
+        const fields = await this.fields();
+        if (!openStatus) {
+            await this.close();
+        }
+
+        const newSource = ShapefileFeatureSource.createEmpty(targetFilePath, fileType, fields);
+        return newSource;
+    }
 
     /**
      * Pushes a feature into this feature source.
