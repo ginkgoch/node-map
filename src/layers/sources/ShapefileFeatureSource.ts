@@ -302,6 +302,14 @@ export class ShapefileFeatureSource extends FeatureSource {
     }
 
     /**
+     * Update properties only for a feature for performance consideration. If it is not implemented, please call `update` method instead.
+     * @param {IFeature} feature The feature to update in this feature source.
+     */
+    protected async _updateProperties(feature: IFeature) {
+        this.__shapefile.update(feature, 'properties');
+    }
+
+    /**
      * Removes a feature by a specified feature id.
      * @param {number} id The feature id to remove. 
      */
