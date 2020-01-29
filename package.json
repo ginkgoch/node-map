@@ -1,6 +1,6 @@
 {
   "name": "ginkgoch-map",
-  "version": "1.7.10",
+  "version": "1.8.0",
   "description": "This is a map kit for node.js. Provide capabilities to build map service with various data sources and customized styles.",
   "main": "dist/bundle.js",
   "types": "dist/index.d.ts",
