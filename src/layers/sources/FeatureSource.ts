@@ -379,10 +379,25 @@ export abstract class FeatureSource extends Opener {
      * Updates an existing feature in this feature source.
      * @param {IFeature} feature The feature to update in this feature source. 
      * The difference to the public function is that, the feature parameter is converted to the same SRS of this feature source.
-     * 
      */
     protected async _update(feature: IFeature) {
         this._notImplemented();
+    }
+
+    /**
+     * Update properties only for a feature for performance consideration. If it is not implemented, please call `update` method instead.
+     * @param {IFeature} feature The feature to update in this feature source.
+     */
+    async updateProperties(feature: IFeature) {
+        await this._updateProperties(feature);
+    }
+
+    /**
+     * Update properties only for a feature for performance consideration. If it is not implemented, please call `update` method instead.
+     * @param {IFeature} feature The feature to update in this feature source.
+     */
+    protected async _updateProperties(feature: IFeature) {
+        await this.update(feature);
     }
 
     /**
