@@ -62,6 +62,16 @@ export class Render {
             this.context.antialias = v;
         }
     }
+
+    get imageSmoothingEnabled(): boolean {
+        return this.context ? this.context.imageSmoothingEnabled : true;
+    }
+
+    set imageSmoothingEnabled(v: boolean) {
+        if (this.context) {
+            this.context.imageSmoothingEnabled = v;
+        }
+    }
     /**
      * The concrete native drawing context.
      */
