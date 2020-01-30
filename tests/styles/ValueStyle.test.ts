@@ -71,7 +71,7 @@ describe('ValueStyle', () => {
         await layer.draw(canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'valueStyle-2.png', false);
+        compareImage(canvas.image, 'valueStyle-2.png');
     });
 
     it('json', () => {

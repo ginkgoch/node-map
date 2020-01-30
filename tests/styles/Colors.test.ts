@@ -36,8 +36,8 @@ describe('Colors', () => {
         }
 
         expect(betweenColors).toThrow(/than 1/);
-    });    
-    
+    });
+
     const compareImage = TestUtils.compareImageFunc(name => TestUtils.resolveStyleDataPath(name));
     it('between - normal - 1', () => {
         const colors = Colors.between('#000000', '#ffffff', 3);
@@ -171,17 +171,17 @@ function drawColors(colors: string[]) {
     const envelope = new Envelope(-180, -90, 180, 90);
     const resolution = envelope.width / imageWidth;
     const marginWorld = margin * resolution;
-    
+
     const partWorldWidth = (envelope.width - marginWorld * 2) / (colors.length - 1);
     const canvas = Render.create(512, 256, envelope);
 
     canvas.drawBackground('#ffffff');
-    for(let i = 0; i < colors.length; i++) {
+    for (let i = 0; i < colors.length; i++) {
         const x1 = envelope.minx + marginWorld + partWorldWidth * (i - .5);
         const y1 = envelope.maxy - marginWorld;
         const x2 = x1 + partWorldWidth;
         const y2 = envelope.miny + marginWorld;
-        const polygon = new Polygon(new LinearRing([[x1, y1], [x1, y2], [x2, y2], [x2, y1], [x1, y1]].map(c => ({x: c[0], y: c[1]}))));
+        const polygon = new Polygon(new LinearRing([[x1, y1], [x1, y2], [x2, y2], [x2, y1], [x1, y1]].map(c => ({ x: c[0], y: c[1] }))));
         canvas.drawGeometry(polygon, { fillStyle: colors[i], lineWidth: 0, radius: 14 });
     }
 

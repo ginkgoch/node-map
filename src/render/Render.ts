@@ -10,7 +10,21 @@ import {
     LinearRing, Envelope, IEnvelope
 } from "ginkgoch-geom";
 
-export type RenderAntialias = "default" | "none" | "gray" | "subpixel";
+export type RenderAntialias = 'default' | 'none' | 'gray' | 'subpixel';
+
+export type RenderPatternQuality = 'fast' | 'good' | 'best' | 'nearest' | 'bilinear';
+
+export type RenderQuality = 'fast' | 'good' | 'best' | 'nearest' | 'bilinear';
+
+export type RenderTextDrawingMode = 'path' | 'glyph';
+
+export interface RenderContextOptions {
+    antialias: RenderAntialias,
+    patternQuality: RenderPatternQuality,
+    quality: RenderQuality,
+    textDrawingMode: RenderTextDrawingMode,
+    imageSmoothingEnabled: boolean
+}
 
 /**
  * This class represents a shared renderer that is used in this component.
@@ -48,30 +62,26 @@ export class Render {
      * The world envelope of the viewport.
      */
     envelope: IEnvelope;
+    
+    private _contextOptions: RenderContextOptions;
+
     /**
-     * The antialias setting of canvas.
+     * Gets the drawing context options.
      */
-    get antialias(): RenderAntialias {
-        return this.context ? this.context.antialias : 'default';
+    get contextOptions(): RenderContextOptions {
+        return this._contextOptions;
     }
+
     /**
-     * The antialias setting of canvas.
+     * Sets the drawing context options.
      */
-    set antialias(v: RenderAntialias) {
-        if (this.context) {
-            this.context.antialias = v;
+    set contextOptions(v: RenderContextOptions) {
+        this._contextOptions = v;
+        if (this.context !== undefined) {
+            _.assign(this.context, v);
         }
     }
 
-    get imageSmoothingEnabled(): boolean {
-        return this.context ? this.context.imageSmoothingEnabled : true;
-    }
-
-    set imageSmoothingEnabled(v: boolean) {
-        if (this.context) {
-            this.context.imageSmoothingEnabled = v;
-        }
-    }
     /**
      * The concrete native drawing context.
      */
@@ -81,7 +91,7 @@ export class Render {
      */
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
-    simplifyTolerance: number = 2;
+    simplifyTolerance: number = 1;
 
     /**
      * Constructs a renderer instance.
@@ -100,10 +110,17 @@ export class Render {
         this.scale = GeoUtils.scale(envelope, envelopeUnit, { width: this.width, height: this.height });
         this.resolutionX = Math.abs(envelope.maxx - envelope.minx) / this.width;
         this.resolutionY = Math.abs(envelope.maxy - envelope.miny) / this.height;
+        this._contextOptions = {
+            antialias: 'default',
+            patternQuality: 'good',
+            quality: 'good',
+            textDrawingMode: 'path',
+            imageSmoothingEnabled: true
+        };
 
         this.canvas = NativeFactory.nativeCanvas(this.width, this.height);
         this.context = this.canvas.getContext('2d');
-        this.context.antialias = this.antialias;
+        _.assign(this.context, this.contextOptions);
     }
 
     /**

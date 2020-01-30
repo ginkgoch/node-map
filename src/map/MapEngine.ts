@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { IEnvelope, Envelope, Point, Geometry, Feature, GeometryFactory } from "ginkgoch-geom";
-import { Render, RenderAntialias } from "../render";
+import { Render, RenderContextOptions } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
@@ -66,9 +66,7 @@ export class MapEngine {
      */
     origin: TileOrigin = 'upperLeft';
 
-    antialias: RenderAntialias = 'default';
-
-    imageSmoothingEnabled: boolean = true;
+    renderContextOptions: RenderContextOptions;
 
     /**
      * Constructs a map engine instance.
@@ -83,6 +81,13 @@ export class MapEngine {
         this.srs = new Srs(srs || 'EPSG:3857');
         this.groups = new Array<LayerGroup>();
         this.scales = new Array<number>();
+        this.renderContextOptions = {
+            antialias: 'default',
+            patternQuality: 'good',
+            quality: 'good',
+            textDrawingMode: 'path',
+            imageSmoothingEnabled: true
+        };
 
         if (scales !== undefined) {
             scales.forEach(s => this.scales.push(s));
@@ -295,8 +300,8 @@ export class MapEngine {
         }
 
         const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
-        render.antialias = this.antialias;
-        render.imageSmoothingEnabled = this.imageSmoothingEnabled;
+        render.contextOptions = this.renderContextOptions;
+
         for (let group of this.groups) {
             if (!group.visible) {
                 continue;

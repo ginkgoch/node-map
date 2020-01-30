@@ -46,6 +46,7 @@ describe('Map', () => {
 
     it('draw', async () => {
         const map = getMap();
+
         const image = await map.draw();
         compareImage(image, 'us-states-1.png');
     });
