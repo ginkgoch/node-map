@@ -68,6 +68,8 @@ export class MapEngine {
 
     antialias: RenderAntialias = 'default';
 
+    imageSmoothingEnabled: boolean = true;
+
     /**
      * Constructs a map engine instance.
      * @param {number} width The width of map. Optional with default value 256 px. 
@@ -294,6 +296,7 @@ export class MapEngine {
 
         const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
         render.antialias = this.antialias;
+        render.imageSmoothingEnabled = this.imageSmoothingEnabled;
         for (let group of this.groups) {
             if (!group.visible) {
                 continue;
