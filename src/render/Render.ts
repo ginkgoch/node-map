@@ -51,7 +51,17 @@ export class Render {
     /**
      * The antialias setting of canvas.
      */
-    antialias: RenderAntialias = 'default';
+    get antialias(): RenderAntialias {
+        return this.context ? this.context.antialias : 'default';
+    }
+    /**
+     * The antialias setting of canvas.
+     */
+    set antialias(v: RenderAntialias) {
+        if (this.context) {
+            this.context.antialias = v;
+        }
+    }
     /**
      * The concrete native drawing context.
      */
