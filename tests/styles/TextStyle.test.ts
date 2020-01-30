@@ -88,7 +88,8 @@ describe('TextStyle', () => {
             textAlign: 'center',
             font: '12px ARIAL',
             lineWidth: 0,
-            fillStyle: '#ff0000'
+            fillStyle: '#ff0000',
+            location: 'centroid'
         });
     });
 
