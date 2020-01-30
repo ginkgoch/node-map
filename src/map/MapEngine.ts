@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { IEnvelope, Envelope, Point, Geometry, Feature, GeometryFactory } from "ginkgoch-geom";
-import { Render, Image } from "../render";
+import { Render, RenderAntialias } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
@@ -65,6 +65,8 @@ export class MapEngine {
      * Some tiling system is calculating from lower right corner, this is the property to set.
      */
     origin: TileOrigin = 'upperLeft';
+
+    antialias: RenderAntialias = 'default';
 
     /**
      * Constructs a map engine instance.
@@ -291,6 +293,7 @@ export class MapEngine {
         }
 
         const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
+        render.antialias = this.antialias;
         for (let group of this.groups) {
             if (!group.visible) {
                 continue;

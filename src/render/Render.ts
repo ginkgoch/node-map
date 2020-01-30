@@ -10,6 +10,8 @@ import {
     LinearRing, Envelope, IEnvelope
 } from "ginkgoch-geom";
 
+export type RenderAntialias = "default" | "none" | "gray" | "subpixel";
+
 /**
  * This class represents a shared renderer that is used in this component.
  */
@@ -49,7 +51,7 @@ export class Render {
     /**
      * The antialias setting of canvas.
      */
-    antialias: "default" | "none" | "gray" | "subpixel" = 'default';
+    antialias: RenderAntialias = 'default';
     /**
      * The concrete native drawing context.
      */
