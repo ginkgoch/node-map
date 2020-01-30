@@ -271,9 +271,11 @@ export class Render {
         }
 
         _.extend(this.context, style);
+        _.extend(this.context, this.contextOptions);
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
+            _.extend(this.context, this.contextOptions);
             this.context.stroke();
         }
     }
