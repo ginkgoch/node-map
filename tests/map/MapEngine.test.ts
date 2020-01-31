@@ -3,7 +3,7 @@ import { MapEngine } from '../../src/map';
 import { FillStyle } from '../../src/styles';
 import TestUtils from '../shared/TestUtils';
 import { LayerGroup, MemoryFeatureSource, Srs } from '../../src/layers';
-import { Point } from '../../src';
+import { Point, Constants } from '../../src';
 
 const compareImage = TestUtils.compareImageFunc(name => './tests/data/map/' + name);
 
@@ -68,9 +68,33 @@ describe('Map', () => {
         const features = await map.intersection(point, 'WGS84', 3);
         
         expect(features.length).toBe(1);
-        expect(features[0].layer).toEqual(map.layer('USStates')!.id);
+        expect(features[0].layer).toEqual(map.layer('USStates')!.name);
         expect(features[0].features.length).toBe(1);
         expect(features[0].features[0].properties.get('STATE_NAME')).toEqual('Texas');
+    });
+
+    it('intersection without invisible', async () => {
+        const map = getMap();
+        map.srs = new Srs('WGS84');
+        map.layer('USStates')!.source.srs = 'WGS84';
+        map.layer('USStates')!.minimumScale = Constants.DEFAULT_SCALES[2];
+
+        const point = new Point(-99.13513183593751, 31.481379984249294);
+        const features = await map.intersection(point, 'WGS84', 3);
+        
+        expect(features.length).toBe(0);
+    });
+
+    it('intersection with invisible', async () => {
+        const map = getMap();
+        map.srs = new Srs('WGS84');
+        map.layer('USStates')!.source.srs = 'WGS84';
+        map.layer('USStates')!.minimumScale = Constants.DEFAULT_SCALES[2];
+
+        const point = new Point(-99.13513183593751, 31.481379984249294);
+        const features = await map.intersection(point, 'WGS84', 3, 5, true);
+        
+        expect(features.length).toBe(1);
     });
 });
 
