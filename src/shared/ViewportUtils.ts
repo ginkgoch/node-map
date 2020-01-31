@@ -62,10 +62,6 @@ export class ViewportUtils {
         geom._coordinates = coordinates;
     }
 
-    private static _shouldSuppress(c1: ICoordinate, c2: ICoordinate, resolution: number, tolerance: number) {
-        return Math.abs(c1.x - c2.x) / resolution > tolerance || Math.abs(c1.y - c2.y) / resolution > tolerance;
-    }
-
     private static _compressCoordinates(coordinates: ICoordinate[], resolution: number, tolerance: number) {
         let previous = coordinates[0];
         let compressed = [previous];
@@ -73,7 +69,7 @@ export class ViewportUtils {
             const current = coordinates[i];
             const suppressed = this._shouldSuppress(previous, current, resolution, tolerance);
             if (!suppressed) {
-                compressed.push(coordinates[i]);
+                compressed.push(current);
                 previous = current;
             }
         }
@@ -81,5 +77,9 @@ export class ViewportUtils {
         compressed.push(coordinates[coordinates.length - 1]);
 
         return compressed;
+    }
+
+    private static _shouldSuppress(c1: ICoordinate, c2: ICoordinate, resolution: number, tolerance: number) {
+        return Math.abs(c1.x - c2.x) / resolution < tolerance || Math.abs(c1.y - c2.y) / resolution < tolerance;
     }
 }
