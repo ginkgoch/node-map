@@ -239,7 +239,7 @@ export class MapEngine {
      * @param pointTolerance Tolerance for point geometry.
      * @returns {Array<{layerID:string, features: Feature[]}>} The intersected features that are categorized by layers.
      */
-    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10) {
+    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10, includeInvisibleLayers: boolean = false, layersToQuery?: string[]) {
         Validator.checkSrsIsValid(this.srs);
 
         const projection = new Projection(geomSrs, this.srs.projection);
@@ -255,9 +255,19 @@ export class MapEngine {
             envelope.maxy = geomProjected.y + worldTolerance;
         }
 
+        const scaleToQuery = this.scales[zoomLevel];
         const layers = _.flatMap(this.groups, g => g.layers);
         const intersectedFeatures: Array<{ layer: string, features: Feature[] }> = [];
         for (let layer of layers) {
+            if (!includeInvisibleLayers && !layer.visible) continue;
+            if (!includeInvisibleLayers && (layer.maximumScale < scaleToQuery || layer.minimumScale > scaleToQuery)) {
+                continue;
+            }
+
+            if (layersToQuery !== undefined && !layersToQuery.includes(layer.name)) {
+                continue;
+            }
+
             try {
                 await layer.open();
                 let features = await layer.source.features(envelope);
@@ -265,7 +275,7 @@ export class MapEngine {
                 features = features.filter(f => f.geometry.intersects(testPolygon));
                 if (features.length > 0) {
                     intersectedFeatures.push({
-                        layer: layer.id,
+                        layer: layer.name,
                         features
                     });
                 }
