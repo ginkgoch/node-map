@@ -7,6 +7,7 @@ In this page, I will introduce how to install the dependencies and set the dev e
 `Ginkgoch MAP` is a cross-platform GIS development library. For desktop, we could take the advantage of `electron` and HTML5 APIs for rendering graphics. While for services, or command tools, due to the lack of graphics support by Node.JS, I chose [canvas](https://www.npmjs.com/package/canvas) as my graphics module. `Canvas` module uses `cario` which is required dependency for `Ginkgoch MAP` library. Refer to [the official document](https://github.com/Automattic/node-canvas) to prepare the env. 
 
 Here is also a snapshot for the reference.
+
 | OS      | Command                                                      |
 | ------- | ------------------------------------------------------------ |
 | macOS   | brew install pkg-config cairo libpng jpeg giflib             |
