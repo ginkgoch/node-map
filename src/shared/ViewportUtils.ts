@@ -1,7 +1,30 @@
-import { Geometry, Point, MultiPoint, LineString, ICoordinate, MultiLineString, Polygon, LinearRing, MultiPolygon, GeometryCollection } from "ginkgoch-geom";
+import { Geometry, Point, MultiPoint, LineString, ICoordinate, MultiLineString, Polygon, LinearRing, MultiPolygon, GeometryCollection, IEnvelope, Envelope } from "ginkgoch-geom";
 import { GeoUtils } from "./GeoUtils";
 
 export class ViewportUtils {
+    public static adjustEnvelopeToMatchScreenSize(envelope: IEnvelope, screenWidth: number, screenHeight: number, marginPercentage: number = 0): Envelope {
+        let [ex, ey] = [Math.abs(envelope.maxx - envelope.minx), Math.abs(envelope.maxy - envelope.miny)];
+        let [rx, ry] = [ex / screenWidth, ey / screenHeight];
+        let r = Math.max(rx, ry);
+        let [cx, cy] = [(envelope.minx + envelope.maxx) * 0.5, (envelope.miny + envelope.maxy) * .5];
+
+        let newMinX = cx - r * screenWidth * .5;
+        let newMaxX = cx + r * screenWidth * .5;
+        let newMinY = cy - r * screenHeight * .5;
+        let newMaxY = cy + r * screenHeight * .5;
+
+        if (marginPercentage !== 0) {
+            let marginSizeX = (newMaxX - newMinX) * marginPercentage * .005;
+            let marginSizeY = (newMaxY - newMinY) * marginPercentage * .005;
+            newMinX -= marginSizeX;
+            newMaxX += marginSizeX;
+            newMinY -= marginSizeY;
+            newMaxY += marginSizeY;
+        }
+
+        return new Envelope(newMinX, newMinY, newMaxX, newMaxY);
+    }
+
     public static compressGeometry<T extends Geometry>(geom: T, geomSrs: string, scale: number, tolerance: number = 1): T {
         const unit = GeoUtils.unit(geomSrs);
         const resolution = GeoUtils.resolution(scale, unit);
