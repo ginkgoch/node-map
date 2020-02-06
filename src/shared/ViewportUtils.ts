@@ -104,6 +104,6 @@ export class ViewportUtils {
     }
 
     private static _shouldSuppress(c1: ICoordinate, c2: ICoordinate, resolution: number, tolerance: number) {
-        return (Math.abs(c1.x - c2.x) / resolution) < tolerance || (Math.abs(c1.y - c2.y) / resolution) < tolerance;
+        return (Math.abs(c1.x - c2.x) / resolution) < tolerance && (Math.abs(c1.y - c2.y) / resolution) < tolerance;
     }
 }
