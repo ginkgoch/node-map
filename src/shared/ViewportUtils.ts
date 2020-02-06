@@ -62,9 +62,10 @@ export class ViewportUtils {
 
     private static _compressPolygon(geom: Polygon, resolution: number, tolerance: number) {
         this._compressLinearRing(geom.externalRing, resolution, tolerance);
-        for (let i = 0; i < geom.internalRings.length; i++) {
-            this._compressLinearRing(geom.internalRings[i], resolution, tolerance);
-        }
+        geom.internalRings = geom.internalRings.map(r => {
+            this._compressLinearRing(r, resolution, tolerance);
+            return r;
+        }).filter(r => r._coordinates.length >= 4);
     }
 
     private static _compressLinearRing(geom: LinearRing, resolution: number, tolerance: number) {
@@ -103,6 +104,6 @@ export class ViewportUtils {
     }
 
     private static _shouldSuppress(c1: ICoordinate, c2: ICoordinate, resolution: number, tolerance: number) {
-        return Math.abs(c1.x - c2.x) / resolution < tolerance || Math.abs(c1.y - c2.y) / resolution < tolerance;
+        return (Math.abs(c1.x - c2.x) / resolution) < tolerance || (Math.abs(c1.y - c2.y) / resolution) < tolerance;
     }
 }
