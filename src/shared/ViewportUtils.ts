@@ -1,4 +1,5 @@
-import { Geometry, Point, MultiPoint, LineString, ICoordinate, MultiLineString, Polygon, LinearRing, MultiPolygon, GeometryCollection, IEnvelope, Envelope } from "ginkgoch-geom";
+import _ from 'lodash';
+import { Geometry, Point, MultiPoint, LineString, ICoordinate, MultiLineString, Polygon, LinearRing, MultiPolygon, GeometryCollection, IEnvelope, Envelope, IFeature } from "ginkgoch-geom";
 import { GeoUtils } from "./GeoUtils";
 
 export class ViewportUtils {
@@ -25,6 +26,63 @@ export class ViewportUtils {
         return new Envelope(newMinX, newMinY, newMaxX, newMaxY);
     }
 
+    public static compressFeatures(features: IFeature[], featureSrs: string, scale: number, tolerance: number = 1) {
+        const unit = GeoUtils.unit(featureSrs);
+        const resolution = GeoUtils.resolution(scale, unit);
+        
+        const compressed = new Array<IFeature>();
+        const pointFeatures = new Array<IFeature>();
+        for (let feature of features) {
+            let geom = feature.geometry
+            if (geom instanceof Point) {
+                pointFeatures.push(feature);
+            } else {
+                const compressedGeom = this._compressGeometry(geom, resolution, tolerance);
+                feature.geometry = compressedGeom;
+                compressed.push(feature);
+            }
+        }
+
+        if (pointFeatures.length > 2) {
+            const compressedPointFeatures = this._compressArbitraryCoordinatedObjects(pointFeatures, f => <Point>f.geometry, resolution, tolerance);
+            compressed.push(...compressedPointFeatures);
+        }
+
+        return compressed;
+    }
+
+    public static compressFeature(feature: IFeature, featureSrs: string, scale: number, tolerance: number = 1) {
+        if (_.isEmpty(feature.geometry)) {
+            return feature;
+        }
+
+        feature.geometry = this.compressGeometry(feature.geometry, featureSrs, scale, tolerance);
+        return feature;
+    }
+
+    public static compressGeometries(geometries: Geometry[], geomSrs: string, scale: number, tolerance: number = 1) {
+        const unit = GeoUtils.unit(geomSrs);
+        const resolution = GeoUtils.resolution(scale, unit);
+        
+        const compressed = new Array<Geometry>();
+        const pointsBuffer = new MultiPoint();
+        for (let geom of geometries) {
+            if (geom instanceof Point) {
+                pointsBuffer._geometries.push(geom);
+            } else {
+                const compressedGeom = this._compressGeometry(geom, resolution, tolerance);
+                compressed.push(compressedGeom);
+            }
+        }
+
+        if (pointsBuffer._geometries.length > 2) {
+            this._compressMultiPoint(pointsBuffer, resolution, tolerance);
+            compressed.push(...pointsBuffer._geometries);
+        }
+
+        return compressed;
+    }
+
     public static compressGeometry<T extends Geometry>(geom: T, geomSrs: string, scale: number, tolerance: number = 1): T {
         const unit = GeoUtils.unit(geomSrs);
         const resolution = GeoUtils.resolution(scale, unit);
@@ -43,6 +101,8 @@ export class ViewportUtils {
             this._compressMultiPolygon(geom, resolution, tolerance);
         } else if (geom instanceof GeometryCollection) {
             this._compressGeomCollection(geom, resolution, tolerance);
+        } else if (geom instanceof MultiPoint) {
+            this._compressMultiPoint(geom, resolution, tolerance);
         }
 
         return geom;
@@ -70,7 +130,7 @@ export class ViewportUtils {
 
     private static _compressLinearRing(geom: LinearRing, resolution: number, tolerance: number) {
         let coordinates = geom._coordinates;
-        coordinates = this._compressCoordinates(coordinates, resolution, tolerance);
+        coordinates = this._compressOrderedCoordinates(coordinates, resolution, tolerance);
         geom._coordinates = coordinates;
     }
 
@@ -82,11 +142,20 @@ export class ViewportUtils {
 
     private static _compressLineString(geom: LineString, resolution: number, tolerance: number) {
         let coordinates = geom._coordinates;
-        coordinates = this._compressCoordinates(coordinates, resolution, tolerance);
+        coordinates = this._compressOrderedCoordinates(coordinates, resolution, tolerance);
         geom._coordinates = coordinates;
     }
 
-    private static _compressCoordinates(coordinates: ICoordinate[], resolution: number, tolerance: number) {
+    private static _compressMultiPoint(geom: MultiPoint, resolution: number, tolerance: number) {
+        if (geom._geometries.length === 0) {
+            return;
+        }
+
+        const compressed = this._compressArbitraryCoordinates(geom._geometries, resolution, tolerance);
+        geom._geometries = compressed;
+    }
+
+    private static _compressOrderedCoordinates(coordinates: ICoordinate[], resolution: number, tolerance: number) {
         let previous = coordinates[0];
         let compressed = [previous];
         for (let i = 1; i < coordinates.length - 1; i++) {
@@ -103,7 +172,70 @@ export class ViewportUtils {
         return compressed;
     }
 
+    private static _compressArbitraryCoordinatedObjects<T>(objects: T[], getCoordinate: (obj: T) => ICoordinate, resolution: number, tolerance: number) {
+        const compressor = new CoordinateCompressor<T>(resolution, tolerance, getCoordinate);
+        compressor.push(...objects);
+        return compressor.getCompressed();
+    }
+
+    private static _compressArbitraryCoordinates<T extends ICoordinate>(coordinates: T[], resolution: number, tolerance: number) {
+        const compressed = this._compressArbitraryCoordinatedObjects(coordinates, c => c, resolution, tolerance);
+        return compressed;
+    }
+
     private static _shouldSuppress(c1: ICoordinate, c2: ICoordinate, resolution: number, tolerance: number) {
         return (Math.abs(c1.x - c2.x) / resolution) < tolerance && (Math.abs(c1.y - c2.y) / resolution) < tolerance;
+    }
+}
+
+class CoordinateCompressor<T> {
+    tolerance: number;
+    resolution: number;
+    matrix: Map<number, Map<number, any>>;
+    toCoordinateMapper: (n: T) => ICoordinate | undefined;
+
+
+    constructor(resolution: number, tolerance: number, toCoordinateMapper: (n: T) => ICoordinate | undefined) {
+        this.resolution = resolution;
+        this.tolerance = tolerance;
+        this.matrix = new Map<number, Map<number, T>>();
+        this.toCoordinateMapper = toCoordinateMapper;
+    }
+
+    push(...objects: T[]) {
+        if (this.tolerance < 1) {
+            this.tolerance = 1;
+        }
+
+        let res = this.resolution * this.tolerance;
+        for (let obj of objects) {
+            let c = this.toCoordinateMapper(obj);
+            if (c === undefined) {
+                continue;
+            }
+
+            let sx = Math.trunc(c.x / res);
+            let sy = Math.trunc(c.y / res);
+            
+            if (!this.matrix.has(sx)) {
+                this.matrix.set(sx, new Map<number, T>());
+            }
+
+            const currentCol = this.matrix.get(sx)!;
+            if (!currentCol.has(sy)) {
+                currentCol.set(sy, obj);
+            }
+        }
+    }
+
+    getCompressed() {
+        const compressed = new Array<T>();
+        this.matrix.forEach(cs => {
+            cs.forEach(v => {
+                compressed.push(v);
+            });
+        });
+
+        return compressed;
     }
 }
