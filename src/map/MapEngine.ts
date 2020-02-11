@@ -4,6 +4,7 @@ import { Render, RenderContextOptions } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
+import { MapOptions } from "./MapOptions";
 
 /**
  * This class represents a complete structure of a map instance. 
@@ -141,6 +142,18 @@ export class MapEngine {
             return (<any[]>groupsJson).map(g => LayerGroup.parseJSON(g));
         });
         return map;
+    }
+
+    static fromOptions(mapOptions: MapOptions) {
+        mapOptions = _.defaults(mapOptions, {
+            width: 256,
+            height: 256,
+            crs: 'EPSG:4326',
+            scales: Constants.DEFAULT_SCALES
+        });
+
+        let mapEngine = new MapEngine(mapOptions.width, mapOptions.height, mapOptions.crs, mapOptions.scales);
+        return mapEngine;
     }
 
     /**
