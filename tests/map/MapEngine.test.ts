@@ -1,5 +1,5 @@
 import { ShapefileFeatureSource, FeatureLayer } from '..';
-import { MapEngine } from '../../src/map';
+import { MapEngine, LeafletMapOptions } from '../../src/map';
 import { FillStyle } from '../../src/styles';
 import TestUtils from '../shared/TestUtils';
 import { LayerGroup, MemoryFeatureSource, Srs } from '../../src/layers';
@@ -95,6 +95,26 @@ describe('Map', () => {
         const features = await map.intersection(point, 'WGS84', 3, 5, true);
         
         expect(features.length).toBe(1);
+    });
+
+    it('fromOptions', () => {
+        let mapEngine = MapEngine.fromOptions(LeafletMapOptions.DEFAULT);
+        expect(mapEngine.width).toBe(256);
+        expect(mapEngine.height).toBe(256);
+        expect(mapEngine.srs.projection).toBe('EPSG:3857');
+        expect(mapEngine.scales.length).toBe(20);
+
+        mapEngine = MapEngine.fromOptions(LeafletMapOptions.WGS84);
+        expect(mapEngine.width).toBe(256);
+        expect(mapEngine.height).toBe(256);
+        expect(mapEngine.srs.projection).toBe('EPSG:4326');
+        expect(mapEngine.scales.length).toBe(19);
+
+        mapEngine = MapEngine.fromOptions({width: 512, crs: 'EPSG:900913'});
+        expect(mapEngine.width).toBe(512);
+        expect(mapEngine.height).toBe(256);
+        expect(mapEngine.srs.projection).toBe('EPSG:900913');
+        expect(mapEngine.scales.length).toBe(20);
     });
 });
 

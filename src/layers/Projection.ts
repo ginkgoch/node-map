@@ -159,6 +159,10 @@ export class Projection {
         }
     }
 
+    get isValid(): boolean {
+        return this.from.projection !== undefined && this.to.projection !== undefined && this.from.projection !== this.to.projection;
+    }
+
     private _forwardCoordinate(coordinate: ICoordinate) {
         return this._transform(coordinate, () => {
             return (<proj4.Converter>this._converter).forward(coordinate);

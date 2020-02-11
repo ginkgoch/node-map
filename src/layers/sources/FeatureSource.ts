@@ -97,7 +97,10 @@ export abstract class FeatureSource extends Opener {
 
         const fieldsNorm = await this._normalizeFields(fields);
         const featuresIn = await this._features(envelopeIn, fieldsNorm);
-        let featuresOut = this._forwardProjection(featuresIn);
+        let featuresOut = featuresIn;
+        if (this.projection.isValid) {
+            featuresOut = this._forwardProjection(featuresIn);
+        }
 
         if (this.decorateFeature !== undefined) {
             featuresOut = featuresOut.map(this.decorateFeature);
@@ -130,7 +133,9 @@ export abstract class FeatureSource extends Opener {
             return undefined;
         }
 
-        feature = this._forwardProjection(feature);
+        if (this.projection.isValid) {
+            feature = this._forwardProjection(feature);
+        }
 
         if (this.decorateFeature !== undefined) {
             feature = this.decorateFeature(feature);
