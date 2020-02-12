@@ -3,29 +3,38 @@ import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { IFeature, GeometryType } from "ginkgoch-geom";
+import { Image } from "../render";
+
+export type FillPatternRepeat = 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
+
+export interface FillPattern {
+    image: Image,
+    repeat?: FillPatternRepeat
+}
 
 /**
  * This class represents a style for an area based geometries (e.g. polygon, multi-polygon) only.
  */
 export class FillStyle extends Style {
-    fillStyle: string;
+    fillStyle: string | FillPattern;
     lineWidth: number;
     strokeStyle: string;
 
     /**
      * Constructs a fill style instance.
-     * @param {string} fillStyle The fill color string. 
+     * @param {string | FillPattern} fillStyle The fill color string. 
      * @param {string} strokeStyle The stroke color string.
      * @param {number} lineWidth The stroke width in pixel.
      * @param {string} name The name of this style.
      */
-    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 2, name?: string) {
+    constructor(fillStyle?: string | FillPattern, strokeStyle?: string, lineWidth = 2, name?: string) {
         super();
 
         this.name = name || 'Fill Style';
         this.type = JSONKnownTypes.fillStyle;
         this.lineWidth = lineWidth;
-        this.fillStyle = StyleUtils.colorOrRandomLight(fillStyle);
+        
+        this.fillStyle = fillStyle || StyleUtils.colorOrRandomLight(fillStyle);
         this.strokeStyle = StyleUtils.colorOrRandomDark(strokeStyle);
     }
 
