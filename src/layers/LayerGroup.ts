@@ -47,8 +47,8 @@ export class LayerGroup {
      * This function unions the envelope of each layers as a minimum envelope to contains all layers.
      * @returns {Envelope} A minimum envelope to contains all the layers inside.
      */
-    async envelope() {
-        const envelopes = new Array<IEnvelope>();
+    async envelope(): Promise<Envelope> {
+        const envelopes = new Array<Envelope>();
         for (let layer of this.layers) {
             await layer.open();
             const envelope = await layer.envelope();

@@ -69,15 +69,15 @@ export class MultiSourceFeatureLayer extends Layer {
 
     /**
      * Gets the envelope of this layer.
-     * @returns {IEnvelope} The envelope of this layer.
+     * @returns {Envelope} The envelope of this layer.
      */
-    async envelope() {
+    async envelope(): Promise<Envelope> {
         Validator.checkOpened(this);
 
-        let envelope: IEnvelope = new Envelope(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
+        let envelope = new Envelope(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
         for (let source of this.sources) {
             let currentEnvelope = await source.envelope();
-            envelope = Envelope.union(envelope!, currentEnvelope);
+            envelope.expand(currentEnvelope);
         }
 
         return envelope;

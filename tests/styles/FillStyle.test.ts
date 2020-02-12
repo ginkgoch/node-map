@@ -27,7 +27,7 @@ describe('FillStyle', () => {
         style.draw(feature, canvas);
         canvas.flush();
 
-        compareImage(canvas.image, 'fillstyle-pattern.png', true);
+        compareImage(canvas.image, 'fillstyle-pattern.png');
     });
 
     it('json', () => {

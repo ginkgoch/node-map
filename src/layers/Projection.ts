@@ -1,4 +1,4 @@
-import { ICoordinate, IEnvelope, Geometry, LinearRing, Polygon } from "ginkgoch-geom";
+import { ICoordinate, IEnvelope, Geometry, LinearRing, Polygon, Envelope } from "ginkgoch-geom";
 import proj4 from 'proj4';
 import _ from "lodash";
 import { Unit, GeoUtils } from "../shared";
@@ -144,12 +144,12 @@ export class Projection {
     /**
      * Converts the coordinate, envelope or geometry from source SRS to target SRS.
      * @param {ICoordinate|IEnvelope|Geometry} geom The geometry to convert from source to target direction.
-     * @returns {ICoordinate|IEnvelope|Geometry} The converted geometry in target SRS.
+     * @returns {ICoordinate|Envelope|Geometry} The converted geometry in target SRS.
      */
     forward(coordinate: ICoordinate): ICoordinate
-    forward(coordinate: IEnvelope): IEnvelope
+    forward(coordinate: IEnvelope): Envelope
     forward(coordinate: Geometry): Geometry
-    forward(geom: ICoordinate | IEnvelope | Geometry): ICoordinate | IEnvelope | Geometry {
+    forward(geom: ICoordinate | IEnvelope | Geometry): ICoordinate | Envelope | Geometry {
         if (geom instanceof Geometry) {
             return this._forwardGeometry(geom);
         } else if (Projection._isInstanceOfICoordinate(geom)) {
@@ -175,7 +175,7 @@ export class Projection {
         });
     }
 
-    private _forwardEnvelope(envelope: IEnvelope) {
+    private _forwardEnvelope(envelope: IEnvelope): Envelope {
         const segmentCount = 4;
         const polygon = Projection._segmentEnvelope(envelope, segmentCount);
         const projectedPolygon = this._forwardGeometry(polygon);
@@ -214,7 +214,7 @@ export class Projection {
         });
     }
 
-    private _inverseEnvelope(envelope: IEnvelope) {
+    private _inverseEnvelope(envelope: IEnvelope): Envelope {
         const segmentCount = 4;
         const polygon = Projection._segmentEnvelope(envelope, segmentCount);
         const projectedPolygon = this._inverseGeometry(polygon);
