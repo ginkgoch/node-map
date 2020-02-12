@@ -1,6 +1,7 @@
 export * from './Field';
 export * from './LayerGroup';
 export * from './Projection';
+export * from './Layer';
 export * from './FeatureLayer';
 export * from './sources/FeatureSource';
 export * from './PropertyAggregator';

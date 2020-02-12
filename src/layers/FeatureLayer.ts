@@ -1,12 +1,12 @@
 import _ from "lodash";
 import { FeatureSource } from "./sources/FeatureSource";
 import { Style } from "../styles/Style";
-import { Render, Image } from "../render";
-import { Opener, Validator, Constants, JSONKnownTypes } from "../shared";
+import { Render } from "../render";
+import { Validator, JSONKnownTypes } from "../shared";
 import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 import uuid from "../shared/UUID";
-import { IEnvelope } from "ginkgoch-geom";
+import { Layer } from "./Layer";
 
 /**
  * FeatureLayer responses for rendering FeatureSource with styles.
@@ -18,15 +18,9 @@ import { IEnvelope } from "ginkgoch-geom";
  * ...
  * ```
  */
-export class FeatureLayer extends Opener {
-    id: string;
-    name: string;
+export class FeatureLayer extends Layer {
     source: FeatureSource;
     styles: Array<Style>;
-    minimumScale: number;
-    maximumScale: number;
-    visible = true;
-    margin = 5;
 
     /**
      * Constructs a FeatureLayer instance.
@@ -34,14 +28,11 @@ export class FeatureLayer extends Opener {
      * @param {string} name The name of this layer. Optional with default value `layer-${uuid()}`.
      */
     constructor(source: FeatureSource, name?: string) {
-        super();
+        super(name);
 
-        this.id = 'layer-' + uuid();
         this.name = name || source.name;
         this.source = source;
         this.styles = new Array<Style>();
-        this.minimumScale = 0;
-        this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     }
 
     /**
@@ -78,16 +69,16 @@ export class FeatureLayer extends Opener {
         return await this.source.envelope();
     }
 
+    protected getCRS() {
+        return this.source.projection.from;
+    }
+
     /**
      * Draws this layer with styles and feature source in a restricted envelope.
      * @param {Render} render The renderer that holds the image source and necessary spatial infos.
      */
-    async draw(render: Render) {
-        if (!this.visible || !this._scaleInRange(render.scale, this.maximumScale, this.minimumScale)) {
-            return;
-        }
-
-        const styles = this.styles.filter(s => s.visible && this._scaleInRange(render.scale, s.maximumScale, s.minimumScale));
+    async _draw(render: Render) {
+        const styles = this.styles.filter(s => s.visible && this.scaleVisible(render.scale));
         if (styles.length === 0) {
             return;
         }
@@ -102,48 +93,6 @@ export class FeatureLayer extends Opener {
         styles.forEach(style => {
             style.drawAll(features, render);
         });
-    }
-
-    /**
-     * Enlarges the specified envelope based on the `margin` property.
-     * @param {IEnvelope} envelope The envelope to enlarge.
-     * @param {Render} render The render.
-     * @returns {IEnvelope} The enlarged envelope.
-     */
-    applyMargin(envelope: IEnvelope, render: Render) {
-        if (this.margin > 0) {
-            envelope = _.clone(envelope);
-            const marginWidth = render.resolutionX * this.margin;
-            const marginHeight = render.resolutionY * this.margin;
-            envelope.minx -= marginWidth;
-            envelope.maxx += marginWidth;
-            envelope.miny -= marginHeight;
-            envelope.maxy += marginHeight;
-        }
-
-        return envelope;
-    }
-
-    /**
-     * Gets a thumbnail image of this layer.
-     * @param {number} width The width in pixel of the thumbnail image.
-     * @param {number} height The height in pixel of the thumbnail image.
-     */
-    async thumbnail(width = 256, height = 256): Promise<Image> {
-        const envelope = await this.envelope();
-        const render = Render.create(width, height, envelope, this.source.projection.from.unit);
-        await this.draw(render);
-        render.flush();
-
-        return render.image;
-    }
-
-    /**
-     * Converts this layer into a JSON format data.
-     * @returns A JSON format data of this layer.
-     */
-    toJSON(): any {
-        return this._toJSON();
     }
 
     /**
@@ -183,9 +132,5 @@ export class FeatureLayer extends Opener {
         });
 
         return layer;
-    }
-
-    private _scaleInRange(scale: number, maxScale: number, minScale: number) {
-        return scale >= minScale && scale <= maxScale;
     }
 }
