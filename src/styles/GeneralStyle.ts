@@ -2,13 +2,14 @@ import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { PointSymbolType } from "./PointStyle";
 import { JSONKnownTypes } from "../shared/JSONUtils";
+import { FillPattern } from "./FillStyle";
 
 /**
  * This class represents a general style regardless the geometry type to draw.
  */
 export class GeneralStyle extends Style {
     /** The fill color string. e.g. "#ff0000" or "red". */
-    fillStyle: string;
+    fillStyle: string | FillPattern;
     /** The stroke width in pixel. */
     lineWidth: number;
     /** The stroke color string. e.g. "#000000" or "black". */
@@ -19,14 +20,15 @@ export class GeneralStyle extends Style {
     radius: number;
 
     /** Constructs a general style instance that regardless the geometry type to draw. */
-    constructor(fillStyle?: string, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default', name?: string) {
+    constructor(fillStyle?: string | FillPattern, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default', name?: string) {
         super();
 
         this.name = name || 'General Style';
         this.type = JSONKnownTypes.generalStyle;
         this.lineWidth = lineWidth;
-        this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
-        this.strokeStyle = strokeStyle || this.fillStyle;
+
+        this.fillStyle = fillStyle || StyleUtils.colorOrRandomDark(fillStyle);
+        this.strokeStyle = strokeStyle || 'transparent';
         this.symbol = symbol;
         this.radius = radius;
     }

@@ -272,11 +272,20 @@ export class Render {
 
         _.extend(this.context, style);
         _.extend(this.context, this.contextOptions);
+
+        this._setPattern(style);
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
             _.extend(this.context, this.contextOptions);
             this.context.stroke();
+        }
+    }
+
+    private _setPattern(style: any) {
+        if (typeof style.fillStyle === 'object' ) {
+            let fillPattern = this.context.createPattern(style.fillStyle.image.source, style.fillStyle.repeat || 'repeat');
+            this.context.fillStyle = fillPattern;
         }
     }
 
