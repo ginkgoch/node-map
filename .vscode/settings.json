@@ -12,6 +12,8 @@
         "endregion",
         "filestream",
         "ginkgoch",
+        "latlng",
+        "latlong",
         "maxx",
         "maxy",
         "miny",
