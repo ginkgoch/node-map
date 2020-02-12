@@ -98,7 +98,7 @@ export class MemoryFeatureSource extends FeatureSource {
 
     /**
      * Gets the envelope (bounding box) of this feature source.
-     * @returns {Promise<IEnvelope>} The envelope (bounding box) of this feature source.
+     * @returns {Promise<Envelope>} The envelope (bounding box) of this feature source.
      */
     protected async _envelope(): Promise<Envelope> {
         return this._interFeatures.envelope();

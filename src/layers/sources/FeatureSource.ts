@@ -264,9 +264,9 @@ export abstract class FeatureSource extends Opener {
 
     /**
      * Gets the envelope (bounding box) of this feature source.
-     * @returns {Promise<IEnvelope>} The envelope (bounding box) of this feature source.
+     * @returns {Promise<Envelope>} The envelope (bounding box) of this feature source.
      */
-    async envelope() {
+    async envelope(): Promise<Envelope> {
         Validator.checkOpened(this, !this._openRequired);
 
         let envelope = await this._envelope();
@@ -275,7 +275,7 @@ export abstract class FeatureSource extends Opener {
 
     /**
      * Gets the envelope (bounding box) of this feature source.
-     * @returns {Promise<IEnvelope>} The envelope (bounding box) of this feature source.
+     * @returns {Promise<Envelope>} The envelope (bounding box) of this feature source.
      */
     protected abstract async _envelope(): Promise<Envelope>;
 

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import uuid from "../shared/UUID";
 import { Constants, Render, Image } from "..";
-import { IEnvelope } from "ginkgoch-geom";
+import { IEnvelope, Envelope } from "ginkgoch-geom";
 import { Srs } from "./Projection";
 import { Opener } from "../shared/Opener";
 
@@ -22,26 +22,27 @@ export abstract class Layer extends Opener {
         this.maximumScale = Constants.POSITIVE_INFINITY_SCALE;
     }
 
-    abstract async envelope(): Promise<IEnvelope>;
+    abstract async envelope(): Promise<Envelope>;
 
     /**
      * Enlarges the specified envelope based on the `margin` property.
      * @param {IEnvelope} envelope The envelope to enlarge.
      * @param {Render} render The render.
-     * @returns {IEnvelope} The enlarged envelope.
+     * @returns {Envelope} The enlarged envelope.
      */
-    applyMargin(envelope: IEnvelope, render: Render) {
+    applyMargin(envelope: IEnvelope, render: Render): Envelope {
+        let { minx, miny, maxx, maxy } = envelope;
+
         if (this.margin > 0) {
-            envelope = _.clone(envelope);
             const marginWidth = render.resolutionX * this.margin;
             const marginHeight = render.resolutionY * this.margin;
-            envelope.minx -= marginWidth;
-            envelope.maxx += marginWidth;
-            envelope.miny -= marginHeight;
-            envelope.maxy += marginHeight;
+            minx -= marginWidth;
+            maxx += marginWidth;
+            miny -= marginHeight;
+            maxy += marginHeight;
         }
 
-        return envelope;
+        return new Envelope(minx, miny, maxx, maxy);
     }
 
     protected abstract getCRS(): Srs
