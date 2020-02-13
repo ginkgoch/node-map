@@ -43,6 +43,16 @@ describe('PointStyle', () => {
         compareImage(canvas.image, 'point-rect.png');
     });
 
+    it('rect - dash', () => {
+        const style = new PointStyle('green', 'yellow', 6, 20, "rect");
+        style.lineDash = [4, 2];
+        const canvas = Render.create(64, 64);
+        style.draw(new Feature(new Point(0, 0)), canvas);
+        canvas.flush();
+
+        compareImage(canvas.image, 'point-rect-dash.png');
+    });
+
     it('json', () => {
         const style = new PointStyle('green', 'yellow', 6, 20, "rect");
         expect(_.omit(style.toJSON(), 'id')).toEqual({

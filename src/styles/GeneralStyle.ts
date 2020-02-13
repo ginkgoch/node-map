@@ -8,7 +8,10 @@ import { FillPattern } from "./FillStyle";
  * This class represents a general style regardless the geometry type to draw.
  */
 export class GeneralStyle extends Style {
-    /** The fill color string. e.g. "#ff0000" or "red". */
+    /** 
+     * The fill style with color or pattern. 
+     * e.g. '#cccccc' | 'gray' | { image: new Image('pattern.png'), repeat: 'repeat' } 
+     * */
     fillStyle: string | FillPattern;
     /** The stroke width in pixel. */
     lineWidth: number;
@@ -18,6 +21,8 @@ export class GeneralStyle extends Style {
     symbol: PointSymbolType;
     /** The radius width in pixel for point geometry. */
     radius: number;
+    /** The line dash array. e.g. [4, 4] */
+    lineDash?: Array<number>;
 
     /** Constructs a general style instance that regardless the geometry type to draw. */
     constructor(fillStyle?: string | FillPattern, strokeStyle?: string, lineWidth = 1, radius = 12, symbol: PointSymbolType = 'default', name?: string) {
@@ -42,7 +47,8 @@ export class GeneralStyle extends Style {
             'lineWidth',
             'strokeStyle',
             'symbol',
-            'radius'
+            'radius',
+            'lineDash'
         ];
     }
 }

@@ -29,6 +29,20 @@ describe('LineStyle', () => {
         compareImage(canvas.image, 'linestyle-2.png');
     });
 
+    it('draw - dash', () => {
+        const canvas = Render.create(64, 64);
+        const style1 = new LineStyle('#00ff00', 6);
+        style1.lineDash = [8, 4];
+
+        const style2 = new LineStyle('#ffffff', 2);
+        const geom = gen();
+        style1.draw(new Feature(geom), canvas);
+        style2.draw(new Feature(geom), canvas);
+        canvas.flush();
+
+        compareImage(canvas.image, 'linestyle-dash.png');
+    });
+
     it('json', () => {
         const style1 = new LineStyle('#00ff00', 6);
         expect(_.omit(style1.toJSON(), 'id')).toEqual({
@@ -39,6 +53,21 @@ describe('LineStyle', () => {
             minimumScale: 0,
             strokeStyle: '#00ff00',
             lineWidth: 6
+        });
+    });
+    
+    it('json - dash', () => {
+        const style1 = new LineStyle('#00ff00', 6);
+        style1.lineDash = [2, 3, 4];
+        expect(_.omit(style1.toJSON(), 'id')).toEqual({
+            type: 'line-style',
+            name: 'Line Style',
+            visible: true,
+            maximumScale: Constants.POSITIVE_INFINITY_SCALE,
+            minimumScale: 0,
+            strokeStyle: '#00ff00',
+            lineWidth: 6,
+            lineDash: [2, 3, 4]
         });
     });
 
