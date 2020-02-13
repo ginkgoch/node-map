@@ -5,7 +5,10 @@ import { IFeature, GeometryType } from "ginkgoch-geom";
 
 /** This class represents a simple point style to render point based geometries (point, multi-point). */
 export class PointStyle extends Style {
-    /** The fill color string. e.g. "#ff0000" or "red". */
+    /** 
+     * The fill style with color or pattern. 
+     * e.g. '#cccccc' | 'gray' | { image: new Image('pattern.png'), repeat: 'repeat' } 
+     * */
     fillStyle: string;
     /** The stroke color string. e.g. "#000000" or "black". */
     strokeStyle: string;
@@ -15,6 +18,8 @@ export class PointStyle extends Style {
     radius: number;
     /** The point symbol type. */
     symbol: PointSymbolType = 'default';
+    /** The line dash array. e.g. [4, 4] */
+    lineDash?: Array<number>;
 
     /**
      * Constructs a point style instance.
@@ -51,7 +56,8 @@ export class PointStyle extends Style {
             'strokeStyle',
             'lineWidth',
             'radius',
-            'symbol'
+            'symbol',
+            'lineDash'
         ];
     }
 

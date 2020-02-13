@@ -12,8 +12,8 @@ export class RenderUtils {
      * @param resolutionY The vertical resolution (world_height / screen_height).
      */
     static toViewportCoordinate(coordinate: ICoordinate, envelope: IEnvelope, resolutionX: number, resolutionY: number): ICoordinate {
-        const x = (coordinate.x - envelope.minx) / resolutionX;
-        const y = (envelope.maxy - coordinate.y) / resolutionY;
+        const x = Math.trunc((coordinate.x - envelope.minx) / resolutionX);
+        const y = Math.trunc((envelope.maxy - coordinate.y) / resolutionY);
         return { x, y };
     }
 

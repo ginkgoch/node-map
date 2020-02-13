@@ -1,4 +1,4 @@
-import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection } from "ginkgoch-geom";
+import { IFeature, MultiPoint, MultiPolygon, Point, Polygon, LineString, MultiLineString, GeometryCollectionBase, Geometry, GeometryCollection, ICoordinate } from "ginkgoch-geom";
 import { Style } from "./Style";
 import { StyleUtils } from "./StyleUtils";
 import { Render } from "../render";
@@ -35,7 +35,8 @@ export class TextStyle extends Style {
     strokeStyle: string | undefined;
     /** The outline stroke width in pixel on text. If it is zero, no outline will be drawn. */
     lineWidth: number;
-
+    /** Use `centroid` or `interior` as text location. Default is `centroid`. */
+    location: 'centroid' | 'interior';
     /**
      * Constructs a text style instance.
      * @param {string|undefined} content The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.
@@ -68,6 +69,7 @@ export class TextStyle extends Style {
         this.textAlign = 'center';
         this.font = font || '12px ARIAL';
         this.lineWidth = 0;
+        this.location = 'centroid';
         this.fillStyle = StyleUtils.colorOrRandomDark(fillStyle);
     }
 
@@ -109,7 +111,8 @@ export class TextStyle extends Style {
             this._drawTextForGeomCollection(geom, text, styleJson, render);
         }
         else if (geom instanceof Point || geom instanceof Polygon) {
-            render.drawText(text, geom.centroid(), styleJson);
+            let geomLocation = this._locationOnGeom(geom);
+            render.drawText(text, geomLocation, styleJson);
         } else if (geom instanceof LineString) {
             render.drawTextOnLine(text, geom, styleJson);
         } else if (geom instanceof MultiLineString) {
@@ -174,7 +177,8 @@ export class TextStyle extends Style {
 
     private _drawTextForGeomCollection<T extends Geometry>(geom: GeometryCollectionBase<T>, text: string, styleJson: any, render: Render) {
         geom.children.forEach(g => {
-            render.drawText(text, g.centroid(), styleJson);
+            const locationOnGeom = this._locationOnGeom(g);
+            render.drawText(text, locationOnGeom, styleJson);
         });
     }
 
@@ -184,12 +188,22 @@ export class TextStyle extends Style {
         }
 
         const drawingPolygon = geom.children.map(polygon => ({ factor: this._polygonSortFactor(polygon), polygon })).sort((p1, p2) => p2.factor - p1.factor)[0];
-        render.drawText(text, drawingPolygon.polygon.centroid(), styleJson);
+        const locationOnGeom = this._locationOnGeom(drawingPolygon.polygon);
+        render.drawText(text, locationOnGeom, styleJson);
     }
 
     private _polygonSortFactor(polygon: Polygon): number {
         const box = polygon.envelope();
         return box.width + box.height;
+    }
+
+    private _locationOnGeom(geom: Geometry): ICoordinate {
+        switch (this.location) {
+            case 'interior':
+                return geom.interiorPoint();
+            default:
+                return geom.centroid();
+        }
     }
 }
 

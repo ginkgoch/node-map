@@ -8,20 +8,25 @@ const INCH_PER_FT = 12;
 const INCH_PER_DD = 4374754;
 const DPI = 96;
 const DEFAULT_MAXIMUM_SCALE = 591659030.6768064;
+const DEFAULT_MAXIMUM_SCALE_WGS84 = 590591790;
+
+function calculateScales(maximumScale: number): Array<number> {
+    const scales = new Array<number>();
+    let currentScale = maximumScale;
+    while (scales.length < 20) {
+        scales.push(currentScale);
+        currentScale *= 0.5;
+    }
+
+    return scales;
+}
 
 export let Constants = {
     POSITIVE_INFINITY_SCALE: 1e10,
     DEFAULT_MAXIMUM_SCALE,
-    DEFAULT_SCALES: (function (): Array<number> {
-        const scales = new Array<number>();
-        let currentScale = DEFAULT_MAXIMUM_SCALE;
-        while (scales.length < 20) {
-            scales.push(currentScale);
-            currentScale *= 0.5;
-        }
-
-        return scales;
-    })()
+    DEFAULT_MAXIMUM_SCALE_WGS84,
+    DEFAULT_SCALES: (calculateScales(DEFAULT_MAXIMUM_SCALE)),
+    DEFAULT_SCALES_WGS84: (calculateScales(DEFAULT_MAXIMUM_SCALE_WGS84).slice(1))
 };
 
 export class GeoUtils {

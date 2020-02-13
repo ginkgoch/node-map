@@ -1,8 +1,7 @@
-import { FillStyle } from "..";
-import { Feature, Polygon, LinearRing } from "ginkgoch-geom";
-import { Render } from "..";
-import TestUtils from "../shared/TestUtils";
 import _ from "lodash";
+import { FillStyle, FillPattern, Render, Image } from "..";
+import { Feature, Polygon, LinearRing } from "ginkgoch-geom";
+import TestUtils from "../shared/TestUtils";
 
 const compareImage = TestUtils.compareImageFunc(TestUtils.resolveStyleDataPath);
 
@@ -16,6 +15,31 @@ describe('FillStyle', () => {
         canvas.flush();
 
         compareImage(canvas.image, 'fillstyle-1.png');
+    });
+    
+    it('draw - dash', () => {
+        const canvas = Render.create(64, 64);
+        const style = new FillStyle('#00ff00', 'red', 4);
+        style.lineDash = [6, 4];
+        const geom = gen();
+        const feature = new Feature(geom);
+        style.draw(feature, canvas);
+        canvas.flush();
+
+        compareImage(canvas.image, 'fillstyle-dash.png');
+    });
+
+    it('draw - pattern', () => {
+        const canvas = Render.create(256, 256);
+
+        const fillPattern: FillPattern = { image: new Image('./tests/data/location.png'), repeat: 'repeat' };
+        const style = new FillStyle(fillPattern, 'red', 4);
+        const geom = gen();
+        const feature = new Feature(geom);
+        style.draw(feature, canvas);
+        canvas.flush();
+
+        compareImage(canvas.image, 'fillstyle-pattern.png');
     });
 
     it('json', () => {

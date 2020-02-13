@@ -10,6 +10,24 @@ import {
     LinearRing, Envelope, IEnvelope
 } from "ginkgoch-geom";
 
+export type RenderAntialias = 'default' | 'none' | 'gray' | 'subpixel';
+
+export type RenderPatternQuality = 'fast' | 'good' | 'best' | 'nearest' | 'bilinear';
+
+export type RenderQuality = 'fast' | 'good' | 'best' | 'nearest' | 'bilinear';
+
+export type RenderTextDrawingMode = 'path' | 'glyph';
+
+export interface RenderContextOptions {
+    antialias: RenderAntialias,
+    patternQuality: RenderPatternQuality,
+    quality: RenderQuality,
+    textDrawingMode: RenderTextDrawingMode,
+    imageSmoothingEnabled: boolean
+}
+
+const emptyLineDash: any = [];
+
 /**
  * This class represents a shared renderer that is used in this component.
  */
@@ -46,10 +64,26 @@ export class Render {
      * The world envelope of the viewport.
      */
     envelope: IEnvelope;
+    
+    private _contextOptions: RenderContextOptions;
+
     /**
-     * The antialias setting of canvas.
+     * Gets the drawing context options.
      */
-    antialias: "default" | "none" | "gray" | "subpixel" = 'default';
+    get contextOptions(): RenderContextOptions {
+        return this._contextOptions;
+    }
+
+    /**
+     * Sets the drawing context options.
+     */
+    set contextOptions(v: RenderContextOptions) {
+        this._contextOptions = v;
+        if (this.context !== undefined) {
+            _.assign(this.context, v);
+        }
+    }
+
     /**
      * The concrete native drawing context.
      */
@@ -59,7 +93,7 @@ export class Render {
      */
     textBounds: Array<IEnvelope> = new Array<IEnvelope>();
 
-    simplifyTolerance: number = 2;
+    simplifyTolerance: number = 1;
 
     /**
      * Constructs a renderer instance.
@@ -78,10 +112,17 @@ export class Render {
         this.scale = GeoUtils.scale(envelope, envelopeUnit, { width: this.width, height: this.height });
         this.resolutionX = Math.abs(envelope.maxx - envelope.minx) / this.width;
         this.resolutionY = Math.abs(envelope.maxy - envelope.miny) / this.height;
+        this._contextOptions = {
+            antialias: 'default',
+            patternQuality: 'good',
+            quality: 'good',
+            textDrawingMode: 'path',
+            imageSmoothingEnabled: true
+        };
 
         this.canvas = NativeFactory.nativeCanvas(this.width, this.height);
         this.context = this.canvas.getContext('2d');
-        this.context.antialias = this.antialias;
+        _.assign(this.context, this.contextOptions);
     }
 
     /**
@@ -194,11 +235,13 @@ export class Render {
             this.context.closePath();
         }
 
-        _.extend(this.context, style);
+        this._setGeneralStyle(style);
+        this._setContextOptions();
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, style);
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
     }
@@ -217,7 +260,9 @@ export class Render {
         });
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, style);
+            this._setGeneralStyle(style);
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
     }
@@ -231,12 +276,35 @@ export class Render {
             });
         }
 
-        _.extend(this.context, style);
+        this._setGeneralStyle(style);
+        this._setPattern(style);
+        this._setContextOptions();
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
+    }
+
+    private _setPattern(style: any) {
+        if (typeof style.fillStyle === 'object' ) {
+            let fillPattern = this.context.createPattern(style.fillStyle.image.source, style.fillStyle.repeat || 'repeat');
+            this.context.fillStyle = fillPattern;
+        }
+    }
+
+    private _setLineDash(style: any) {
+        this.context.setLineDash(style.lineDash || emptyLineDash);
+    }
+
+    private _setGeneralStyle(style: any) {
+        _.extend(this.context, style);
+    }
+
+    private _setContextOptions() {
+        _.extend(this.context, this.contextOptions);
     }
 
     _drawRing(geom: LinearRing): boolean {

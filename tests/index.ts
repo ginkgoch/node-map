@@ -10,3 +10,4 @@ export * from '../src/render';
 export * from '../src/shared';
 export * from '../src/styles';
 export * from '../src/map';
+export * from 'ginkgoch-geom';

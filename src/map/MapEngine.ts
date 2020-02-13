@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { IEnvelope, Envelope, Point, Geometry, Feature, GeometryFactory } from "ginkgoch-geom";
-import { Render, Image } from "../render";
+import { Render, RenderContextOptions } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
+import { MapOptions } from "./MapOptions";
 
 /**
  * This class represents a complete structure of a map instance. 
@@ -66,6 +67,8 @@ export class MapEngine {
      */
     origin: TileOrigin = 'upperLeft';
 
+    renderContextOptions: RenderContextOptions;
+
     /**
      * Constructs a map engine instance.
      * @param {number} width The width of map. Optional with default value 256 px. 
@@ -79,6 +82,13 @@ export class MapEngine {
         this.srs = new Srs(srs || 'EPSG:3857');
         this.groups = new Array<LayerGroup>();
         this.scales = new Array<number>();
+        this.renderContextOptions = {
+            antialias: 'default',
+            patternQuality: 'good',
+            quality: 'good',
+            textDrawingMode: 'path',
+            imageSmoothingEnabled: true
+        };
 
         if (scales !== undefined) {
             scales.forEach(s => this.scales.push(s));
@@ -132,6 +142,18 @@ export class MapEngine {
             return (<any[]>groupsJson).map(g => LayerGroup.parseJSON(g));
         });
         return map;
+    }
+
+    static fromOptions(mapOptions: MapOptions) {
+        mapOptions = _.defaults(mapOptions, {
+            width: 256,
+            height: 256,
+            crs: 'EPSG:4326',
+            scales: Constants.DEFAULT_SCALES
+        });
+
+        let mapEngine = new MapEngine(mapOptions.width, mapOptions.height, mapOptions.crs, mapOptions.scales);
+        return mapEngine;
     }
 
     /**
@@ -230,7 +252,7 @@ export class MapEngine {
      * @param pointTolerance Tolerance for point geometry.
      * @returns {Array<{layerID:string, features: Feature[]}>} The intersected features that are categorized by layers.
      */
-    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10) {
+    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10, includeInvisibleLayers: boolean = false, layersToQuery?: string[]) {
         Validator.checkSrsIsValid(this.srs);
 
         const projection = new Projection(geomSrs, this.srs.projection);
@@ -246,9 +268,19 @@ export class MapEngine {
             envelope.maxy = geomProjected.y + worldTolerance;
         }
 
+        const scaleToQuery = this.scales[zoomLevel];
         const layers = _.flatMap(this.groups, g => g.layers);
         const intersectedFeatures: Array<{ layer: string, features: Feature[] }> = [];
         for (let layer of layers) {
+            if (!includeInvisibleLayers && !layer.visible) continue;
+            if (!includeInvisibleLayers && (layer.maximumScale < scaleToQuery || layer.minimumScale > scaleToQuery)) {
+                continue;
+            }
+
+            if (layersToQuery !== undefined && !layersToQuery.includes(layer.name)) {
+                continue;
+            }
+
             try {
                 await layer.open();
                 let features = await layer.source.features(envelope);
@@ -256,7 +288,7 @@ export class MapEngine {
                 features = features.filter(f => f.geometry.intersects(testPolygon));
                 if (features.length > 0) {
                     intersectedFeatures.push({
-                        layer: layer.id,
+                        layer: layer.name,
                         features
                     });
                 }
@@ -291,6 +323,8 @@ export class MapEngine {
         }
 
         const render = Render.create(this.width, this.height, envelope, this.srs!.unit);
+        render.contextOptions = this.renderContextOptions;
+
         for (let group of this.groups) {
             if (!group.visible) {
                 continue;

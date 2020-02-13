@@ -7,10 +7,12 @@ import { IFeature, GeometryType } from "ginkgoch-geom";
  * This class represents a line style. 
  */
 export class LineStyle extends Style {
-    /** The stroke color string. e.g. "000000" or "black" */
+    /** The stroke color string. e.g. "#000000" or "black" */
     strokeStyle: string;
     /** The stroke width in pixel. */
     lineWidth: number;
+    /** The line dash array. e.g. [4, 4] */
+    lineDash?: Array<number>;
 
     /** Constructs a line style instance. */
     constructor(strokeStyle?: string, lineWidth = 2, name?: string) {
@@ -28,7 +30,8 @@ export class LineStyle extends Style {
     protected _htmlStyleKeys(): string[] {
         return [
             'strokeStyle',
-            'lineWidth'
+            'lineWidth',
+            'lineDash'
         ];
     }
 

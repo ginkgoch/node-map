@@ -7,19 +7,21 @@ import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 import uuid from "../shared/UUID";
 import { Layer } from "./Layer";
+import { Envelope, IEnvelope } from "ginkgoch-geom";
+import { Srs } from "./Projection";
 
 /**
  * FeatureLayer responses for rendering FeatureSource with styles.
  * 
  * ```typescript
  * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
- * const layer = new FeatureLayer(source);
+ * const layer = new MultiSourceFeatureLayer([source]);
  * layer.styles.push(new FillStyle('#886600', 'red', 2));
  * ...
  * ```
  */
-export class FeatureLayer extends Layer {
-    source: FeatureSource;
+export class MultiSourceFeatureLayer extends Layer {
+    sources: Array<FeatureSource>;
     styles: Array<Style>;
 
     /**
@@ -27,11 +29,13 @@ export class FeatureLayer extends Layer {
      * @param {FeatureSource} source The feature source where the features are fetched.
      * @param {string} name The name of this layer. Optional with default value `layer-${uuid()}`.
      */
-    constructor(source: FeatureSource, name?: string) {
+    constructor(sources: Array<FeatureSource>, name?: string) {
         super(name);
 
-        this.name = name || source.name;
-        this.source = source;
+        this.name = name || this.id;
+        this.sources = new Array<FeatureSource>();
+        sources && this.sources.push(...sources);
+
         this.styles = new Array<Style>();
     }
 
@@ -49,28 +53,42 @@ export class FeatureLayer extends Layer {
      * Opens this layer and prepares the resources for querying and rendering.
      */
     protected async _open(): Promise<void> {
-        await this.source.open();
+        for (let source of this.sources) {
+            await source.open();
+        }
     }
 
     /**
      * Closes this layer and release its related resources.
      */
     protected async _close(): Promise<void> {
-        await this.source.close();
+        for (let source of this.sources) {
+            await source.close();
+        }
     }
 
     /**
      * Gets the envelope of this layer.
-     * @returns {IEnvelope} The envelope of this layer.
+     * @returns {Envelope} The envelope of this layer.
      */
-    async envelope() {
+    async envelope(): Promise<Envelope> {
         Validator.checkOpened(this);
 
-        return await this.source.envelope();
+        let envelope = new Envelope(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
+        for (let source of this.sources) {
+            let currentEnvelope = await source.envelope();
+            envelope.expand(currentEnvelope);
+        }
+
+        return envelope;
     }
 
     protected getCRS() {
-        return this.source.projection.from;
+        if (this.sources.length === 0) {
+            return new Srs('WGS84');
+        }
+
+        return this.sources[0].projection.from;
     }
 
     /**
@@ -89,10 +107,12 @@ export class FeatureLayer extends Layer {
         envelope = this.applyMargin(envelope, render);
         
         const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
-        const features = await this.source.features(envelope, fields);
-        styles.forEach(style => {
-            style.drawAll(features, render);
-        });
+        for (let source of this.sources) {
+            const features = await source.features(envelope, fields);
+            styles.forEach(style => {
+                style.drawAll(features, render);
+            });
+        }
     }
 
     /**
@@ -105,7 +125,7 @@ export class FeatureLayer extends Layer {
             type: JSONKnownTypes.featureLayer,
             id: this.id,
             name: this.name,
-            source: this.source.toJSON(),
+            sources: this.sources.map(s => s.toJSON()),
             styles: this.styles.map(style => style.toJSON()),
             minimumScale: this.minimumScale,
             maximumScale: this.maximumScale,
@@ -120,8 +140,8 @@ export class FeatureLayer extends Layer {
      * @returns {FeatureLayer} A FeatureLayer instance.
      */
     static parseJSON(json: any) {
-        const source = FeatureSourceFactory.parseJSON(json.source) as FeatureSource;
-        const layer = new FeatureLayer(source);
+        const sources = (<any[]>json.sources).map(s => FeatureSourceFactory.parseJSON(s) as FeatureSource);
+        const layer = new MultiSourceFeatureLayer(sources);
         layer.id = _.defaultTo(json.id, 'layer-' + uuid());
         layer.name = _.defaultTo(json.name, 'Unknown');
         layer.visible = _.defaultTo(json.visible, true);
