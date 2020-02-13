@@ -26,6 +26,8 @@ export interface RenderContextOptions {
     imageSmoothingEnabled: boolean
 }
 
+const emptyLineDash: any = [];
+
 /**
  * This class represents a shared renderer that is used in this component.
  */
@@ -233,11 +235,13 @@ export class Render {
             this.context.closePath();
         }
 
-        _.extend(this.context, style);
+        this._setGeneralStyle(style);
+        this._setContextOptions();
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, style);
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
     }
@@ -256,7 +260,9 @@ export class Render {
         });
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, style);
+            this._setGeneralStyle(style);
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
     }
@@ -270,14 +276,14 @@ export class Render {
             });
         }
 
-        _.extend(this.context, style);
-        _.extend(this.context, this.contextOptions);
-
+        this._setGeneralStyle(style);
         this._setPattern(style);
+        this._setContextOptions();
         this.context.fill();
 
         if (style && style.lineWidth !== 0) {
-            _.extend(this.context, this.contextOptions);
+            this._setLineDash(style);
+            this._setContextOptions();
             this.context.stroke();
         }
     }
@@ -287,6 +293,18 @@ export class Render {
             let fillPattern = this.context.createPattern(style.fillStyle.image.source, style.fillStyle.repeat || 'repeat');
             this.context.fillStyle = fillPattern;
         }
+    }
+
+    private _setLineDash(style: any) {
+        this.context.setLineDash(style.lineDash || emptyLineDash);
+    }
+
+    private _setGeneralStyle(style: any) {
+        _.extend(this.context, style);
+    }
+
+    private _setContextOptions() {
+        _.extend(this.context, this.contextOptions);
     }
 
     _drawRing(geom: LinearRing): boolean {

@@ -16,8 +16,20 @@ describe('FillStyle', () => {
 
         compareImage(canvas.image, 'fillstyle-1.png');
     });
+    
+    it('draw - dash', () => {
+        const canvas = Render.create(64, 64);
+        const style = new FillStyle('#00ff00', 'red', 4);
+        style.lineDash = [6, 4];
+        const geom = gen();
+        const feature = new Feature(geom);
+        style.draw(feature, canvas);
+        canvas.flush();
 
-    it('draw - 2', () => {
+        compareImage(canvas.image, 'fillstyle-dash.png');
+    });
+
+    it('draw - pattern', () => {
         const canvas = Render.create(256, 256);
 
         const fillPattern: FillPattern = { image: new Image('./tests/data/location.png'), repeat: 'repeat' };

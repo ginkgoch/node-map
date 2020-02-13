@@ -16,9 +16,17 @@ export interface FillPattern {
  * This class represents a style for an area based geometries (e.g. polygon, multi-polygon) only.
  */
 export class FillStyle extends Style {
+    /** 
+     * The fill style with color or pattern. 
+     * e.g. '#cccccc' | 'gray' | { image: new Image('pattern.png'), repeat: 'repeat' } 
+     * */
     fillStyle: string | FillPattern;
+    /** The stroke width in pixel. */
     lineWidth: number;
+    /** The stroke color string. e.g. "#000000" or "black" */
     strokeStyle: string;
+    /** The line dash array. e.g. [4, 4] */
+    lineDash?: Array<number>;
 
     /**
      * Constructs a fill style instance.
@@ -42,7 +50,7 @@ export class FillStyle extends Style {
      * Collects the raw HTML style keys that will be included in the returning raw styles.
      */
     protected _htmlStyleKeys(): string[] {
-        return ['fillStyle', 'lineWidth', 'strokeStyle'];
+        return ['fillStyle', 'lineWidth', 'strokeStyle', 'lineDash'];
     }
 
     /**
