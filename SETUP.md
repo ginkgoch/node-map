@@ -42,7 +42,7 @@ Here is also a snapshot for the reference.
 1. Install dependencies
     `ginkgoch-node` and `canvas` are required. _Make sure the `cario` is pre installed on your dev machine or deployment host_.
     ```bash
-    npm i canvas ginkgoch-node --save
+    npm i canvas ginkgoch-map --save
     ```
 2. Inject `canvas` as native graphic API
     ```javascript
