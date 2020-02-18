@@ -75,12 +75,20 @@ export class Projection {
 
     /**
      * Constructs a Projection instance.
-     * @param {string} from The from SRS. Optional.
-     * @param {string} to The target SRS. Optional.
+     * @param {string | Srs} from The from SRS. Optional.
+     * @param {string | Srs} to The target SRS. Optional.
      */
-    constructor(from?: string, to?: string) {
-        this._from = new Srs(from);
-        this._to = new Srs(to);
+    constructor(from?: string | Srs, to?: string | Srs) {
+        if (!(from instanceof Srs)) {
+            from = new Srs(from);
+        }
+
+        if (!(to instanceof Srs)) {
+            to = new Srs(to);
+        }
+
+        this._from = from;
+        this._to = to;
     }
 
     /**
