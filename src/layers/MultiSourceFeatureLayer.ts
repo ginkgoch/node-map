@@ -108,9 +108,7 @@ export class MultiSourceFeatureLayer extends Layer {
         
         const fields = _.chain(styles).flatMap(s => s.fields()).uniq().value();
         for (let source of this.sources) {
-            const currentFields = (await source.fields()).map(f => f.name);
-            const drawingFields = _.intersection(fields, currentFields);
-            const features = await source.features(envelope, drawingFields);
+            const features = await source.features(envelope, fields);
             styles.forEach(style => {
                 style.drawAll(features, render);
             });
