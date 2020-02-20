@@ -1,3 +1,5 @@
-export declare class NativeDOM {
+declare class NativeDOM {
     static init(): void;
 }
+
+export default NativeDOM;
