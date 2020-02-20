@@ -1,6 +1,7 @@
+import _ from "lodash";
 import { NativeAdaptor } from "./NativeAdaptor";
 import { NativeImage } from "./NativeImage";
-import _ from "lodash";
+import { NativeCanvas } from "./NativeCanvas";
 
 /**
  * This class represents a central factory for creating native adaptors with few callback registration. 
@@ -69,7 +70,7 @@ export class NativeFactory {
     /**
      * Creates native canvas by the registered adaptor. Throws exception if not registered.
      */
-    static nativeCanvas(width: number, height: number) {
+    static nativeCanvas(width: number, height: number): NativeCanvas {
         NativeFactory._checkHasRegistered();
 
         return NativeFactory._adaptor!.createCanvas(width, height);

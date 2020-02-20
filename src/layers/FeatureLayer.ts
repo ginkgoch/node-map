@@ -7,6 +7,8 @@ import { FeatureSourceFactory } from ".";
 import { StyleFactory } from "../styles";
 import uuid from "../shared/UUID";
 import { Layer } from "./Layer";
+import { Envelope } from "ginkgoch-geom";
+import { Srs } from "./Projection";
 
 /**
  * FeatureLayer responses for rendering FeatureSource with styles.
@@ -63,13 +65,13 @@ export class FeatureLayer extends Layer {
      * Gets the envelope of this layer.
      * @returns {IEnvelope} The envelope of this layer.
      */
-    async envelope() {
+    async envelope(): Promise<Envelope> {
         Validator.checkOpened(this);
 
         return await this.source.envelope();
     }
 
-    protected getCRS() {
+    protected getCRS(): Srs {
         return this.source.projection.from;
     }
 
