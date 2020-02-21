@@ -1,4 +1,4 @@
-import { LineString, Feature } from "ginkgoch-geom";
+import { LineString, Feature, GeometryFactory } from "ginkgoch-geom";
 import { MemoryFeatureSource, FeatureLayer, Render, LineStyle, ShapefileFeatureSource } from "..";
 import TestUtils from "../shared/TestUtils";
 import { FillStyle } from "../../src/styles";
@@ -111,6 +111,14 @@ describe('FeatureLayer', () => {
         await layer.open();
 
         expect((<any>source.projection.from)._unit).toEqual('degrees');
+    });
+
+    it('query - disjoint', async () => {
+        const source = new ShapefileFeatureSource('./tests/data/layers/latlong.shp');
+        await source.open();
+
+        let features = await source.query('disjoint', GeometryFactory.envelopeAsPolygon({ minx: -10, miny: -10, maxx: 10, maxy: 10 }));
+        expect(features.length).toBeGreaterThan(0);
     });
 });
 
