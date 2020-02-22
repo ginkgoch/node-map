@@ -3,6 +3,8 @@ import { IFeature } from "ginkgoch-geom";
 import { Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } from ".";
+import { AutoStyleOptions } from "./AutoStyleOptions";
+import { Constants } from "../shared";
 
 /** This class represents a value style which allows to set various sub-styles based on a field value. */
 export class ValueStyle extends Style {
@@ -66,6 +68,7 @@ export class ValueStyle extends Style {
     }
 
     /**
+     * @deprecated Use `auto` function instead.
      * This is a shortcut function to automatically generate value items based on the distinct values, 
      * and assign a gradient colors to each item.
      * @param {'fill'|'linear'|'point'} styleType The style type of the sub-styles.
@@ -80,26 +83,38 @@ export class ValueStyle extends Style {
      * @returns {ValueStyle} A value style with sub styles filled with the specified conditions. 
      */
     static auto(styleType: 'fill' | 'linear' | 'point', field: string, values: any[], fromColor?: string, toColor?: string, strokeColor?: string, strokeWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
+        return this.autoByValues(styleType, field, values, { fromColor, toColor, strokeColor, strokeWidth, radius, symbol });
+    }
+
+    static autoByValues(styleType: 'fill' | 'linear' | 'point', field: string, values: any[], autoStyleOptions?: AutoStyleOptions) {
+        let options = _.defaults(autoStyleOptions, Constants.DEFAULT_AUTO_STYLE_OPTIONS);
+
+        let { fromColor, toColor, strokeColor, strokeWidth, radius, symbol } = options;
+        let styleFn: (color: string, value: any) => Style;
         switch (styleType) {
             case 'point':
-                return this._auto(field, values, fromColor, toColor, (c, v) => {
+                styleFn = (c, v) => {
                     const style = new PointStyle(c, strokeColor, strokeWidth, radius, symbol);
                     style.name = `value = ${v}`;
                     return style;
-                });
+                }; break;
             case 'fill':
-                return this._auto(field, values, fromColor, toColor, (c, v) => {
+                styleFn = (c, v) => {
                     const style = new FillStyle(c, strokeColor, strokeWidth);
                     style.name = `value = ${v}`;
                     return style;
-                });
+                }; break;
             case 'linear':
-                return this._auto(field, values, fromColor, toColor, (c, v) => {
+                styleFn = (c, v) => {
                     const style = new LineStyle(c, strokeWidth);
                     style.name = `value = ${v}`;
                     return style;
-                });
+                }; break;
+            default:
+                throw new Error(`Unsupported style type ${styleType}`);
         }
+
+        return this._auto(field, values, fromColor, toColor, styleFn);
     }
 
     private static _auto(field: string, values: any[], fromColor?: string, toColor?: string, func?: (color: string, value: any) => Style) {

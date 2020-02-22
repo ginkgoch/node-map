@@ -26,7 +26,8 @@ export let Constants = {
     DEFAULT_MAXIMUM_SCALE,
     DEFAULT_MAXIMUM_SCALE_WGS84,
     DEFAULT_SCALES: (calculateScales(DEFAULT_MAXIMUM_SCALE)),
-    DEFAULT_SCALES_WGS84: (calculateScales(DEFAULT_MAXIMUM_SCALE_WGS84).slice(1))
+    DEFAULT_SCALES_WGS84: (calculateScales(DEFAULT_MAXIMUM_SCALE_WGS84).slice(1)),
+    DEFAULT_AUTO_STYLE_OPTIONS: { strokeWidth: 1, radius: 12, symbol: 'default' }
 };
 
 export class GeoUtils {

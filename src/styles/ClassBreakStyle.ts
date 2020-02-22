@@ -6,7 +6,7 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils, AutoStyleOptions } from ".";
 import { PropertyAggregator } from "../layers";
 
-const DEFAULT_AUTO_STYLE_OPTIONS = { strokeWidth: 1, radius: 12, symbol: 'default' };
+const DEFAULT_AUTO_STYLE_OPTIONS = Constants.DEFAULT_AUTO_STYLE_OPTIONS;
 
 /**
  * This class represents a style to render different sub-styles based on the break down values.
