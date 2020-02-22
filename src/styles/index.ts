@@ -10,3 +10,4 @@ export * from './ValueStyle';
 export * from './ClassBreakStyle'
 export * from './GeneralStyle';
 export * from './StyleFactory';
+export * from './AutoStyleOptions';

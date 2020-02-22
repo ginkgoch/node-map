@@ -55,5 +55,10 @@ describe('ClassBreakStyle', () => {
         const style = ClassBreakStyle.auto('point', 'type', 100, 0, 4, '#ff0000', '#0000ff', undefined, 0);
         const props = style.props();
         expect(props).toEqual({});
-    })
+    });
+
+    it('autoByRange', () => {
+        let style = ClassBreakStyle.autoByRange('point', 'type', 100, 0, 4, { fromColor: '#ff0000', toColor: '#0000ff'});
+        expect(style.classBreaks.length).toBe(4);
+    });
 });
