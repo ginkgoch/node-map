@@ -4,6 +4,7 @@ import { Render } from "../render";
 import { Constants } from "../shared";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { Style, PointSymbolType, PointStyle, FillStyle, LineStyle, StyleUtils } from ".";
+import { PropertyAggregator } from "../layers";
 
 /**
  * This class represents a style to render different sub-styles based on the break down values.
@@ -142,6 +143,63 @@ export class ClassBreakStyle extends Style {
 
             const subStyle = func(colors[i], breakMin, breakMax);
             style.classBreaks.push({ minimum: breakMin, maximum: breakMax, style: subStyle });
+        }
+
+        return style;
+    }
+
+    static autoByAggregator(styleType: 'fill' | 'linear' | 'point', field: string, aggregator: PropertyAggregator, breakCount: number, breakBy?: 'value'|'position',
+        fromColor?: string, toColor?: string, strokeColor?: string,
+        strokeWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
+        let breakDownValues = aggregator.breakDownValues(field, breakCount, breakBy);
+        return this.autoByValues(styleType, field, breakDownValues, fromColor, toColor, strokeColor, strokeWidth, radius, symbol);
+    }
+
+    static autoByValues(styleType: 'fill' | 'linear' | 'point', field: string, breakDownValues: Array<{minimum: number, maximum:number}>, 
+        fromColor?: string, toColor?: string, strokeColor?: string,
+        strokeWidth = 1, radius = 12, symbol: PointSymbolType = 'default') {
+        let styleFn: ((color: string, min: number, max: number) => Style) | undefined = undefined;
+
+        switch (styleType) {
+            case 'point':
+                styleFn = (c, min, max) => {
+                    const style = new PointStyle(c, strokeColor, strokeWidth, radius, symbol);
+                    style.name = this.subStyleName(min, max);
+                    return style;
+                };
+            case 'fill':
+                styleFn = (c, min, max) => {
+                    const style = new FillStyle(c, strokeColor, strokeWidth);
+                    style.name = this.subStyleName(min, max);
+                    return style;
+                };
+            case 'linear':
+                styleFn = (c, min, max) => {
+                    const style = new LineStyle(c, strokeWidth);
+                    style.name = this.subStyleName(min, max);
+                    return style;
+                };
+        }
+
+        if (styleFn === undefined) {
+            throw new Error(`Unsupported style type: ${styleType}`);
+        }
+
+        return this._autoByValues(field, breakDownValues, fromColor, toColor, styleFn);
+    }
+
+    private static _autoByValues(field: string, breakDownValues: Array<{minimum: number, maximum:number}>,
+        fromColor?: string, toColor?: string, func?: (color: string, min: number, max: number) => Style) {
+        const count = breakDownValues.length;
+        const colors = StyleUtils.colorsBetween(count, fromColor, toColor);
+        const style = new ClassBreakStyle(field);
+        
+        for (let i = 0; i < count; i++) {
+            if (func === undefined) break;
+
+            let {minimum, maximum} = breakDownValues[i];
+            const subStyle = func(colors[i], minimum, maximum);
+            style.classBreaks.push({ minimum, maximum, style: subStyle });
         }
 
         return style;
