@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { CSVFeatureSource, FeatureLayer, GeneralStyle, Render } from "..";
 import TestUtils from "../shared/TestUtils";
 
@@ -69,5 +70,31 @@ describe('CSVFeatureSource', () => {
         expect(fields.length).toBe(5);
         expect(source.internalFeatures.length).toBe(198);
         await source.close();
+    });
+
+    it('create', async () => {
+        let fieldOptions = { geomField: { x: 'longitude', y: 'latitude' }, hasFieldsRow: true };
+        let source = new CSVFeatureSource('./tests/data/layers/airports.csv', fieldOptions);
+        await source.open();
+
+        let features = await source.features();
+        let fields = await source.fields();
+
+        let filePathNew = './tests/data/layers/TMP_airports_create.csv';
+        let fieldOptionsNew = { fields: fields.map(f => f.name), geomField: { x: 'longitude', y: 'latitude' } };
+
+        try {
+            CSVFeatureSource.create(filePathNew, ',', fieldOptionsNew, features);
+
+            let sourceNew = new CSVFeatureSource(filePathNew, fieldOptions);
+            expect(sourceNew.name).toEqual('TMP_airports_create');
+
+            await sourceNew.open();
+            let featuresNew = await sourceNew.features();
+            expect(featuresNew.length).toBe(features.length);
+        }
+        finally {
+            fs.unlinkSync(filePathNew);
+        }
     });
 })
