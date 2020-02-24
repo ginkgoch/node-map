@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ginkgoch-map - v1.4.2</title>
+	<title>ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">ginkgoch-map - v1.4.2</a>
+					<a href="index.html" class="title">ginkgoch-map - v1.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> ginkgoch-map - v1.4.2</h1>
+			<h1> ginkgoch-map - v1.12.0</h1>
 		</div>
 	</div>
 </header>
@@ -65,58 +65,46 @@
 				<a href="#ginkgoch-map-for-nodejs" id="ginkgoch-map-for-nodejs" style="color: inherit; text-decoration: none;">
 					<h1>Ginkgoch Map for Node.js</h1>
 				</a>
-				<p><code>Ginkgoch map</code> is an easy-to-use map sdk to build map based applications with <a href="https://nodejs.org">Node.js</a>. All tools are available out of box. </p>
-				<ol>
-					<li>Geometry</li>
-					<li>Spatial Query</li>
-					<li>Projection</li>
-					<li>Vector Data Format (shp, json and allows to extend easily)</li>
-					<li>Styling &amp; Labeling</li>
-					<li>Server Render</li>
-					<li>...</li>
-				</ol>
-				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-					<h2>Example</h2>
+				<p><code>Ginkgoch MAP</code> is GIS Full-Stack Solution with JavaScript. It is a development library for building map visualization, data analysis on web service/application, desktop and mobile. It is not necessary to learn the other programming languages, but build your maps with JavaScript only.</p>
+				<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+					<h2>Overview</h2>
 				</a>
-				<pre><code class="language-js"><span class="hljs-comment">// tbd...</span></code></pre>
+				<ol>
+					<li>Full-stack GIS (backend/frontend) development with JavaScript only - Learn one programming language and develope full-stack GIS solutions.</li>
+					<li>Visualization/Data analysis - A complete development framework with visualization libraries, data APIs.</li>
+					<li>Rapid APP development - Compatible with HTML5 layouts as well as many fantasic mapping client library to build responsive application prototypes with your own GIS data.</li>
+					<li>Performance and interactivity - Smoothly visualize millions of geometries on server and compatible with 3rd party client mapping libraries.</li>
+					<li>Scalability - Scale your apps to millions of requests with Ginkgoch-Server as a backend. In-app cluster is also supported.</li>
+					<li>Cross-platform - Web service, Desktop or Mobile; macOS, Linux or Windows; no native APIs.</li>
+				</ol>
+				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+					<h2>Features</h2>
+				</a>
+				<ol>
+					<li>Geometry and Spatial Analysis.</li>
+					<li>Thematic Styles.</li>
+					<li>Various data format (SHP, CSV, MEM, GeoJSON etc.) read and write support.</li>
+					<li>Map with multiple layers overlap.</li>
+				</ol>
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting Started</h2>
+				</a>
+				<p>Here is a project to represents basic functions of Ginkgoch and build a very simple XYZ map tile service with KOA with your own data. <a href="https://github.com/ginkgoch/map-quick-started-demos">https://github.com/ginkgoch/map-quick-started-demos</a></p>
+				<p>Due to the low level GIS library for Node.JS, you can also build:</p>
+				<ol>
+					<li>Command line tools - <a href="https://github.com/ginkgoch/node-shapefile-cli">https://github.com/ginkgoch/node-shapefile-cli</a></li>
+					<li>Desktop application - <a href="https://github.com/ginkgoch/node-shapefile-viewer">https://github.com/ginkgoch/node-shapefile-viewer</a></li>
+					<li>Map Service (Docker support as well) - <a href="https://github.com/ginkgoch/node-map-server">https://github.com/ginkgoch/node-map-server</a></li>
+					<li>Mobile - WIP...</li>
+				</ol>
 				<a href="#screenshots" id="screenshots" style="color: inherit; text-decoration: none;">
 					<h2>Screenshots</h2>
 				</a>
-				<p>TBD...</p>
-				<blockquote>
-					<p><code>Ginkgoch map</code> uses <code>Cairo</code> as its render engine. Before using <code>ginkgoch map</code>, please refer <a href="https://www.npmjs.com/package/canvas">canvas&#39; official guide</a> to quickly install its dependencies with command on your OS.</p>
-				</blockquote>
-				<a href="#quick-reference-to-install-on-different-os" id="quick-reference-to-install-on-different-os" style="color: inherit; text-decoration: none;">
-					<h2>Quick Reference to Install on Different OS</h2>
+				<p><img src="./tests/data/layers/render-colorful-map.png" alt="colorful map"></p>
+				<a href="#setup-development-environment" id="setup-development-environment" style="color: inherit; text-decoration: none;">
+					<h2>Setup Development Environment</h2>
 				</a>
-				<table>
-					<thead>
-						<tr>
-							<th>OS</th>
-							<th>Command</th>
-						</tr>
-					</thead>
-					<tbody><tr>
-							<td>macOS</td>
-							<td>brew install pkg-config cairo libpng jpeg giflib</td>
-						</tr>
-						<tr>
-							<td>Ubuntu</td>
-							<td>sudo apt-get install libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++</td>
-						</tr>
-						<tr>
-							<td>Fedora</td>
-							<td>sudo yum install cairo cairo-devel cairomm-devel libjpeg-turbo-devel pango pango-devel pangomm pangomm-devel giflib-devel</td>
-						</tr>
-						<tr>
-							<td>Solaris</td>
-							<td>pkgin install cairo pkg-config xproto renderproto kbproto xextproto</td>
-						</tr>
-						<tr>
-							<td>Windows</td>
-							<td><a href="https://github.com/Automattic/node-canvas/wiki/Installation---Windows">refer the wiki for instruction</a></td>
-						</tr>
-				</tbody></table>
+				<p>Refer <a href="./SETUP.md">this guide</a> for setting up the development environment for <code>desktop</code>, <code>service</code> or <code>mobile</code> projects.</p>
 				<a href="#contacts" id="contacts" style="color: inherit; text-decoration: none;">
 					<h2>Contacts</h2>
 				</a>
@@ -155,6 +143,9 @@
 						<a href="classes/baseindex.html" class="tsd-kind-icon">Base<wbr>Index</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/csvfeaturesource.html" class="tsd-kind-icon">CSVFeature<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/classbreakstyle.html" class="tsd-kind-icon">Class<wbr>Break<wbr>Style</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -165,6 +156,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/colors.html" class="tsd-kind-icon">Colors</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-not-exported">
+						<a href="classes/coordinatecompressor.html" class="tsd-kind-icon">Coordinate<wbr>Compressor</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/featurelayer.html" class="tsd-kind-icon">Feature<wbr>Layer</a>
@@ -188,6 +182,9 @@
 						<a href="classes/generalstyle.html" class="tsd-kind-icon">General<wbr>Style</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/geojsonfeaturesource.html" class="tsd-kind-icon">GeoJSONFeature<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/geoutils.html" class="tsd-kind-icon">Geo<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -195,6 +192,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/image.html" class="tsd-kind-icon">Image</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/layer.html" class="tsd-kind-icon">Layer</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/layerfactory.html" class="tsd-kind-icon">Layer<wbr>Factory</a>
@@ -210,6 +210,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/memoryfeaturesource.html" class="tsd-kind-icon">Memory<wbr>Feature<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/multisourcefeaturelayer.html" class="tsd-kind-icon">Multi<wbr>Source<wbr>Feature<wbr>Layer</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/nativefactory.html" class="tsd-kind-icon">Native<wbr>Factory</a>
@@ -251,6 +254,9 @@
 						<a href="classes/srs.html" class="tsd-kind-icon">Srs</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/stopwatch.html" class="tsd-kind-icon">Stop<wbr>Watch</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/style.html" class="tsd-kind-icon">Style</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -274,14 +280,32 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/valuestyle.html" class="tsd-kind-icon">Value<wbr>Style</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/viewportutils.html" class="tsd-kind-icon">Viewport<wbr>Utils</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/aggregationresult.html" class="tsd-kind-icon">Aggregation<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/autostyleoptions.html" class="tsd-kind-icon">Auto<wbr>Style<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/csvfieldoptions.html" class="tsd-kind-icon">CSVField<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/classbreakitem.html" class="tsd-kind-icon">Class<wbr>Break<wbr>Item</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="interfaces/colorinfo.html" class="tsd-kind-icon">Color<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/dynamicfield.html" class="tsd-kind-icon">Dynamic<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/fillpattern.html" class="tsd-kind-icon">Fill<wbr>Pattern</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/mapoptions.html" class="tsd-kind-icon">Map<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/nativeadaptor.html" class="tsd-kind-icon">Native<wbr>Adaptor</a>
@@ -299,13 +323,25 @@
 						<a href="interfaces/randomcoloroption.html" class="tsd-kind-icon">Random<wbr>Color<wbr>Option</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/range.html" class="tsd-kind-icon">Range</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rendercontextoptions.html" class="tsd-kind-icon">Render<wbr>Context<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/size.html" class="tsd-kind-icon">Size</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/valueitem.html" class="tsd-kind-icon">Value<wbr>Item</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/viewportinfo.html" class="tsd-kind-icon">Viewport<wbr>Info</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#fieldfilters" class="tsd-kind-icon">Field<wbr>Filters</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#fillpatternrepeat" class="tsd-kind-icon">Fill<wbr>Pattern<wbr>Repeat</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#fontstyle" class="tsd-kind-icon">Font<wbr>Style</a>
@@ -317,6 +353,21 @@
 						<a href="globals.html#pointsymboltype" class="tsd-kind-icon">Point<wbr>Symbol<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#renderantialias" class="tsd-kind-icon">Render<wbr>Antialias</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#renderpatternquality" class="tsd-kind-icon">Render<wbr>Pattern<wbr>Quality</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#renderquality" class="tsd-kind-icon">Render<wbr>Quality</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#rendertextdrawingmode" class="tsd-kind-icon">Render<wbr>Text<wbr>Drawing<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#spatialqueryrelationship" class="tsd-kind-icon">Spatial<wbr>Query<wbr>Relationship</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#tileorigin" class="tsd-kind-icon">Tile<wbr>Origin</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
@@ -326,7 +377,13 @@
 						<a href="globals.html#dbf_field_decimal" class="tsd-kind-icon">DBF_<wbr>FIELD_<wbr>DECIMAL</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#default_auto_style_options" class="tsd-kind-icon">DEFAULT_<wbr>AUTO_<wbr>STYLE_<wbr>OPTIONS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#default_maximum_scale" class="tsd-kind-icon">DEFAULT_<wbr>MAXIMUM_<wbr>SCALE</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#default_maximum_scale_wgs84" class="tsd-kind-icon">DEFAULT_<wbr>MAXIMUM_<wbr>SCALE_<wbr>WGS84</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#description" class="tsd-kind-icon">DESCRIPTION</a>
@@ -359,22 +416,25 @@
 						<a href="globals.html#defaultencoding" class="tsd-kind-icon">default<wbr>Encoding</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#sourcefilepath" class="tsd-kind-icon">source<wbr>File<wbr>Path</a>
+						<a href="globals.html#emptylinedash" class="tsd-kind-icon">empty<wbr>Line<wbr>Dash</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#geomfieldundefinederror" class="tsd-kind-icon">geom<wbr>Field<wbr>Undefined<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#fetchpointfeatures" class="tsd-kind-icon">fetch<wbr>Point<wbr>Features</a>
+						<a href="globals.html#calculatescales" class="tsd-kind-icon">calculate<wbr>Scales</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#main" class="tsd-kind-icon">main</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-not-exported">
-						<a href="globals.html#readcount" class="tsd-kind-icon">read<wbr>Count</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#uuid" class="tsd-kind-icon">uuid</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#constants" class="tsd-kind-icon">Constants</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#leafletmapoptions" class="tsd-kind-icon">Leaflet<wbr>Map<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

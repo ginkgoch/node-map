@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NativeFactory | ginkgoch-map - v1.4.2</title>
+	<title>NativeFactory | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">ginkgoch-map - v1.4.2</a>
+					<a href="../index.html" class="title">ginkgoch-map - v1.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -95,9 +95,11 @@ NativeFactory.register({
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#isregistered" class="tsd-kind-icon">is<wbr>Registered</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#nativecanvas" class="tsd-kind-icon">native<wbr>Canvas</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#nativeimage" class="tsd-kind-icon">native<wbr>Image</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#register" class="tsd-kind-icon">register</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#registerfrom" class="tsd-kind-icon">register<wbr>From</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="nativefactory.html#unregister" class="tsd-kind-icon">unregister</a></li>
 							</ul>
 						</section>
@@ -106,6 +108,23 @@ NativeFactory.register({
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="isregistered" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Registered</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Registered<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L57">src/native/NativeFactory.ts:57</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="nativecanvas" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> native<wbr>Canvas</h3>
@@ -116,9 +135,14 @@ NativeFactory.register({
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/native/NativeFactory.ts#L37">src/native/NativeFactory.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L73">src/native/NativeFactory.ts:73</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates native canvas by the registered adaptor. Throws exception if not registered.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -142,9 +166,14 @@ NativeFactory.register({
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/native/NativeFactory.ts#L31">src/native/NativeFactory.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L64">src/native/NativeFactory.ts:64</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates native image by the registered adaptor. Throws exception if not registered.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/nativeimage.html" class="tsd-signature-type">NativeImage</a></h4>
 						</li>
 					</ul>
@@ -159,13 +188,55 @@ NativeFactory.register({
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/native/NativeFactory.ts#L23">src/native/NativeFactory.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L29">src/native/NativeFactory.ts:29</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers a native adaptor.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>adaptor: <a href="../interfaces/nativeadaptor.html" class="tsd-signature-type">NativeAdaptor</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The native adaptor.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="registerfrom" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> register<wbr>From</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>From<span class="tsd-signature-symbol">(</span>importer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L43">src/native/NativeFactory.ts:43</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers a native adaptor with node-canvas importer only.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>importer: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The node-canvas importer.</p>
+										<pre><code class="language-typescript"># requires canvas installed <span class="hljs-keyword">for</span> <span class="hljs-keyword">this</span> project or global first.
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> canvasImporter <span class="hljs-keyword">from</span> <span class="hljs-string">'canvas'</span>;
+NativeFactory.registerFrom(canvasImporter);</code></pre>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -182,9 +253,14 @@ NativeFactory.register({
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/native/NativeFactory.ts#L27">src/native/NativeFactory.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/native/NativeFactory.ts#L53">src/native/NativeFactory.ts:53</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Unregister current native adaptor.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -207,6 +283,9 @@ NativeFactory.register({
 						<a href="nativefactory.html" class="tsd-kind-icon">Native<wbr>Factory</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="nativefactory.html#isregistered" class="tsd-kind-icon">is<wbr>Registered</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="nativefactory.html#nativecanvas" class="tsd-kind-icon">native<wbr>Canvas</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -214,6 +293,9 @@ NativeFactory.register({
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="nativefactory.html#register" class="tsd-kind-icon">register</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="nativefactory.html#registerfrom" class="tsd-kind-icon">register<wbr>From</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="nativefactory.html#unregister" class="tsd-kind-icon">unregister</a>

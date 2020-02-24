@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>FeatureLayer | ginkgoch-map - v1.12.0</title>
+	<title>Layer | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,35 +54,32 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="featurelayer.html">FeatureLayer</a>
+					<a href="layer.html">Layer</a>
 				</li>
 			</ul>
-			<h1>Class FeatureLayer</h1>
+			<h1>Class Layer</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>FeatureLayer responses for rendering FeatureSource with styles.</p>
-					</div>
-					<pre><code class="language-typescript"><span class="hljs-keyword">const</span> source = <span class="hljs-keyword">new</span> ShapefileFeatureSource(<span class="hljs-string">'./tests/data/layers/USStates.shp'</span>);
-<span class="hljs-keyword">const</span> layer = <span class="hljs-keyword">new</span> FeatureLayer(source);
-layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="hljs-string">'#886600'</span>, <span class="hljs-string">'red'</span>, <span class="hljs-number">2</span>));
-...</code></pre>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="layer.html" class="tsd-signature-type">Layer</a>
+						<a href="opener.html" class="tsd-signature-type">Opener</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">FeatureLayer</span>
+								<span class="target">Layer</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="featurelayer.html" class="tsd-signature-type">FeatureLayer</a>
+									</li>
+									<li>
+										<a href="multisourcefeaturelayer.html" class="tsd-signature-type">MultiSourceFeatureLayer</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -95,48 +92,44 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="featurelayer.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="layer.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#margin" class="tsd-kind-icon">margin</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#minimumscale" class="tsd-kind-icon">minimum<wbr>Scale</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#opened" class="tsd-kind-icon">opened</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="featurelayer.html#source" class="tsd-kind-icon">source</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="featurelayer.html#styles" class="tsd-kind-icon">styles</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#visible" class="tsd-kind-icon">visible</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#margin" class="tsd-kind-icon">margin</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#minimumscale" class="tsd-kind-icon">minimum<wbr>Scale</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="layer.html#opened" class="tsd-kind-icon">opened</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="layer.html#visible" class="tsd-kind-icon">visible</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited tsd-is-private-protected">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="featurelayer.html#_openrequired" class="tsd-kind-icon">_open<wbr>Required</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="layer.html#_openrequired" class="tsd-kind-icon">_open<wbr>Required</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="featurelayer.html#_close" class="tsd-kind-icon">_close</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="featurelayer.html#_draw" class="tsd-kind-icon">_draw</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="featurelayer.html#_open" class="tsd-kind-icon">_open</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="featurelayer.html#_tojson" class="tsd-kind-icon">_toJSON</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#applymargin" class="tsd-kind-icon">apply<wbr>Margin</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#close" class="tsd-kind-icon">close</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#draw" class="tsd-kind-icon">draw</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="featurelayer.html#envelope" class="tsd-kind-icon">envelope</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="featurelayer.html#getcrs" class="tsd-kind-icon">getCRS</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#open" class="tsd-kind-icon">open</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="featurelayer.html#pushstyles" class="tsd-kind-icon">push<wbr>Styles</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="featurelayer.html#scalevisible" class="tsd-kind-icon">scale<wbr>Visible</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="featurelayer.html#shoulddraw" class="tsd-kind-icon">should<wbr>Draw</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#thumbnail" class="tsd-kind-icon">thumbnail</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="featurelayer.html#tojson" class="tsd-kind-icon">toJSON</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="featurelayer.html#parsejson" class="tsd-kind-icon">parseJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="layer.html#_close" class="tsd-kind-icon">_close</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="layer.html#_draw" class="tsd-kind-icon">_draw</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="layer.html#_open" class="tsd-kind-icon">_open</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="layer.html#_tojson" class="tsd-kind-icon">_toJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="layer.html#applymargin" class="tsd-kind-icon">apply<wbr>Margin</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="layer.html#close" class="tsd-kind-icon">close</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="layer.html#draw" class="tsd-kind-icon">draw</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="layer.html#envelope" class="tsd-kind-icon">envelope</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="layer.html#getcrs" class="tsd-kind-icon">getCRS</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="layer.html#open" class="tsd-kind-icon">open</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="layer.html#scalevisible" class="tsd-kind-icon">scale<wbr>Visible</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="layer.html#shoulddraw" class="tsd-kind-icon">should<wbr>Draw</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="layer.html#thumbnail" class="tsd-kind-icon">thumbnail</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="layer.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 							</ul>
 						</section>
 					</div>
@@ -144,101 +137,77 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Feature<wbr>Layer<span class="tsd-signature-symbol">(</span>source<span class="tsd-signature-symbol">: </span><a href="featuresource.html" class="tsd-signature-type">FeatureSource</a>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="featurelayer.html" class="tsd-signature-type">FeatureLayer</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Layer<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="layer.html" class="tsd-signature-type">Layer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="layer.html">Layer</a>.<a href="layer.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L25">src/layers/FeatureLayer.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L14">src/layers/Layer.ts:14</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Constructs a FeatureLayer instance.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>source: <a href="featuresource.html" class="tsd-signature-type">FeatureSource</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The feature source where the features are fetched.</p>
-										</div>
-									</div>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The name of this layer. Optional with default value <code>layer-${uuid()}</code>.</p>
-										</div>
-									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="featurelayer.html" class="tsd-signature-type">FeatureLayer</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="layer.html" class="tsd-signature-type">Layer</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="id" class="tsd-anchor"></a>
 					<h3>id</h3>
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#id">id</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L9">src/layers/Layer.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="margin" class="tsd-anchor"></a>
 					<h3>margin</h3>
 					<div class="tsd-signature tsd-kind-icon">margin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#margin">margin</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L14">src/layers/Layer.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="maximumscale" class="tsd-anchor"></a>
 					<h3>maximum<wbr>Scale</h3>
 					<div class="tsd-signature tsd-kind-icon">maximum<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#maximumscale">maximumScale</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L12">src/layers/Layer.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="minimumscale" class="tsd-anchor"></a>
 					<h3>minimum<wbr>Scale</h3>
 					<div class="tsd-signature tsd-kind-icon">minimum<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#minimumscale">minimumScale</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L11">src/layers/Layer.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#name">name</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L10">src/layers/Layer.ts:10</a></li>
 						</ul>
@@ -256,31 +225,10 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="source" class="tsd-anchor"></a>
-					<h3>source</h3>
-					<div class="tsd-signature tsd-kind-icon">source<span class="tsd-signature-symbol">:</span> <a href="featuresource.html" class="tsd-signature-type">FeatureSource</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L24">src/layers/FeatureLayer.ts:24</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="styles" class="tsd-anchor"></a>
-					<h3>styles</h3>
-					<div class="tsd-signature tsd-kind-icon">styles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="style.html" class="tsd-signature-type">Style</a><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L25">src/layers/FeatureLayer.ts:25</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="visible" class="tsd-anchor"></a>
 					<h3>visible</h3>
 					<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#visible">visible</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L13">src/layers/Layer.ts:13</a></li>
 						</ul>
@@ -310,41 +258,35 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_close" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _close</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _close</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_close<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="opener.html">Opener</a>.<a href="opener.html#_close">_close</a></p>
+								<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#_close">_close</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L60">src/layers/FeatureLayer.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L20">src/shared/Opener.ts:20</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Closes this layer and release its related resources.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_draw" class="tsd-anchor"></a>
-					<h3>_draw</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _draw</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_draw<span class="tsd-signature-symbol">(</span>render<span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="layer.html">Layer</a>.<a href="layer.html#_draw">_draw</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L82">src/layers/FeatureLayer.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L94">src/layers/Layer.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -365,41 +307,35 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_open" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _open</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _open</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_open<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="opener.html">Opener</a>.<a href="opener.html#_open">_open</a></p>
+								<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#_open">_open</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L53">src/layers/FeatureLayer.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L11">src/shared/Opener.ts:11</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Opens this layer and prepares the resources for querying and rendering.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_tojson" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _toJSON</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _toJSON</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="layer.html">Layer</a>.<a href="layer.html#_tojson">_toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L105">src/layers/FeatureLayer.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L77">src/layers/Layer.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -407,47 +343,20 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 									<p>Converts this layer into a JSON format data.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 							<p>A JSON format data of this layer.</p>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter">
-									<h5>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>maximum<wbr>Scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>minimum<wbr>Scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JSONKnownTypes</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>visible<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
-								</li>
-							</ul>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="applymargin" class="tsd-anchor"></a>
 					<h3>apply<wbr>Margin</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">apply<wbr>Margin<span class="tsd-signature-symbol">(</span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IEnvelope</span>, render<span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Envelope</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#applymargin">applyMargin</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L33">src/layers/Layer.ts:33</a></li>
 								</ul>
@@ -495,16 +404,15 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="draw" class="tsd-anchor"></a>
 					<h3>draw</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">draw<span class="tsd-signature-symbol">(</span>render<span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#draw">draw</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L83">src/layers/Layer.ts:83</a></li>
 								</ul>
@@ -527,42 +435,34 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="envelope" class="tsd-anchor"></a>
-					<h3>envelope</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> envelope</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">envelope<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Envelope</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="layer.html">Layer</a>.<a href="layer.html#envelope">envelope</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L68">src/layers/FeatureLayer.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L25">src/layers/Layer.ts:25</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets the envelope of this layer.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Envelope</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>The envelope of this layer.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="getcrs" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> getCRS</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> getCRS</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">getCRS<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="srs.html" class="tsd-signature-type">Srs</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="layer.html">Layer</a>.<a href="layer.html#getcrs">getCRS</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L74">src/layers/FeatureLayer.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L48">src/layers/Layer.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="srs.html" class="tsd-signature-type">Srs</a></h4>
@@ -587,47 +487,15 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="pushstyles" class="tsd-anchor"></a>
-					<h3>push<wbr>Styles</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">push<wbr>Styles<span class="tsd-signature-symbol">(</span>styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="style.html" class="tsd-signature-type">Style</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L44">src/layers/FeatureLayer.ts:44</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Pushes multiple styles into this layer.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>styles: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="style.html" class="tsd-signature-type">Style</a><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The styles to render features.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="scalevisible" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> scale<wbr>Visible</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">scale<wbr>Visible<span class="tsd-signature-symbol">(</span>scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#scalevisible">scaleVisible</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L100">src/layers/Layer.ts:100</a></li>
 								</ul>
@@ -642,16 +510,15 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="shoulddraw" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> should<wbr>Draw</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">should<wbr>Draw<span class="tsd-signature-symbol">(</span>render<span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#shoulddraw">shouldDraw</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L96">src/layers/Layer.ts:96</a></li>
 								</ul>
@@ -666,16 +533,15 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="thumbnail" class="tsd-anchor"></a>
 					<h3>thumbnail</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">thumbnail<span class="tsd-signature-symbol">(</span>width<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="image.html" class="tsd-signature-type">Image</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#thumbnail">thumbnail</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L55">src/layers/Layer.ts:55</a></li>
 								</ul>
@@ -704,16 +570,15 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="tojson" class="tsd-anchor"></a>
 					<h3>toJSON</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="layer.html">Layer</a>.<a href="layer.html#tojson">toJSON</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/Layer.ts#L68">src/layers/Layer.ts:68</a></li>
 								</ul>
@@ -725,39 +590,6 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 							<p>A JSON format data of this layer.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="parsejson" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> parseJSON</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">parseJSON<span class="tsd-signature-symbol">(</span>json<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="featurelayer.html" class="tsd-signature-type">FeatureLayer</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/FeatureLayer.ts#L124">src/layers/FeatureLayer.ts:124</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Parses the given JSON format data to a FeatureLayer instance.
-									The JSON data must match FeatureLayer schema.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>json: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The JSON format data of this layer.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="featurelayer.html" class="tsd-signature-type">FeatureLayer</a></h4>
-							<p>A FeatureLayer instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -776,88 +608,76 @@ layer.styles.push(<span class="hljs-keyword">new</span> FillStyle(<span class="h
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="featurelayer.html" class="tsd-kind-icon">Feature<wbr>Layer</a>
+						<a href="layer.html" class="tsd-kind-icon">Layer</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="featurelayer.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#id" class="tsd-kind-icon">id</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#margin" class="tsd-kind-icon">margin</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#minimumscale" class="tsd-kind-icon">minimum<wbr>Scale</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#opened" class="tsd-kind-icon">opened</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="layer.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="featurelayer.html#source" class="tsd-kind-icon">source</a>
+								<a href="layer.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="featurelayer.html#styles" class="tsd-kind-icon">styles</a>
+								<a href="layer.html#margin" class="tsd-kind-icon">margin</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="layer.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="layer.html#minimumscale" class="tsd-kind-icon">minimum<wbr>Scale</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="layer.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#visible" class="tsd-kind-icon">visible</a>
+								<a href="layer.html#opened" class="tsd-kind-icon">opened</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="layer.html#visible" class="tsd-kind-icon">visible</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="featurelayer.html#_openrequired" class="tsd-kind-icon">_open<wbr>Required</a>
+								<a href="layer.html#_openrequired" class="tsd-kind-icon">_open<wbr>Required</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="featurelayer.html#_close" class="tsd-kind-icon">_close</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="layer.html#_close" class="tsd-kind-icon">_close</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="featurelayer.html#_draw" class="tsd-kind-icon">_draw</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="layer.html#_draw" class="tsd-kind-icon">_draw</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="featurelayer.html#_open" class="tsd-kind-icon">_open</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="layer.html#_open" class="tsd-kind-icon">_open</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="featurelayer.html#_tojson" class="tsd-kind-icon">_toJSON</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#applymargin" class="tsd-kind-icon">apply<wbr>Margin</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#close" class="tsd-kind-icon">close</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#draw" class="tsd-kind-icon">draw</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="featurelayer.html#envelope" class="tsd-kind-icon">envelope</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="featurelayer.html#getcrs" class="tsd-kind-icon">getCRS</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#open" class="tsd-kind-icon">open</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="layer.html#_tojson" class="tsd-kind-icon">_toJSON</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="featurelayer.html#pushstyles" class="tsd-kind-icon">push<wbr>Styles</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="featurelayer.html#scalevisible" class="tsd-kind-icon">scale<wbr>Visible</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="featurelayer.html#shoulddraw" class="tsd-kind-icon">should<wbr>Draw</a>
+								<a href="layer.html#applymargin" class="tsd-kind-icon">apply<wbr>Margin</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#thumbnail" class="tsd-kind-icon">thumbnail</a>
+								<a href="layer.html#close" class="tsd-kind-icon">close</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="layer.html#draw" class="tsd-kind-icon">draw</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="layer.html#envelope" class="tsd-kind-icon">envelope</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="layer.html#getcrs" class="tsd-kind-icon">getCRS</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="featurelayer.html#tojson" class="tsd-kind-icon">toJSON</a>
+								<a href="layer.html#open" class="tsd-kind-icon">open</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="featurelayer.html#parsejson" class="tsd-kind-icon">parseJSON</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="layer.html#scalevisible" class="tsd-kind-icon">scale<wbr>Visible</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="layer.html#shoulddraw" class="tsd-kind-icon">should<wbr>Draw</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="layer.html#thumbnail" class="tsd-kind-icon">thumbnail</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="layer.html#tojson" class="tsd-kind-icon">toJSON</a>
 							</li>
 						</ul>
 					</li>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AggregationResult | ginkgoch-map - v1.12.0</title>
+	<title>AutoStyleOptions | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,28 +54,21 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="aggregationresult.html">AggregationResult</a>
+					<a href="autostyleoptions.html">AutoStyleOptions</a>
 				</li>
 			</ul>
-			<h1>Interface AggregationResult</h1>
+			<h1>Interface AutoStyleOptions</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>This interface defines the schema of the general aggregation result.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AggregationResult</span>
+						<span class="target">AutoStyleOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -86,11 +79,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aggregationresult.html#average" class="tsd-kind-icon">average</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aggregationresult.html#count" class="tsd-kind-icon">count</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aggregationresult.html#maximum" class="tsd-kind-icon">maximum</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aggregationresult.html#minimum" class="tsd-kind-icon">minimum</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aggregationresult.html#sum" class="tsd-kind-icon">sum</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#fromcolor" class="tsd-kind-icon">from<wbr>Color</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#radius" class="tsd-kind-icon">radius</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#strokecolor" class="tsd-kind-icon">stroke<wbr>Color</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#strokewidth" class="tsd-kind-icon">stroke<wbr>Width</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#symbol" class="tsd-kind-icon">symbol</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="autostyleoptions.html#tocolor" class="tsd-kind-icon">to<wbr>Color</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,79 +93,64 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="average" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> average</h3>
-					<div class="tsd-signature tsd-kind-icon">average<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="fromcolor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> from<wbr>Color</h3>
+					<div class="tsd-signature tsd-kind-icon">from<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/PropertyAggregator.ts#L166">src/layers/PropertyAggregator.ts:166</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L4">src/styles/AutoStyleOptions.ts:4</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The average value in the items.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="count" class="tsd-anchor"></a>
-					<h3>count</h3>
-					<div class="tsd-signature tsd-kind-icon">count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="radius" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> radius</h3>
+					<div class="tsd-signature tsd-kind-icon">radius<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/PropertyAggregator.ts#L154">src/layers/PropertyAggregator.ts:154</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L8">src/styles/AutoStyleOptions.ts:8</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The count of the items.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="maximum" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> maximum</h3>
-					<div class="tsd-signature tsd-kind-icon">maximum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="strokecolor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stroke<wbr>Color</h3>
+					<div class="tsd-signature tsd-kind-icon">stroke<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/PropertyAggregator.ts#L158">src/layers/PropertyAggregator.ts:158</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L6">src/styles/AutoStyleOptions.ts:6</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The maximum value in the items.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="minimum" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> minimum</h3>
-					<div class="tsd-signature tsd-kind-icon">minimum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="strokewidth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stroke<wbr>Width</h3>
+					<div class="tsd-signature tsd-kind-icon">stroke<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/PropertyAggregator.ts#L162">src/layers/PropertyAggregator.ts:162</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L7">src/styles/AutoStyleOptions.ts:7</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The minimum value in the items.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sum" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sum</h3>
-					<div class="tsd-signature tsd-kind-icon">sum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="symbol" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> symbol</h3>
+					<div class="tsd-signature tsd-kind-icon">symbol<span class="tsd-signature-symbol">:</span> <a href="../globals.html#pointsymboltype" class="tsd-signature-type">PointSymbolType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/PropertyAggregator.ts#L170">src/layers/PropertyAggregator.ts:170</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L9">src/styles/AutoStyleOptions.ts:9</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The sum of the item values.</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="tocolor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> to<wbr>Color</h3>
+					<div class="tsd-signature tsd-kind-icon">to<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/AutoStyleOptions.ts#L5">src/styles/AutoStyleOptions.ts:5</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -188,22 +167,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="aggregationresult.html" class="tsd-kind-icon">Aggregation<wbr>Result</a>
+						<a href="autostyleoptions.html" class="tsd-kind-icon">Auto<wbr>Style<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aggregationresult.html#average" class="tsd-kind-icon">average</a>
+								<a href="autostyleoptions.html#fromcolor" class="tsd-kind-icon">from<wbr>Color</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aggregationresult.html#count" class="tsd-kind-icon">count</a>
+								<a href="autostyleoptions.html#radius" class="tsd-kind-icon">radius</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aggregationresult.html#maximum" class="tsd-kind-icon">maximum</a>
+								<a href="autostyleoptions.html#strokecolor" class="tsd-kind-icon">stroke<wbr>Color</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aggregationresult.html#minimum" class="tsd-kind-icon">minimum</a>
+								<a href="autostyleoptions.html#strokewidth" class="tsd-kind-icon">stroke<wbr>Width</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aggregationresult.html#sum" class="tsd-kind-icon">sum</a>
+								<a href="autostyleoptions.html#symbol" class="tsd-kind-icon">symbol</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="autostyleoptions.html#tocolor" class="tsd-kind-icon">to<wbr>Color</a>
 							</li>
 						</ul>
 					</li>

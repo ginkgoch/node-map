@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ShapefileFeatureSource | ginkgoch-map - v1.4.2</title>
+	<title>ShapefileFeatureSource | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">ginkgoch-map - v1.4.2</a>
+					<a href="../index.html" class="title">ginkgoch-map - v1.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -97,6 +97,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#decoratefeature" class="tsd-kind-icon">decorate<wbr>Feature</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#dynamicfields" class="tsd-kind-icon">dynamic<wbr>Fields</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="shapefilefeaturesource.html#flag" class="tsd-kind-icon">flag</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#index" class="tsd-kind-icon">index</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#indexenabled" class="tsd-kind-icon">index<wbr>Enabled</a></li>
@@ -138,8 +140,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="shapefilefeaturesource.html#_tojson" class="tsd-kind-icon">_toJSON</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="shapefilefeaturesource.html#_update" class="tsd-kind-icon">_update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="shapefilefeaturesource.html#_updatefield" class="tsd-kind-icon">_update<wbr>Field</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="shapefilefeaturesource.html#_updateproperties" class="tsd-kind-icon">_update<wbr>Properties</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="shapefilefeaturesource.html#buildindex" class="tsd-kind-icon">build<wbr>Index</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#close" class="tsd-kind-icon">close</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="shapefilefeaturesource.html#copyschemaas" class="tsd-kind-icon">copy<wbr>Schema<wbr>As</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#count" class="tsd-kind-icon">count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#envelope" class="tsd-kind-icon">envelope</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#feature" class="tsd-kind-icon">feature</a></li>
@@ -151,11 +155,14 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#propertyaggregator" class="tsd-kind-icon">property<wbr>Aggregator</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#push" class="tsd-kind-icon">push</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#pushfield" class="tsd-kind-icon">push<wbr>Field</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#query" class="tsd-kind-icon">query</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#remove" class="tsd-kind-icon">remove</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#removefield" class="tsd-kind-icon">remove<wbr>Field</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#update" class="tsd-kind-icon">update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#updatefield" class="tsd-kind-icon">update<wbr>Field</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="shapefilefeaturesource.html#updateproperties" class="tsd-kind-icon">update<wbr>Properties</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="shapefilefeaturesource.html#createempty" class="tsd-kind-icon">create<wbr>Empty</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="shapefilefeaturesource.html#parsejson" class="tsd-kind-icon">parseJSON</a></li>
 							</ul>
 						</section>
@@ -175,7 +182,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L23">src/layers/ShapefileFeatureSource.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L23">src/layers/sources/ShapefileFeatureSource.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,13 +224,35 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="decoratefeature" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> decorate<wbr>Feature</h3>
+					<div class="tsd-signature tsd-kind-icon">decorate<wbr>Feature<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#decoratefeature">decorateFeature</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L52">src/layers/sources/FeatureSource.ts:52</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="dynamicfields" class="tsd-anchor"></a>
+					<h3>dynamic<wbr>Fields</h3>
+					<div class="tsd-signature tsd-kind-icon">dynamic<wbr>Fields<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dynamicfield.html" class="tsd-signature-type">DynamicField</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#dynamicfields">dynamicFields</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L54">src/layers/sources/FeatureSource.ts:54</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="flag" class="tsd-anchor"></a>
 					<h3>flag</h3>
 					<div class="tsd-signature tsd-kind-icon">flag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L21">src/layers/ShapefileFeatureSource.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L21">src/layers/sources/ShapefileFeatureSource.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -244,7 +273,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#index">index</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L45">src/layers/FeatureSource.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L50">src/layers/sources/FeatureSource.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -261,7 +290,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#indexenabled">indexEnabled</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L40">src/layers/FeatureSource.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L45">src/layers/sources/FeatureSource.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -279,7 +308,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L25">src/layers/FeatureSource.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L30">src/layers/sources/FeatureSource.ts:30</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -295,7 +324,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#opened">opened</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/shared/Opener.ts#L2">src/shared/Opener.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L2">src/shared/Opener.ts:2</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -306,7 +335,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#projection">projection</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L29">src/layers/FeatureSource.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L34">src/layers/sources/FeatureSource.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -322,7 +351,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#type">type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L33">src/layers/FeatureSource.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L38">src/layers/sources/FeatureSource.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -345,7 +374,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#_openrequired">_openRequired</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/shared/Opener.ts#L22">src/shared/Opener.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L22">src/shared/Opener.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -363,7 +392,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#editable">editable</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L99">src/layers/ShapefileFeatureSource.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L99">src/layers/sources/ShapefileFeatureSource.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +416,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L48">src/layers/ShapefileFeatureSource.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L48">src/layers/sources/ShapefileFeatureSource.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -400,7 +429,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L55">src/layers/ShapefileFeatureSource.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L55">src/layers/sources/ShapefileFeatureSource.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -428,7 +457,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L65">src/layers/ShapefileFeatureSource.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L65">src/layers/sources/ShapefileFeatureSource.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -452,7 +481,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#srs">srs</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L249">src/layers/FeatureSource.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L349">src/layers/sources/FeatureSource.ts:349</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -470,7 +499,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#srs">srs</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L256">src/layers/FeatureSource.ts:256</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L356">src/layers/sources/FeatureSource.ts:356</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -503,7 +532,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_close">_close</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L173">src/layers/ShapefileFeatureSource.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L173">src/layers/sources/ShapefileFeatureSource.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -527,7 +556,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_count">_count</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L190">src/layers/ShapefileFeatureSource.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L190">src/layers/sources/ShapefileFeatureSource.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -551,7 +580,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_envelope">_envelope</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L233">src/layers/ShapefileFeatureSource.ts:233</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L233">src/layers/sources/ShapefileFeatureSource.ts:233</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -575,7 +604,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_feature">_feature</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L243">src/layers/ShapefileFeatureSource.ts:243</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L243">src/layers/sources/ShapefileFeatureSource.ts:243</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -614,7 +643,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_features">_features</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L200">src/layers/ShapefileFeatureSource.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L200">src/layers/sources/ShapefileFeatureSource.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -653,7 +682,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_fields">_fields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L224">src/layers/ShapefileFeatureSource.ts:224</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L224">src/layers/sources/ShapefileFeatureSource.ts:224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -677,7 +706,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_flushfields">_flushFields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L320">src/layers/ShapefileFeatureSource.ts:320</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L354">src/layers/sources/ShapefileFeatureSource.ts:354</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -701,7 +730,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_forwardprojection">_forwardProjection</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L286">src/layers/FeatureSource.ts:286</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L386">src/layers/sources/FeatureSource.ts:386</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -722,7 +751,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_forwardprojection">_forwardProjection</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L287">src/layers/FeatureSource.ts:287</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L387">src/layers/sources/FeatureSource.ts:387</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -747,7 +776,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_inverseprojection">_inverseProjection</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L266">src/layers/FeatureSource.ts:266</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L366">src/layers/sources/FeatureSource.ts:366</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -768,7 +797,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_inverseprojection">_inverseProjection</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L267">src/layers/FeatureSource.ts:267</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L367">src/layers/sources/FeatureSource.ts:367</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -792,7 +821,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_normalizefields">_normalizeFields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L138">src/layers/FeatureSource.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L227">src/layers/sources/FeatureSource.ts:227</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -825,7 +854,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_open">_open</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L145">src/layers/ShapefileFeatureSource.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L145">src/layers/sources/ShapefileFeatureSource.ts:145</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -854,7 +883,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_properties">_properties</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L253">src/layers/ShapefileFeatureSource.ts:253</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L253">src/layers/sources/ShapefileFeatureSource.ts:253</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -887,7 +916,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_push">_push</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L265">src/layers/ShapefileFeatureSource.ts:265</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L291">src/layers/sources/ShapefileFeatureSource.ts:291</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -921,7 +950,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_pushfield">_pushField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L290">src/layers/ShapefileFeatureSource.ts:290</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L324">src/layers/sources/ShapefileFeatureSource.ts:324</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -944,7 +973,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_pushfield">_pushField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L291">src/layers/ShapefileFeatureSource.ts:291</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L325">src/layers/sources/ShapefileFeatureSource.ts:325</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -968,7 +997,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_remove">_remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L282">src/layers/ShapefileFeatureSource.ts:282</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L316">src/layers/sources/ShapefileFeatureSource.ts:316</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1000,7 +1029,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_removefield">_removeField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L313">src/layers/ShapefileFeatureSource.ts:313</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L347">src/layers/sources/ShapefileFeatureSource.ts:347</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1032,7 +1061,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_tojson">_toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L74">src/layers/ShapefileFeatureSource.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L74">src/layers/sources/ShapefileFeatureSource.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1055,7 +1084,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_update">_update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L274">src/layers/ShapefileFeatureSource.ts:274</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L300">src/layers/sources/ShapefileFeatureSource.ts:300</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1089,7 +1118,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_updatefield">_updateField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L302">src/layers/ShapefileFeatureSource.ts:302</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L336">src/layers/sources/ShapefileFeatureSource.ts:336</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1118,7 +1147,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_updatefield">_updateField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L303">src/layers/ShapefileFeatureSource.ts:303</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L337">src/layers/sources/ShapefileFeatureSource.ts:337</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1128,6 +1157,38 @@
 								</li>
 								<li>
 									<h5>newField: <span class="tsd-signature-type">DbfField</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+					<a name="_updateproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _update<wbr>Properties</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_update<wbr>Properties<span class="tsd-signature-symbol">(</span>feature<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IFeature</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#_updateproperties">_updateProperties</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L308">src/layers/sources/ShapefileFeatureSource.ts:308</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Update properties only for a feature for performance consideration. If it is not implemented, please call <code>update</code> method instead.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>feature: <span class="tsd-signature-type">IFeature</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The feature to update in this feature source.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1144,7 +1205,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L108">src/layers/ShapefileFeatureSource.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L108">src/layers/sources/ShapefileFeatureSource.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1177,10 +1238,33 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#close">close</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/shared/Opener.ts#L13">src/shared/Opener.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L13">src/shared/Opener.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="copyschemaas" class="tsd-anchor"></a>
+					<h3>copy<wbr>Schema<wbr>As</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">copy<wbr>Schema<wbr>As<span class="tsd-signature-symbol">(</span>targetFilePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="shapefilefeaturesource.html" class="tsd-signature-type">ShapefileFeatureSource</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L268">src/layers/sources/ShapefileFeatureSource.ts:268</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>targetFilePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="shapefilefeaturesource.html" class="tsd-signature-type">ShapefileFeatureSource</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1195,7 +1279,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#count">count</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L153">src/layers/FeatureSource.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L251">src/layers/sources/FeatureSource.ts:251</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1212,14 +1296,14 @@
 					<a name="envelope" class="tsd-anchor"></a>
 					<h3>envelope</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">envelope<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEnvelope</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">envelope<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Envelope</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#envelope">envelope</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L232">src/layers/FeatureSource.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L332">src/layers/sources/FeatureSource.ts:332</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1227,7 +1311,7 @@
 									<p>Gets the envelope (bounding box) of this feature source.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEnvelope</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Envelope</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>The envelope (bounding box) of this feature source.</p>
 						</li>
 					</ul>
@@ -1243,7 +1327,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#feature">feature</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L112">src/layers/FeatureSource.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L192">src/layers/sources/FeatureSource.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1282,7 +1366,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#features">features</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L81">src/layers/FeatureSource.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L91">src/layers/sources/FeatureSource.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1321,7 +1405,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#fields">fields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L175">src/layers/FeatureSource.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L273">src/layers/sources/FeatureSource.ts:273</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1345,7 +1429,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#flushfields">flushFields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L437">src/layers/FeatureSource.ts:437</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L552">src/layers/sources/FeatureSource.ts:552</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1368,7 +1452,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="opener.html">Opener</a>.<a href="opener.html#open">open</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/shared/Opener.ts#L4">src/shared/Opener.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/shared/Opener.ts#L4">src/shared/Opener.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1386,7 +1470,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#properties">properties</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L206">src/layers/FeatureSource.ts:206</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L304">src/layers/sources/FeatureSource.ts:304</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1419,7 +1503,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#propertyaggregator">propertyAggregator</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L196">src/layers/FeatureSource.ts:196</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L294">src/layers/sources/FeatureSource.ts:294</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1454,7 +1538,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#push">push</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L317">src/layers/FeatureSource.ts:317</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L417">src/layers/sources/FeatureSource.ts:417</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1487,7 +1571,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#pushfield">pushField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L379">src/layers/FeatureSource.ts:379</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L494">src/layers/sources/FeatureSource.ts:494</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1509,6 +1593,62 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="query" class="tsd-anchor"></a>
+					<h3>query</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">query<span class="tsd-signature-symbol">(</span>queryRelationship<span class="tsd-signature-symbol">: </span><a href="../globals.html#spatialqueryrelationship" class="tsd-signature-type">SpatialQueryRelationship</a>, geom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Geometry</span>, geomSrs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="srs.html" class="tsd-signature-type">Srs</a>, fields<span class="tsd-signature-symbol">?: </span><a href="../globals.html#fieldfilters" class="tsd-signature-type">FieldFilters</a>, viewportEnvelope<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">IEnvelope</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Feature</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#query">query</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L125">src/layers/sources/FeatureSource.ts:125</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Query features spatially with a specific relationship.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>queryRelationship: <a href="../globals.html#spatialqueryrelationship" class="tsd-signature-type">SpatialQueryRelationship</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The relationship to query. NOTE: &#39;disjoint&#39; requires to fetch all features in a data source. If the source has too many features, this operation will be pretty slow. Consider to set viewportEnvelope to reduce the querying area.</p>
+									</div>
+								</li>
+								<li>
+									<h5>geom: <span class="tsd-signature-type">Geometry</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The geometry to compare relationship among the features in this feature source.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> geomSrs: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="srs.html" class="tsd-signature-type">Srs</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The geometry SRS. Default is undefined which means using the geometry directly.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fields: <a href="../globals.html#fieldfilters" class="tsd-signature-type">FieldFilters</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The fields included in the returning features.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> viewportEnvelope: <span class="tsd-signature-type">IEnvelope</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The restriction area of querying features.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Feature</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="remove" class="tsd-anchor"></a>
 					<h3>remove</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -1519,7 +1659,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L360">src/layers/FeatureSource.ts:360</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L475">src/layers/sources/FeatureSource.ts:475</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1551,7 +1691,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#removefield">removeField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L419">src/layers/FeatureSource.ts:419</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L534">src/layers/sources/FeatureSource.ts:534</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1583,7 +1723,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L459">src/layers/FeatureSource.ts:459</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L574">src/layers/sources/FeatureSource.ts:574</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1606,7 +1746,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L339">src/layers/FeatureSource.ts:339</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L439">src/layers/sources/FeatureSource.ts:439</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1639,7 +1779,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#updatefield">updateField</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/FeatureSource.ts#L399">src/layers/FeatureSource.ts:399</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L514">src/layers/sources/FeatureSource.ts:514</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1666,6 +1806,67 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="updateproperties" class="tsd-anchor"></a>
+					<h3>update<wbr>Properties</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Properties<span class="tsd-signature-symbol">(</span>feature<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IFeature</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="featuresource.html">FeatureSource</a>.<a href="featuresource.html#updateproperties">updateProperties</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/FeatureSource.ts#L459">src/layers/sources/FeatureSource.ts:459</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Update properties only for a feature for performance consideration. If it is not implemented, please call <code>update</code> method instead.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>feature: <span class="tsd-signature-type">IFeature</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The feature to update in this feature source.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="createempty" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> create<wbr>Empty</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Empty<span class="tsd-signature-symbol">(</span>filePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fileType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ShapefileType</span>, fields<span class="tsd-signature-symbol">: </span><a href="field.html" class="tsd-signature-type">Field</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="shapefilefeaturesource.html" class="tsd-signature-type">ShapefileFeatureSource</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L259">src/layers/sources/ShapefileFeatureSource.ts:259</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>filePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>fileType: <span class="tsd-signature-type">ShapefileType</span></h5>
+								</li>
+								<li>
+									<h5>fields: <a href="field.html" class="tsd-signature-type">Field</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="shapefilefeaturesource.html" class="tsd-signature-type">ShapefileFeatureSource</a></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="parsejson" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> parseJSON</h3>
@@ -1676,7 +1877,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/layers/ShapefileFeatureSource.ts#L86">src/layers/ShapefileFeatureSource.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/layers/sources/ShapefileFeatureSource.ts#L86">src/layers/sources/ShapefileFeatureSource.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1717,6 +1918,12 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="shapefilefeaturesource.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="shapefilefeaturesource.html#decoratefeature" class="tsd-kind-icon">decorate<wbr>Feature</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="shapefilefeaturesource.html#dynamicfields" class="tsd-kind-icon">dynamic<wbr>Fields</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="shapefilefeaturesource.html#flag" class="tsd-kind-icon">flag</a>
@@ -1811,11 +2018,17 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="shapefilefeaturesource.html#_updatefield" class="tsd-kind-icon">_update<wbr>Field</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+								<a href="shapefilefeaturesource.html#_updateproperties" class="tsd-kind-icon">_update<wbr>Properties</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="shapefilefeaturesource.html#buildindex" class="tsd-kind-icon">build<wbr>Index</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="shapefilefeaturesource.html#close" class="tsd-kind-icon">close</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="shapefilefeaturesource.html#copyschemaas" class="tsd-kind-icon">copy<wbr>Schema<wbr>As</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="shapefilefeaturesource.html#count" class="tsd-kind-icon">count</a>
@@ -1851,6 +2064,9 @@
 								<a href="shapefilefeaturesource.html#pushfield" class="tsd-kind-icon">push<wbr>Field</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="shapefilefeaturesource.html#query" class="tsd-kind-icon">query</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="shapefilefeaturesource.html#remove" class="tsd-kind-icon">remove</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -1864,6 +2080,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="shapefilefeaturesource.html#updatefield" class="tsd-kind-icon">update<wbr>Field</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="shapefilefeaturesource.html#updateproperties" class="tsd-kind-icon">update<wbr>Properties</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="shapefilefeaturesource.html#createempty" class="tsd-kind-icon">create<wbr>Empty</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="shapefilefeaturesource.html#parsejson" class="tsd-kind-icon">parseJSON</a>
