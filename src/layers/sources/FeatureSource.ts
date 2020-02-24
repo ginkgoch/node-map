@@ -1,8 +1,9 @@
 import _ from "lodash";
-import { IEnvelope, Feature, IFeature, Envelope } from "ginkgoch-geom";
+import { IEnvelope, Feature, IFeature, Envelope, Geometry } from "ginkgoch-geom";
 import { Opener, Validator, JSONKnownTypes } from "../../shared";
 import { Field, PropertyAggregator, Projection } from "..";
 import { BaseIndex } from "../../indices";
+import { Srs } from "../Projection";
 
 /**
  * This is a new type that could be replaced with 'all', 'none' or a string array.
@@ -10,6 +11,8 @@ import { BaseIndex } from "../../indices";
 export type FieldFilters = 'all' | 'none' | string[];
 
 export interface DynamicField { name: string, fieldsDependOn: string[], mapper: (f: IFeature) => any };
+
+export type SpatialQueryRelationship = 'intersection' | 'within' | 'disjoint' | 'overlap' | 'touch';
 
 /**
  * This class represents a base class of all feature source.
@@ -107,8 +110,68 @@ export abstract class FeatureSource extends Opener {
         }
 
         this.fillFeaturesWithDynamicFields(featuresOut, fieldsNorm);
-        
+
         return featuresOut;
+    }
+
+    /**
+     * Query features spatially with a specific relationship.
+     * @param {SpatialQueryRelationship} queryRelationship The relationship to query. NOTE: 'disjoint' requires to fetch all features in a data source. If the source has too many features, this operation will be pretty slow. Consider to set viewportEnvelope to reduce the querying area. 
+     * @param {Geometry} geom The geometry to compare relationship among the features in this feature source.
+     * @param {string | Srs | undefined} geomSrs The geometry SRS. Default is undefined which means using the geometry directly.
+     * @param {FieldFilters | undefined} fields The fields included in the returning features. 
+     * @param {IEnvelope | undefined} viewportEnvelope The restriction area of querying features.
+     */
+    async query(queryRelationship: SpatialQueryRelationship, geom: Geometry, geomSrs?: string | Srs, fields?: FieldFilters, viewportEnvelope?: IEnvelope): Promise<Array<Feature>> {
+        if (!['disjoint', 'intersection', 'overlap', 'touch', 'within'].includes(queryRelationship)) {
+            throw new Error(`Not supported spatial query relationship <${queryRelationship}>.`);
+        }
+
+        geom = this._getProjectedGeometry(geom, geomSrs);
+        let envelope: IEnvelope | undefined = queryRelationship === 'disjoint' ? undefined : geom.envelope();
+
+        if (viewportEnvelope !== undefined) {
+            if (queryRelationship === 'disjoint') {
+                envelope = viewportEnvelope;
+            }
+            else {
+                envelope = Envelope.intersection(envelope, viewportEnvelope);
+            }
+        }
+
+        let features = await this.features(envelope, fields);
+        features = features.filter(f => {
+            if (_.isEmpty(f.geometry)) {
+                return false;
+            }
+
+            switch (queryRelationship) {
+                case 'disjoint': return f.geometry.disjoint(geom);
+                case 'intersection': return f.geometry.intersects(geom);
+                case 'overlap': return f.geometry.overlaps(geom);
+                case 'touch': return f.geometry.touches(geom);
+                case 'within': return f.geometry.within(geom);
+                default:
+                    return false;
+            }
+        });
+
+        return features;
+    }
+
+    private _getProjectedGeometry(geom: Geometry, geomSrs: string | Srs | undefined) {
+        if (!this.projection.isValid || geomSrs === undefined) {
+            return geom;
+        }
+
+        if (typeof geomSrs === 'string') {
+            geomSrs = new Srs(geomSrs);
+        }
+
+        const geomProj = new Projection(geomSrs, this.projection.to);
+        geom = geomProj.forward(geom);
+
+        return geom;
     }
 
     /**

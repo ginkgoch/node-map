@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { Constants } from "../shared";
 
 /**
  * This class represents a utility for aggregating property data from a feature source.
@@ -22,8 +23,13 @@ export class PropertyAggregator {
      * @param {string} field The field name to filter from the source property data. 
      * @returns {any[]} An array of field values of the specified field name.
      */
-    select(field: string) {
-        return _.chain(this.properties).filter(p => p.has(field)).map(p => p.get(field)).value();
+    select(field: string, sort: boolean = false, sortFn?: (a:any, b:any)=>number) {
+        let result = _.chain(this.properties).filter(p => p.has(field)).map(p => p.get(field)).value();
+        if (sort) {
+            result = result.sort(sortFn);
+        }
+
+        return result;
     }
 
     /**
@@ -41,6 +47,70 @@ export class PropertyAggregator {
         }
 
         return query.value();
+    }
+
+    breakDownValues(field: string, breakCount: number, breakBy?: 'value' | 'position'): Array<{minimum:number, maximum:number}> {
+        let result = new Array<{minimum:number, maximum:number}>();
+        switch(breakBy) {
+            case 'position': 
+                result.push(...this._breakDownByPosition(field, breakCount));
+                break;
+            default:
+                result.push(...this._breakDownByValues(field, breakCount));
+                break;
+        }
+
+        return result;
+    }
+
+    private _breakDownByPosition(field: string, breakCount: number) {
+        let result = new Array<{minimum:number, maximum:number}>();
+        
+        let fieldValues = this.select(field, true, (a, b) => +a - +b);
+        let fieldValuesCount = fieldValues.length;
+        if (breakCount > fieldValuesCount) {
+            breakCount = fieldValuesCount;
+        }
+        
+        let increment = Math.floor(fieldValuesCount / breakCount);
+        
+        for (let i = 0; i < breakCount; i++) {
+            let current = i * increment;
+            let posMin = current;
+            let posMax = current + increment;
+            let minimum = fieldValues[posMin];
+            let maximum = fieldValues[posMax];
+            if (i === breakCount - 1) {
+                posMax = fieldValuesCount - 1;
+                maximum = Constants.POSITIVE_INFINITY_SCALE;
+            }
+
+            result.push({minimum, maximum});
+        }
+
+        return result;
+    }
+
+    private _breakDownByValues(field: string, breakCount: number) {
+        let result = new Array<{minimum:number, maximum:number}>();
+        
+        let { minimum, maximum } = this.general(field);
+        let increment = Math.abs(maximum! - minimum!) / breakCount;
+        for (let i = 0; i < breakCount; i++) {
+            let breakMin = minimum! + i * increment;
+            let breakMax = breakMin + increment;
+            if (minimum! > 0 && i === 0) {
+                breakMin = 0;
+            }
+
+            if (i === breakCount - 1) {
+                breakMax = Constants.POSITIVE_INFINITY_SCALE;
+            }
+
+            result.push({ minimum: breakMin, maximum: breakMax });
+        }
+
+        return result;
     }
 
     /**

@@ -1,10 +1,11 @@
 import fs from 'fs';
+import path from 'path';
 import _ from 'lodash';
 import csvParse from 'csv-parse/lib/sync';
 import { MemoryFeatureSource } from '..';
 import { JSONKnownTypes } from '../..';
 import { Projection } from '../Projection';
-import { Feature, GeometryFactory, Point, Geometry } from 'ginkgoch-geom';
+import { Feature, GeometryFactory, Point, Geometry, GeometryType } from 'ginkgoch-geom';
 import { Field } from '../Field';
 
 export interface CSVFieldOptions {
@@ -22,13 +23,14 @@ export class CSVFeatureSource extends MemoryFeatureSource {
      * Constructs a `CSVFeatureSource` instance.
      * @param {string} filePath The CSV file path.
      * @param {CSVFieldOptions} fieldOptions The CSV field options. e.g. { geoField: {x:'longitude', y:'latitude'}, hasFieldsRow: true }
+     * @param {string} delimiter The delimiter. 
      * @param {string} name The feature source name. 
      */
-    constructor(public filePath?: string, fieldOptions?: CSVFieldOptions, name?: string) {
+    constructor(public filePath?: string, fieldOptions?: CSVFieldOptions, delimiter: string = ',', name?: string) {
         super();
 
         this.type = JSONKnownTypes.geoJSONFeatureSource;
-        this.name = name || this.name;
+        this.name = name || (filePath !== undefined ? path.basename(filePath!, '.csv') : this.name);
         this.fieldOptions = _.defaults(fieldOptions, {});
     }
 
@@ -147,6 +149,58 @@ export class CSVFeatureSource extends MemoryFeatureSource {
         source.delimiter = json.delimiter;
         source.fieldOptions = json.fieldOptions;
         return source;
+    }
+
+    public static create(filePath: string, delimiter: string, fieldOptions: CSVFieldOptions, features: Array<Feature>, encoding: string = 'utf8') {
+        if (fieldOptions.fields === undefined || fieldOptions.fields.length === 0) {
+            throw new Error('CSV fields must be defined.');
+        }
+
+        fieldOptions = _.defaults(fieldOptions, { geomField: 'WKT' });
+
+        let convertGeom: (f: Feature) => string[];
+        let header = [...fieldOptions.fields!];
+        if (typeof fieldOptions.geomField === 'string') {
+            header.push(fieldOptions.geomField);
+            convertGeom = f => [f.geometry.toWKT()];
+        }
+        else {
+            let { x, y } = fieldOptions.geomField!;
+            header.push(x, y);
+            convertGeom = f => {
+                if (f.geometry.type === GeometryType.Point) {
+                    let { x, y } = <Point>f.geometry;
+                    return [x.toString(), y.toString()];
+                }
+                else {
+                    return ['NaN', 'NaN'];
+                }
+            };
+        }
+
+        let escape = (s: any) => {
+            if (s === undefined) {
+                return '';
+            }
+
+            s = s.toString();
+            if (s.includes(delimiter)) {
+                s = `"${s}"`;
+            }
+
+            return s;
+        };
+
+        let fd = fs.openSync(filePath, 'w');
+        fs.writeSync(fd, header.map(escape).join(delimiter) + '\n', undefined, encoding);
+
+        features.forEach(f => {
+            let row: Array<string> = fieldOptions.fields!.map(field => f.properties.has(field) ? f.properties.get(field).toString() : '');
+            row?.push(...convertGeom(f));
+            fs.writeSync(fd, row.map(escape).join(delimiter) + '\n', undefined, encoding);
+        });
+
+        fs.closeSync(fd);
     }
 
     private static validate(source: CSVFeatureSource) {

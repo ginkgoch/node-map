@@ -1,8 +1,42 @@
 import _ from 'lodash';
 import { Geometry, Point, MultiPoint, LineString, ICoordinate, MultiLineString, Polygon, LinearRing, MultiPolygon, GeometryCollection, IEnvelope, Envelope, IFeature } from "ginkgoch-geom";
-import { GeoUtils } from "./GeoUtils";
+import { GeoUtils, Constants } from "./GeoUtils";
+import { Projection, Srs } from '../layers';
+
+export interface ViewportInfo {
+    lat: number, lng: number, zoom: number
+}
 
 export class ViewportUtils {
+    public static getInitViewport(envelope: IEnvelope, screenWidth: number, screenHeight: number, envelopeSrs?: string, scales?: number[], dpi?: number): ViewportInfo {
+        if (envelopeSrs === undefined) {
+            let envelopeWidth = Math.abs(envelope.maxx - envelope.minx);
+            let envelopeHeight = Math.abs(envelope.maxy - envelope.miny);
+            if (envelopeWidth <= 360 && envelopeHeight <= 360) {
+                envelopeSrs = 'WGS84';
+            } 
+            else {
+                envelopeSrs = 'EPSG:3857';
+            }
+        }
+
+        if (scales === undefined) {
+            scales = Constants.DEFAULT_SCALES;
+        }
+
+        let projection = new Projection(envelopeSrs, 'WGS84');
+
+        let scale = GeoUtils.scale(envelope, projection.from.unit, {width: screenWidth, height: screenHeight}, dpi);
+        let zoom = GeoUtils.scaleLevel(scale, scales);
+
+        let center: ICoordinate = new Point((envelope.minx + envelope.maxx) * .5, (envelope.miny + envelope.maxy) * .5);
+        if (['WGS84', 'EPSG4326'].every(s => s !== envelopeSrs)) {
+            center = projection.forward(center);
+        }
+
+        return { lng: center.x, lat: center.y, zoom };
+    }
+
     public static adjustEnvelopeToMatchScreenSize(envelope: IEnvelope, screenWidth: number, screenHeight: number, marginPercentage: number = 0): Envelope {
         let [ex, ey] = [Math.abs(envelope.maxx - envelope.minx), Math.abs(envelope.maxy - envelope.miny)];
         let [rx, ry] = [ex / screenWidth, ey / screenHeight];

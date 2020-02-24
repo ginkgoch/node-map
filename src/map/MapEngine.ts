@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { IEnvelope, Envelope, Point, Geometry, Feature, GeometryFactory } from "ginkgoch-geom";
-import { Render, RenderContextOptions } from "../render";
+import { Render, RenderContextOptions, Image } from "../render";
 import { LayerGroup, FeatureLayer, Srs, Projection } from "../layers";
 import { Constants, GeoUtils, Validator } from "../shared";
 import { TileOrigin, TileSystem } from ".";
@@ -252,7 +252,8 @@ export class MapEngine {
      * @param pointTolerance Tolerance for point geometry.
      * @returns {Array<{layerID:string, features: Feature[]}>} The intersected features that are categorized by layers.
      */
-    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10, includeInvisibleLayers: boolean = false, layersToQuery?: string[]) {
+    async intersection(geom: Geometry, geomSrs: string, zoomLevel: number, pointTolerance: number = 10, includeInvisibleLayers: boolean = false, layersToQuery?: string[])
+        : Promise<Array<{ layer: string, features: Feature[] }>> {
         Validator.checkSrsIsValid(this.srs);
 
         const projection = new Projection(geomSrs, this.srs.projection);
@@ -308,7 +309,7 @@ export class MapEngine {
      * @deprecated This method is deprecated. Please call image(envelope?: IEnvelope) instead.
      * @ignore 
      */
-    async draw(envelope?: IEnvelope) {
+    async draw(envelope?: IEnvelope): Promise<Image> {
         return await this.image(envelope);
     }
 
@@ -317,7 +318,7 @@ export class MapEngine {
      * @param {IEnvelope} envelope The envelope that the viewport will be rendered. Optional with the minimal envelope of this map.
      * @returns {Image} The image that is rendered with this map instance.
      */
-    async image(envelope?: IEnvelope) {
+    async image(envelope?: IEnvelope): Promise<Image> {
         if (!envelope) {
             envelope = await this.envelope();
         }
@@ -352,7 +353,7 @@ export class MapEngine {
      * @param {number} y The row number. Start from 0.
      * @param {number} z The zoom level number. Start from 0.
      */
-    async xyz(x: number = 0, y: number = 0, z: number = 0) {
+    async xyz(x: number = 0, y: number = 0, z: number = 0): Promise<Image> {
         const tileSystem = new TileSystem(this.width, this.height, this.srs.unit, this.scales, this.origin);
         const envelope = tileSystem.envelope(z, x, y);
         const image = await this.image(envelope);
