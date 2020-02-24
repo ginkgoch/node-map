@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TextStyle | ginkgoch-map - v1.4.2</title>
+	<title>TextStyle | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">ginkgoch-map - v1.4.2</a>
+					<a href="../index.html" class="title">ginkgoch-map - v1.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -102,6 +102,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="textstyle.html#font" class="tsd-kind-icon">font</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="textstyle.html#linewidth" class="tsd-kind-icon">line<wbr>Width</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="textstyle.html#location" class="tsd-kind-icon">location</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#minimumscale" class="tsd-kind-icon">minimum<wbr>Scale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#name" class="tsd-kind-icon">name</a></li>
@@ -117,6 +118,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="textstyle.html#_draw" class="tsd-kind-icon">_draw</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="textstyle.html#_htmlstyle" class="tsd-kind-icon">_html<wbr>Style</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="textstyle.html#_htmlstylekeys" class="tsd-kind-icon">_html<wbr>Style<wbr>Keys</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="textstyle.html#_matches" class="tsd-kind-icon">_matches</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="textstyle.html#_tojson" class="tsd-kind-icon">_toJSON</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#draw" class="tsd-kind-icon">draw</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="textstyle.html#drawall" class="tsd-kind-icon">draw<wbr>All</a></li>
@@ -142,7 +144,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="style.html">Style</a>.<a href="style.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L37">src/styles/TextStyle.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L39">src/styles/TextStyle.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -204,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">content<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L27">src/styles/TextStyle.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L27">src/styles/TextStyle.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,7 +227,7 @@
 					<div class="tsd-signature tsd-kind-icon">fill<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L31">src/styles/TextStyle.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L31">src/styles/TextStyle.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -240,7 +242,7 @@
 					<div class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L29">src/styles/TextStyle.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L29">src/styles/TextStyle.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -256,7 +258,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#id">id</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L15">src/styles/Style.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L15">src/styles/Style.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -271,12 +273,27 @@
 					<div class="tsd-signature tsd-kind-icon">line<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L37">src/styles/TextStyle.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L37">src/styles/TextStyle.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The outline stroke width in pixel on text. If it is zero, no outline will be drawn.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="location" class="tsd-anchor"></a>
+					<h3>location</h3>
+					<div class="tsd-signature tsd-kind-icon">location<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"centroid"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"interior"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L39">src/styles/TextStyle.ts:39</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Use <code>centroid</code> or <code>interior</code> as text location. Default is <code>centroid</code>.</p>
 						</div>
 					</div>
 				</section>
@@ -287,7 +304,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#maximumscale">maximumScale</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L27">src/styles/Style.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L27">src/styles/Style.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -303,7 +320,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#minimumscale">minimumScale</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L31">src/styles/Style.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L31">src/styles/Style.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -319,7 +336,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L23">src/styles/Style.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L23">src/styles/Style.ts:23</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -334,7 +351,7 @@
 					<div class="tsd-signature tsd-kind-icon">stroke<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L35">src/styles/TextStyle.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L35">src/styles/TextStyle.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -349,7 +366,7 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Align<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"start"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"end"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"left"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"right"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"center"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L33">src/styles/TextStyle.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L33">src/styles/TextStyle.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -365,7 +382,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#type">type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L19">src/styles/Style.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L19">src/styles/Style.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -381,7 +398,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L35">src/styles/Style.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L35">src/styles/Style.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -404,7 +421,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="style.html">Style</a>.<a href="style.html#_draw">_draw</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L93">src/styles/TextStyle.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L95">src/styles/TextStyle.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -448,7 +465,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#_htmlstyle">_htmlStyle</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L157">src/styles/Style.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L166">src/styles/Style.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -471,7 +488,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="style.html">Style</a>.<a href="style.html#_htmlstylekeys">_htmlStyleKeys</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L77">src/styles/TextStyle.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L79">src/styles/TextStyle.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -480,6 +497,38 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_matches" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _matches</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_matches<span class="tsd-signature-symbol">(</span>feature<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IFeature</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#_matches">_matches</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L88">src/styles/Style.ts:88</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Whether this feature type matches this style.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>feature: <span class="tsd-signature-type">IFeature</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The feature to match.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -494,7 +543,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#_tojson">_toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L107">src/styles/Style.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L116">src/styles/Style.ts:116</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -518,7 +567,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#draw">draw</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L65">src/styles/Style.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L65">src/styles/Style.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -556,7 +605,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#drawall">drawAll</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L74">src/styles/Style.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L74">src/styles/Style.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -594,7 +643,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="style.html">Style</a>.<a href="style.html#fields">fields</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L126">src/styles/TextStyle.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L129">src/styles/TextStyle.ts:129</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -618,7 +667,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#htmlstyle">htmlStyle</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L148">src/styles/Style.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L157">src/styles/Style.ts:157</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -641,7 +690,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="style.html">Style</a>.<a href="style.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/Style.ts#L97">src/styles/Style.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/Style.ts#L106">src/styles/Style.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -664,7 +713,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/styles/TextStyle.ts#L139">src/styles/TextStyle.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/styles/TextStyle.ts#L142">src/styles/TextStyle.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -739,6 +788,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="textstyle.html#linewidth" class="tsd-kind-icon">line<wbr>Width</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="textstyle.html#location" class="tsd-kind-icon">location</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="textstyle.html#maximumscale" class="tsd-kind-icon">maximum<wbr>Scale</a>
 							</li>
@@ -768,6 +820,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="textstyle.html#_htmlstylekeys" class="tsd-kind-icon">_html<wbr>Style<wbr>Keys</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="textstyle.html#_matches" class="tsd-kind-icon">_matches</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="textstyle.html#_tojson" class="tsd-kind-icon">_toJSON</a>

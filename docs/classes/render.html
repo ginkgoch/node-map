@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Render | ginkgoch-map - v1.4.2</title>
+	<title>Render | ginkgoch-map - v1.12.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">ginkgoch-map - v1.4.2</a>
+					<a href="../index.html" class="title">ginkgoch-map - v1.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -92,7 +92,6 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#antialias" class="tsd-kind-icon">antialias</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#canvas" class="tsd-kind-icon">canvas</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#context" class="tsd-kind-icon">context</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#envelope" class="tsd-kind-icon">envelope</a></li>
@@ -101,8 +100,15 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#resolutionx" class="tsd-kind-icon">resolutionX</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#resolutiony" class="tsd-kind-icon">resolutionY</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#scale" class="tsd-kind-icon">scale</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#simplifytolerance" class="tsd-kind-icon">simplify<wbr>Tolerance</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#textbounds" class="tsd-kind-icon">text<wbr>Bounds</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#width" class="tsd-kind-icon">width</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="render.html#contextoptions" class="tsd-kind-icon">context<wbr>Options</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -146,7 +152,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L60">src/render/Render.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L96">src/render/Render.ts:96</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,27 +195,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="antialias" class="tsd-anchor"></a>
-					<h3>antialias</h3>
-					<div class="tsd-signature tsd-kind-icon">antialias<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"default"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"gray"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"subpixel"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;default&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L52">src/render/Render.ts:52</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The antialias setting of canvas.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="canvas" class="tsd-anchor"></a>
 					<h3>canvas</h3>
 					<div class="tsd-signature tsd-kind-icon">canvas<span class="tsd-signature-symbol">:</span> <a href="../interfaces/nativecanvas.html" class="tsd-signature-type">NativeCanvas</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L32">src/render/Render.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L50">src/render/Render.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -224,7 +215,7 @@
 					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L56">src/render/Render.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L90">src/render/Render.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -239,7 +230,7 @@
 					<div class="tsd-signature tsd-kind-icon">envelope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IEnvelope</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L48">src/render/Render.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L66">src/render/Render.ts:66</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -254,7 +245,7 @@
 					<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L28">src/render/Render.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L46">src/render/Render.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -269,7 +260,7 @@
 					<div class="tsd-signature tsd-kind-icon">image<span class="tsd-signature-symbol">:</span> <a href="image.html" class="tsd-signature-type">Image</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L20">src/render/Render.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L38">src/render/Render.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -284,7 +275,7 @@
 					<div class="tsd-signature tsd-kind-icon">resolutionX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L40">src/render/Render.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L58">src/render/Render.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -299,7 +290,7 @@
 					<div class="tsd-signature tsd-kind-icon">resolutionY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L44">src/render/Render.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L62">src/render/Render.ts:62</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -314,7 +305,7 @@
 					<div class="tsd-signature tsd-kind-icon">scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L36">src/render/Render.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L54">src/render/Render.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -324,12 +315,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="simplifytolerance" class="tsd-anchor"></a>
+					<h3>simplify<wbr>Tolerance</h3>
+					<div class="tsd-signature tsd-kind-icon">simplify<wbr>Tolerance<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L96">src/render/Render.ts:96</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="textbounds" class="tsd-anchor"></a>
 					<h3>text<wbr>Bounds</h3>
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Bounds<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEnvelope</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Array&lt;IEnvelope&gt;()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L60">src/render/Render.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L94">src/render/Render.ts:94</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -344,7 +345,7 @@
 					<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L24">src/render/Render.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L42">src/render/Render.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -352,6 +353,51 @@
 							<p>The canvas width for rendering.</p>
 						</div>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="contextoptions" class="tsd-anchor"></a>
+					<h3>context<wbr>Options</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> contextOptions<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/rendercontextoptions.html" class="tsd-signature-type">RenderContextOptions</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> contextOptions<span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><a href="../interfaces/rendercontextoptions.html" class="tsd-signature-type">RenderContextOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L73">src/render/Render.ts:73</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the drawing context options.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/rendercontextoptions.html" class="tsd-signature-type">RenderContextOptions</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L80">src/render/Render.ts:80</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the drawing context options.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>v: <a href="../interfaces/rendercontextoptions.html" class="tsd-signature-type">RenderContextOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -366,7 +412,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L252">src/render/Render.ts:252</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L327">src/render/Render.ts:327</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -398,7 +444,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L204">src/render/Render.ts:204</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L249">src/render/Render.ts:249</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -424,7 +470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L262">src/render/Render.ts:262</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L337">src/render/Render.ts:337</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -450,7 +496,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L258">src/render/Render.ts:258</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L333">src/render/Render.ts:333</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -476,7 +522,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L266">src/render/Render.ts:266</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L341">src/render/Render.ts:341</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -502,7 +548,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L180">src/render/Render.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L223">src/render/Render.ts:223</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -528,7 +574,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L223">src/render/Render.ts:223</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L270">src/render/Render.ts:270</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -548,13 +594,13 @@
 					<a name="_drawring" class="tsd-anchor"></a>
 					<h3>_draw<wbr>Ring</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">_draw<wbr>Ring<span class="tsd-signature-symbol">(</span>geom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LinearRing</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_draw<wbr>Ring<span class="tsd-signature-symbol">(</span>geom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LinearRing</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L239">src/render/Render.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L310">src/render/Render.ts:310</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -563,7 +609,7 @@
 									<h5>geom: <span class="tsd-signature-type">LinearRing</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -577,7 +623,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L285">src/render/Render.ts:285</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L360">src/render/Render.ts:360</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -609,7 +655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L307">src/render/Render.ts:307</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L382">src/render/Render.ts:382</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -662,7 +708,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L324">src/render/Render.ts:324</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L399">src/render/Render.ts:399</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -688,7 +734,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L127">src/render/Render.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L170">src/render/Render.ts:170</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -719,7 +765,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L150">src/render/Render.ts:150</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L193">src/render/Render.ts:193</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -756,7 +802,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L141">src/render/Render.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L184">src/render/Render.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -793,7 +839,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L159">src/render/Render.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L202">src/render/Render.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -830,7 +876,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L380">src/render/Render.ts:380</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L455">src/render/Render.ts:455</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -873,7 +919,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L279">src/render/Render.ts:279</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L354">src/render/Render.ts:354</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -916,7 +962,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L344">src/render/Render.ts:344</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L419">src/render/Render.ts:419</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -961,7 +1007,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L103">src/render/Render.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L146">src/render/Render.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -983,7 +1029,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L113">src/render/Render.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L156">src/render/Render.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1021,7 +1067,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/d1b4fa8/src/render/Render.ts#L93">src/render/Render.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/ginkgoch/node-map/blob/0a56e40/src/render/Render.ts#L136">src/render/Render.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1081,9 +1127,6 @@
 								<a href="render.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="render.html#antialias" class="tsd-kind-icon">antialias</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="render.html#canvas" class="tsd-kind-icon">canvas</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -1108,10 +1151,16 @@
 								<a href="render.html#scale" class="tsd-kind-icon">scale</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="render.html#simplifytolerance" class="tsd-kind-icon">simplify<wbr>Tolerance</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="render.html#textbounds" class="tsd-kind-icon">text<wbr>Bounds</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="render.html#width" class="tsd-kind-icon">width</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="render.html#contextoptions" class="tsd-kind-icon">context<wbr>Options</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="render.html#_drawgeometrycollection" class="tsd-kind-icon">_draw<wbr>Geometry<wbr>Collection</a>
