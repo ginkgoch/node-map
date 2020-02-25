@@ -27,10 +27,12 @@ Due to the low level GIS library for Node.JS, you can also build:
 4. Mobile - WIP...
 
 ## More Feature Demos
+Learning feature with demos will be a pretty easy way to get started. Before learning from source code, a better approach is to take a look at what it can be done with an executable application.
+
 This feature demo application is built with `electron` that support to run on `macOS`, `Windows` and `Linux`.
 ![feature-demos](./images/feature-demos.png)
 
-Go to the release page for the latest update. OR download directly by the links below.
+Go to the [release page](https://github.com/ginkgoch/map-desktop-demo/releases) for the latest update. OR download directly by the links below.
 
 * [Feature Demos for macOS](https://ginkgoch.s3.us-east-2.amazonaws.com/desktop-demo/ginkgoch-feature-demos-for-desktop-1.0.0-mac.zip)
 * [Feature Demos for Linux](https://ginkgoch.s3.us-east-2.amazonaws.com/desktop-demo/ginkgoch-feature-demos-for-desktop-1.0.0.AppImage)
