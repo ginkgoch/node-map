@@ -4,7 +4,10 @@ import { StyleUtils } from "./StyleUtils";
 import { Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
-/** This class represents text style for drawing text based on feature properties on various geometries. */
+/** 
+ * This class represents text style for drawing text based on feature properties on various geometries. 
+ * @category styles
+ */
 export class TextStyle extends Style {
     /** 
      * The text content to draw. It can be either a concrete string with or without a placeholder to replace on the fly.

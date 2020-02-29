@@ -7,6 +7,7 @@ import uuid from "../shared/UUID";
 
 /**
  * This class represents a base class of all styles.
+ * @category styles
  */
 export abstract class Style {
     /**

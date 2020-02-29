@@ -5,7 +5,10 @@ import { Style } from "./Style";
 import { Image, Render } from "../render";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 
-/** This class represents an icon style to draw icons on map. */
+/** 
+ * This class represents an icon style to draw icons on map.
+ * @category styles advanced
+ */
 export class IconStyle extends Style {
     /** The image source to draw. */
     icon: Image;

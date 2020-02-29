@@ -10,7 +10,9 @@ import { ValueStyle, ValueItem } from "./ValueStyle";
 import { ClassBreakStyle, ClassBreakItem } from "./ClassBreakStyle";
 import { JSONKnownTypes, JSONTypeRegister, JSONUtils } from "../shared/JSONUtils";
 
-/** This class is a style factory to help to easily build style with JSON format data. */
+/** 
+ * This class is a style factory to help to easily build style with JSON format data. 
+ */
 export class StyleFactory {
     static register: JSONTypeRegister;
 

@@ -1,5 +1,6 @@
 import { PointSymbolType } from ".";
 
+/** @category styles advanced  */
 export interface AutoStyleOptions {
     fromColor?: string; 
     toColor?: string; 

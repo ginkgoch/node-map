@@ -6,7 +6,10 @@ import { PointSymbolType, Style, PointStyle, StyleUtils, FillStyle, LineStyle } 
 import { AutoStyleOptions } from "./AutoStyleOptions";
 import { Constants } from "../shared";
 
-/** This class represents a value style which allows to set various sub-styles based on a field value. */
+/** 
+ * This class represents a value style which allows to set various sub-styles based on a field value. 
+ * @category styles advanced
+ */
 export class ValueStyle extends Style {
     /** A value item list with the definition of value and its corresponding style. */
     items: ValueItem[];
@@ -68,7 +71,7 @@ export class ValueStyle extends Style {
     }
 
     /**
-     * @deprecated Use `auto` function instead.
+     * @deprecated Use `autoByValues` function instead.
      * This is a shortcut function to automatically generate value items based on the distinct values, 
      * and assign a gradient colors to each item.
      * @param {'fill'|'linear'|'point'} styleType The style type of the sub-styles.

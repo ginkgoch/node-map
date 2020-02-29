@@ -3,7 +3,10 @@ import { StyleUtils } from "./StyleUtils";
 import { JSONKnownTypes } from "../shared/JSONUtils";
 import { IFeature, GeometryType } from "ginkgoch-geom";
 
-/** This class represents a simple point style to render point based geometries (point, multi-point). */
+/** 
+ * This class represents a simple point style to render point based geometries (point, multi-point). 
+ * @category styles
+ */
 export class PointStyle extends Style {
     /** 
      * The fill style with color or pattern. 

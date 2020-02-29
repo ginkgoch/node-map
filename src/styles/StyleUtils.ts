@@ -1,8 +1,14 @@
 import { Colors, RandomColorOption, RandomLuminosity } from './Colors';
 
-/** This class represents an internal utilities to generate random colors and related resources for styles. */
+/** 
+ * This class represents an internal utilities to generate random colors and related resources for styles. 
+ * @category styles advanced
+ */
 export class StyleUtils {
-    /** Gets a color or random color if not specified. */
+    /** 
+     * Gets a color or random color if not specified. 
+     * @category styles
+     */
     static colorOrRandom(color?: string, option?: RandomColorOption): string {
         if (color !== undefined) return color;
 

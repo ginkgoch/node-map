@@ -5,8 +5,10 @@ import { JSONKnownTypes } from "../shared/JSONUtils";
 import { IFeature, GeometryType } from "ginkgoch-geom";
 import { Image } from "../render";
 
+/** @category styles  */
 export type FillPatternRepeat = 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
 
+/** @category styles  */
 export interface FillPattern {
     image: Image,
     repeat?: FillPatternRepeat
@@ -14,6 +16,7 @@ export interface FillPattern {
 
 /**
  * This class represents a style for an area based geometries (e.g. polygon, multi-polygon) only.
+ * @category styles 
  */
 export class FillStyle extends Style {
     /** 

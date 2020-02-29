@@ -10,6 +10,7 @@ const DEFAULT_AUTO_STYLE_OPTIONS = Constants.DEFAULT_AUTO_STYLE_OPTIONS;
 
 /**
  * This class represents a style to render different sub-styles based on the break down values.
+ * @category styles advanced  
  */
 export class ClassBreakStyle extends Style {
     /**
@@ -256,11 +257,13 @@ export class ClassBreakStyle extends Style {
 
 /**
  * This interface represents a structure of a class break item.
+ * @category styles advanced 
  */
 export interface ClassBreakItem extends Range {
     style: Style
 }
 
+/** @category styles advanced  */
 export interface Range {
     minimum: number,
     maximum: number

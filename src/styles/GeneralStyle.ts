@@ -6,6 +6,7 @@ import { FillPattern } from "./FillStyle";
 
 /**
  * This class represents a general style regardless the geometry type to draw.
+ * @category styles advanced
  */
 export class GeneralStyle extends Style {
     /** 

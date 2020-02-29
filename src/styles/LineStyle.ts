@@ -5,6 +5,7 @@ import { IFeature, GeometryType } from "ginkgoch-geom";
 
 /** 
  * This class represents a line style. 
+ * @category styles
  */
 export class LineStyle extends Style {
     /** The stroke color string. e.g. "#000000" or "black" */
