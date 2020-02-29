@@ -17,8 +17,8 @@ import { Srs } from "./Projection";
  * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
  * const layer = new FeatureLayer(source);
  * layer.styles.push(new FillStyle('#886600', 'red', 2));
- * ...
  * ```
+ * @category layer
  */
 export class FeatureLayer extends Layer {
     source: FeatureSource;

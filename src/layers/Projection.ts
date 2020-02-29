@@ -5,6 +5,7 @@ import { Unit, GeoUtils } from "../shared";
 
 /**
  * This class represents the SRS info (spatial reference system).
+ * @category source shared
  */
 export class Srs {
     private _projection?: string;

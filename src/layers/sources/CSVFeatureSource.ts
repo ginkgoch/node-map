@@ -8,6 +8,7 @@ import { Projection } from '../Projection';
 import { Feature, GeometryFactory, Point, Geometry, GeometryType } from 'ginkgoch-geom';
 import { Field } from '../Field';
 
+/** @category source */
 export interface CSVFieldOptions {
     fields?: string[]
     hasFieldsRow?: boolean
@@ -15,6 +16,8 @@ export interface CSVFieldOptions {
 }
 
 const geomFieldUndefinedError = new Error(`Property 'geomField' is not properly defined.`);
+
+/** @category source */
 export class CSVFeatureSource extends MemoryFeatureSource {
     fieldOptions: CSVFieldOptions;
     delimiter: string = ','

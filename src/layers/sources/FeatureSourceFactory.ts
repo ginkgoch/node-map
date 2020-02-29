@@ -4,6 +4,7 @@ import { ShapefileFeatureSource } from "./ShapefileFeatureSource";
 
 /**
  * This class is a shortcut to build FeatureSource instance.
+ * @category source shared
  */
 export class FeatureSourceFactory {
     /**

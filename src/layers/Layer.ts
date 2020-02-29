@@ -5,6 +5,7 @@ import { IEnvelope, Envelope } from "ginkgoch-geom";
 import { Srs } from "./Projection";
 import { Opener } from "../shared/Opener";
 
+/** @category layer */
 export abstract class Layer extends Opener {
     id: string;
     name: string;

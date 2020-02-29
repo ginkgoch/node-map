@@ -10,16 +10,7 @@ import { Layer } from "./Layer";
 import { Envelope, IEnvelope } from "ginkgoch-geom";
 import { Srs } from "./Projection";
 
-/**
- * FeatureLayer responses for rendering FeatureSource with styles.
- * 
- * ```typescript
- * const source = new ShapefileFeatureSource('./tests/data/layers/USStates.shp');
- * const layer = new MultiSourceFeatureLayer([source]);
- * layer.styles.push(new FillStyle('#886600', 'red', 2));
- * ...
- * ```
- */
+/** @category layer */
 export class MultiSourceFeatureLayer extends Layer {
     sources: Array<FeatureSource>;
     styles: Array<Style>;

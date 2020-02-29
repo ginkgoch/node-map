@@ -7,11 +7,14 @@ import { Srs } from "../Projection";
 
 /**
  * This is a new type that could be replaced with 'all', 'none' or a string array.
+ * @category source
  */
 export type FieldFilters = 'all' | 'none' | string[];
 
+/** @category source */
 export interface DynamicField { name: string, fieldsDependOn: string[], mapper: (f: IFeature) => any };
 
+/** @category source */
 export type SpatialQueryRelationship = 'intersection' | 'within' | 'disjoint' | 'overlap' | 'touch';
 
 /**
@@ -22,6 +25,7 @@ export type SpatialQueryRelationship = 'intersection' | 'within' | 'disjoint' | 
  * For instance, ShapeFile is a popular feature based database.
  * 
  * @see {@link ShapefileFeatureSource} for reading Shapefile data format.
+ * @category source
  */
 export abstract class FeatureSource extends Opener {
     /**

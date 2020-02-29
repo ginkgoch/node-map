@@ -22,6 +22,7 @@ import { MapOptions } from "./MapOptions";
  * 
  * fs.writeFileSync('demo.png', image.buffer);
  * ```
+ * @category map
  */
 export class MapEngine {
     /**

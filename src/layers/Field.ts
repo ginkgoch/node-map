@@ -6,6 +6,7 @@ import { JSONUtils } from "../shared/JSONUtils";
  * 
  * A field is formed with name, data type, length of a field to store corresponding value, 
  * and an extra hash map (key - value pairs) to store other infos that are not covered by pre-defined properties.
+ * @category source shared
  */
 export class Field {
     /**

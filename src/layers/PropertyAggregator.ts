@@ -3,6 +3,7 @@ import { Constants } from "../shared";
 
 /**
  * This class represents a utility for aggregating property data from a feature source.
+ * @category source shared
  */
 export class PropertyAggregator {
     /**

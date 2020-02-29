@@ -12,6 +12,7 @@ import { Projection } from "../Projection";
  * Remind to clear it to release the memory usage. 
  * Watch out the memory usage (if too many features are about to push into this source), 
  * please consider other feature source with persistent storage.
+ * @category source
  */
 export class MemoryFeatureSource extends FeatureSource {
     _interFeatures: FeatureCollection;

@@ -6,6 +6,7 @@ import { Field } from '../Field';
 import { JSONKnownTypes } from '../..';
 import { Projection } from '../Projection';
 
+/** @category source */
 export class GeoJSONFeatureSource extends MemoryFeatureSource {
     _geoJSON?: any|string = undefined;
 

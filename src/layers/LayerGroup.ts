@@ -11,6 +11,8 @@ import uuid from "../shared/UUID";
  * For instance, we usually have a set of layers that are stable and not change very often; 
  * while another set of layers are stored in memory and change very often, just like dynamic editing or highlighting features.
  * Then we could maintain the two sets of layers in two LayerGroup; then it is easier to manage their rendering or caching.
+ * 
+ * @category layer
  */
 export class LayerGroup {
     /**

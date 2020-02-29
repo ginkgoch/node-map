@@ -12,6 +12,7 @@ const DBF_FIELD_DECIMAL = 'decimal';
 
 /**
  * This class represents a feature source that CRUD records from shapefile.
+ * @category source
  */
 export class ShapefileFeatureSource extends FeatureSource {
     /**

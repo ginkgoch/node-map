@@ -4,6 +4,7 @@ import { ShapefileFeatureSource } from "./sources/ShapefileFeatureSource";
 import { Field } from ".";
 import { MemoryFeatureSource } from "./sources/MemoryFeatureSource";
 
+/** @category layer */
 export class LayerFactory {
 
     /**
