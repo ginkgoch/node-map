@@ -164,16 +164,14 @@ export abstract class FeatureSource extends Opener {
     }
 
     private _getProjectedGeometry(geom: Geometry, geomSrs: string | Srs | undefined) {
-        if (!this.projection.isValid || geomSrs === undefined) {
+        if (geomSrs === undefined || this.projection === undefined || this.projection.to === undefined) {
             return geom;
         }
 
-        if (typeof geomSrs === 'string') {
-            geomSrs = new Srs(geomSrs);
-        }
-
         const geomProj = new Projection(geomSrs, this.projection.to);
-        geom = geomProj.forward(geom);
+        if (geomProj.isValid) {
+            geom = geomProj.forward(geom);
+        }
 
         return geom;
     }
