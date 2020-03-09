@@ -60,6 +60,14 @@ export class TileCache<T> {
     }
 
     /**
+     * Check whether the specified tile id is in cache.
+     * @param {string} id The tile id. 
+     */
+    has(id: string): boolean {
+        return this._cache.has(id);
+    }
+
+    /**
      * Clears all the tile caches.
      */
     clear() {
