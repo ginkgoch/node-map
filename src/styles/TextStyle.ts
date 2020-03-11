@@ -112,17 +112,24 @@ export class TextStyle extends Style {
             this._drawTextForMultiPolygon(geom, text, styleJson, render);
         } else if (geom instanceof GeometryCollection) {
             this._drawTextForGeomCollection(geom, text, styleJson, render);
-        }
-        else if (geom instanceof Point || geom instanceof Polygon) {
+        } else if (geom instanceof Point || geom instanceof Polygon) {
             let geomLocation = this._locationOnGeom(geom);
-            render.drawText(text, geomLocation, styleJson);
+            this._drawTextOnCoordinate(render, text, geomLocation, styleJson);
         } else if (geom instanceof LineString) {
-            render.drawTextOnLine(text, geom, styleJson);
+            this._drawTextOnLine(render, text, geom, styleJson);
         } else if (geom instanceof MultiLineString) {
             geom.children.forEach(l => {
-                render.drawTextOnLine(text, l, styleJson);
+                this._drawTextOnLine(render, text, l, styleJson);
             });
         }
+    }
+
+    protected _drawTextOnCoordinate(render: Render, text: string, position: ICoordinate, style: any) {
+        render.drawText(text, position, style);
+    }
+
+    protected _drawTextOnLine(render: Render, text: string, line: LineString, style: any) {
+        render.drawTextOnLine(text, line, style);
     }
 
     /**
@@ -181,7 +188,7 @@ export class TextStyle extends Style {
     private _drawTextForGeomCollection<T extends Geometry>(geom: GeometryCollectionBase<T>, text: string, styleJson: any, render: Render) {
         geom.children.forEach(g => {
             const locationOnGeom = this._locationOnGeom(g);
-            render.drawText(text, locationOnGeom, styleJson);
+            this._drawTextOnCoordinate(render, text, locationOnGeom, styleJson);
         });
     }
 
@@ -192,7 +199,7 @@ export class TextStyle extends Style {
 
         const drawingPolygon = geom.children.map(polygon => ({ factor: this._polygonSortFactor(polygon), polygon })).sort((p1, p2) => p2.factor - p1.factor)[0];
         const locationOnGeom = this._locationOnGeom(drawingPolygon.polygon);
-        render.drawText(text, locationOnGeom, styleJson);
+        this._drawTextOnCoordinate(render, text, locationOnGeom, styleJson);
     }
 
     private _polygonSortFactor(polygon: Polygon): number {
