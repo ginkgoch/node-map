@@ -419,9 +419,18 @@ export class Render {
     drawTextOnLine(text: string, geom: LineString, style: any) {
         if (text.length === 0) return;
 
+        let textPosition = this.getTextPositionOnLine(text, geom, style);
+        if (textPosition === undefined) {
+            return;
+        }
+
+        this._drawText(text, textPosition.position, style, textPosition.rotation);
+    }
+
+    getTextPositionOnLine(text: string, geom: LineString, style: any): { position: ICoordinate, rotation: number }|undefined {
         let coordinates = geom.coordinatesFlat();
         if (coordinates.length === 0) {
-            return;
+            return undefined;
         }
 
         _.extend(this.context, style);
@@ -437,13 +446,14 @@ export class Render {
                 const y = (previous.y + current.y) * .5;
                 const position = { x, y };
                 const rotation = RenderUtils.angle(previous, current);
-                this._drawText(text, position, style, rotation);
 
-                return;
+                return { position, rotation };
             }
 
             previous = current;
         }
+
+        return undefined;
     }
 
     /**
