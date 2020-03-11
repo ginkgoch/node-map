@@ -364,9 +364,12 @@ export class Render {
 
         _.extend(this.context, style);
         const textBound = this._textBound(text, coordinate);
-        if (_.some(this.textBounds, b => !Envelope.disjoined(b, textBound))) {
+        if (textBound === undefined) {
             return;
         }
+        // if (_.some(this.textBounds, b => !Envelope.disjoined(b, textBound))) {
+        //     return;
+        // }
 
         this.textBounds.push(textBound);
         this._rotate(coordinate.x, coordinate.y, rotation, (x, y) => {
@@ -396,13 +399,20 @@ export class Render {
         }
     }
 
-    _textBound(text: string, coordinate: ICoordinate) {
+    _textBound(text: string, coordinate: ICoordinate): Envelope|undefined {
         const size = this.measureText(text);
         const minx = coordinate.x;
         const maxx = coordinate.x + size.width;
         const maxy = coordinate.y;
         const miny = coordinate.y - size.height;
-        return new Envelope(minx, miny, maxx, maxy);
+        let textBound = new Envelope(minx, miny, maxx, maxy);
+
+        if (_.some(this.textBounds, b => !Envelope.disjoined(b, textBound))) {
+            return undefined;
+        } 
+        else {
+            return textBound;
+        }
     }
     //#endregion
 
@@ -472,7 +482,7 @@ export class Render {
         this.context.drawImage(icon.source, left, top);
     }
 
-    private _toViewport(coordinate: ICoordinate) {
+    _toViewport(coordinate: ICoordinate) {
         return RenderUtils.toViewportCoordinate(coordinate, this.envelope, this.resolutionX, this.resolutionY);
     }
 
